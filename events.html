@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="photos/logo.png?v=20260522" type="image/png" />
+  <title>Events &mdash; AI Solutions</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/@fontsource/cascadia-code@4.2.1/index.css" rel="stylesheet" />
+  <link href="css/theme.css?v=20260522" rel="stylesheet" />
+  <link href="css/footer.css?v=20260522" rel="stylesheet" />
+
+  <style>
+    body, * { font-family: 'Cascadia Code' !important; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    .navbar { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+    .navbar-brand span { color: blue; font-weight: 700; }
+    .nav-link { font-weight: 500; position: relative; }
+    .nav-link::after {
+      content: ''; position: absolute; bottom: 0;
+      left: .5rem; right: .5rem; height: 2px;
+      background: blue; border-radius: 2px;
+      transform: scaleX(0); transition: transform .25s ease;
+    }
+    .nav-link:hover::after, .nav-link.active::after { transform: scaleX(1); }
+
+    .page-hero {
+      background: lightblue;
+      padding: 120px 0 60px;
+      min-height: 320px;
+      color: darkslategray;
+    }
+
+    .page-hero .hero-icon {
+      font-size: 8rem;
+      line-height: 1;
+      color: blue;
+      opacity: 0.2;
+    }
+
+    .hero-glow {
+      animation: pulse-glow 4s ease-in-out infinite;
+    }
+    @keyframes pulse-glow {
+      0%, 100% { opacity: .6; }
+      50% { opacity: 1; }
+    }
+
+    
+    
+
+    .section-badge {
+      display: inline-block;
+      background: lavender;
+      color: blue;
+      font-size: .8rem;
+      font-weight: 600;
+      letter-spacing: .06em;
+      padding: .3rem .9rem;
+      border-radius: 999px;
+    }
+
+    #upcoming .section-badge {
+      background: blue;
+      color: white !important;
+    }
+
+    /* Badges on colored event card headers &mdash; white pill, dark text */
+    .event-card-header .event-status-upcoming,
+    .event-card-header .badge.event-status-upcoming,
+    .event-card-header .badge.event-type-badge {
+      background-color: white !important;
+      color: darkslategray !important;
+      --bs-badge-color: darkslategray !important;
+      --bs-badge-bg: white !important;
+    }
+
+    .filter-btn {
+      border: 1px solid lightgray;
+      background: white;
+      color: slategray;
+      font-size: .82rem;
+      font-weight: 600;
+      padding: .45rem 1rem;
+      border-radius: 999px;
+      transition: all .2s;
+    }
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: blue;
+      border-color: blue;
+      color: white;
+    }
+
+    .event-card {
+      transition: transform .3s, box-shadow .3s;
+      display: flex;
+      flex-direction: column;
+    }
+    .event-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 32px lightgray;
+    }
+
+    .featured-event {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      background: blue;
+      color: white;
+    }
+
+    .featured-event .inner { position: relative; z-index: 1; }
+
+    .countdown-wrap {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    /* Light panels inside dark featured section &mdash; avoid inherited white text */
+    .featured-event .panel-light {
+      background: whitesmoke !important;
+      color: darkslategray !important;
+    }
+
+    .featured-event .panel-light i {
+      color: blue !important;
+    }
+
+    .featured-event .panel-light .text-subtle {
+      color: slategray !important;
+    }
+
+    .countdown-unit {
+      min-width: 72px;
+      text-align: center;
+      padding: .75rem 1rem;
+      border-radius: 12px;
+      background: whitesmoke;
+      color: darkslategray;
+      backdrop-filter: blur(8px);
+    }
+    .countdown-unit span {
+      display: block;
+      font-size: 1.75rem;
+      font-weight: 800;
+      line-height: 1;
+      color: darkslategray;
+    }
+    .countdown-unit small {
+      font-size: .68rem;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: slategray;
+      opacity: 1;
+    }
+
+    .past-event-card { transition: box-shadow .3s; }
+    .past-event-card:hover { box-shadow: 0 8px 24px lightgray; }
+
+    .venue-card {
+      border: 1px solid lightgray;
+      border-radius: 16px;
+      background: white;
+      overflow: hidden;
+      height: 100%;
+      transition: box-shadow .3s;
+    }
+    .venue-card:hover { box-shadow: 0 8px 24px lightgray; }
+
+    .venue-map {
+      overflow: hidden;
+      height: 200px;
+      background: whitesmoke;
+    }
+
+    .venue-map iframe {
+      display: block;
+      width: 100%;
+      height: 248px;
+      margin-bottom: -52px;
+      border: 0;
+    }
+
+    .venue-link {
+      font-size: .8rem;
+      color: blue;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .venue-link:hover { text-decoration: underline; }
+
+  </style>
+  <script src="js/api-config.js"></script>
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white bg-opacity-90 border-bottom fixed-top shadow-sm">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2 fw-semibold fs-5" href="index.html">
+        <img src="photos/logo.png?v=20260522" alt="AI" class="site-logo" width="56" height="56">
+        <span class="brand-word"><strong>Solutions</strong></span>
+      </a>
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"
+        aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav mx-auto gap-1">
+          <li class="nav-item"><a class="nav-link px-3" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link px-3" href="about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link px-3" href="services.html">Services</a></li>
+          <li class="nav-item"><a class="nav-link active px-3" href="events.html">Events</a></li>
+          <li class="nav-item"><a class="nav-link px-3" href="contact.html">Contact</a></li>
+        </ul>
+        <div class="d-flex align-items-center gap-2 mt-2 mt-lg-0">
+          <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#feedbackModal">Feedback</button>
+
+          <div id="navAuthSlot"></div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== 1. PAGE HEADER ===== -->
+  <header class="page-hero">
+    <div class="container">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-7">
+          <span class="badge rounded-pill mb-3 px-3 py-2 hero-glow" style="background:lavender;color:blue;font-size:.8rem;">Events</span>
+          <h1 class="fw-bold mb-3" style="font-size:clamp(2rem,5vw,3.25rem);color:darkslategray;letter-spacing:-.02em;">Join Our Events</h1>
+          <p class="text-muted mb-4" style="font-size:1.1rem;line-height:1.75;max-width:540px;">
+            Discover upcoming webinars, AI demos, and hands-on workshops &mdash; hosted online and at venues across Sunderland and the North East.
+          </p>
+          <a href="register.html" class="btn btn-indigo fw-semibold px-4 py-2">Register Now</a>
+        </div>
+        <div class="col-lg-5 text-center d-none d-lg-block">
+          <div class="hero-glow hero-icon" aria-hidden="true">
+            <i class="bi bi-calendar-event"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ===== 4. FEATURED EVENT (before main list for prominence) ===== -->
+    <section class="py-5" style="background:aliceblue;">
+      <div class="container py-2">
+        <div class="text-center mb-4">
+          <span class="section-badge">Featured Event of the Month</span>
+        </div>
+        <div class="featured-event p-4 p-lg-5">
+          <div class="inner row align-items-center g-4">
+            <div class="col-lg-7">
+              <span class="badge rounded-pill mb-3 panel-light">Don't Miss Out</span>
+              <h2 class="fw-bold mb-2" id="featuredTitle" style="font-size:clamp(1.5rem,3vw,2rem);">Loading&mdash;</h2>
+              <p class="mb-2 opacity-90" id="featuredMeta" style="font-size:.9rem;"></p>
+              <p class="mb-4 opacity-85" id="featuredDesc" style="line-height:1.75;"></p>
+              <div class="countdown-wrap mb-4" id="featuredCountdown"></div>
+              <a href="register.html" class="btn btn-light fw-bold px-4" id="featuredRegisterBtn" style="border-radius:8px;color:blue;">Register Now</a>
+            </div>
+            <div class="col-lg-5">
+              <img src="photos/event.jpeg" alt="Featured Event" style="width:100%;border-radius:12px;object-fit:cover;height:100%;min-height:300px;">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 2. UPCOMING EVENTS ===== -->
+    <section class="py-5" id="upcoming" style="background:white;">
+      <div class="container py-2">
+        <div class="row justify-content-center text-center mb-4">
+          <div class="col-lg-7">
+            <span class="section-badge">Upcoming Events</span>
+            <h2 class="fw-bold mt-3 mb-2" style="color:darkslategray;font-size:clamp(1.6rem,4vw,2.25rem);">What's Coming Up</h2>
+            <p class="text-muted mb-0">Register early &mdash; popular sessions fill up quickly.</p>
+          </div>
+        </div>
+
+        <!-- Search & type filters -->
+        <div class="row g-3 mb-4 align-items-center">
+          <div class="col-md-6">
+            <div class="input-group">
+              <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+              <input type="search" class="form-control border-start-0" id="eventSearch" placeholder="Search events&mdash;" aria-label="Search events" />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="d-flex flex-wrap gap-2 justify-content-md-end">
+              <button type="button" class="filter-btn active" data-type-filter="all">All Types</button>
+              <button type="button" class="filter-btn" data-type-filter="webinar">Webinar</button>
+              <button type="button" class="filter-btn" data-type-filter="workshop">Workshop</button>
+              <button type="button" class="filter-btn" data-type-filter="demo">Demo</button>
+              <button type="button" class="filter-btn" data-type-filter="training">Training</button>
+              <button type="button" class="filter-btn" data-type-filter="conference">Conference</button>
+              <button type="button" class="filter-btn" data-type-filter="showcase">Showcase</button>
+              <button type="button" class="filter-btn" data-type-filter="launch">Launch</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-4" id="eventsGrid"></div>
+      </div>
+    </section>
+
+    <!-- ===== EVENT VENUES & MAPS ===== -->
+    <section class="py-5" id="venues" style="background:white;">
+      <div class="container py-2">
+        <div class="row justify-content-center text-center mb-4">
+          <div class="col-lg-8">
+            <span class="section-badge">Event Venues</span>
+            <h2 class="fw-bold mt-3 mb-2" style="color:darkslategray;font-size:clamp(1.6rem,4vw,2.25rem);">Where We Host Events</h2>
+            <p class="text-muted mb-0">
+              In-person sessions run from our Sunderland headquarters and partner venues. Online events are open worldwide.
+            </p>
+          </div>
+        </div>
+        <div class="row g-4" id="venuesGrid"></div>
+      </div>
+    </section>
+
+
+
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer" style="margin:0;padding-bottom:0;">
+    <div class="container py-5">
+      <div class="row g-5">
+        <div class="col-lg-4 col-md-6">
+          <a href="index.html" class="d-flex align-items-center gap-2 text-decoration-none mb-3">
+            <img src="photos/logo.png?v=20260522" alt="AI" class="site-logo" width="56" height="56">
+            <span class="fw-semibold fs-5 site-footer__brand brand-word"><strong>Solutions</strong></span>
+          </a>
+          <div class="d-flex gap-3 mt-2">
+            <a href="https://www.facebook.com" class="social-icon" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><i class="bi bi-facebook"></i></a>
+            <a href="https://www.twitter.com" class="social-icon" aria-label="Twitter/X" target="_blank" rel="noopener noreferrer"><i class="bi bi-twitter-x"></i></a>
+            <a href="https://www.linkedin.com" class="social-icon" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer"><i class="bi bi-linkedin"></i></a>
+            <a href="https://www.instagram.com" class="social-icon" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><i class="bi bi-instagram"></i></a>
+            <a href="https://www.youtube.com" class="social-icon" aria-label="YouTube" target="_blank" rel="noopener noreferrer"><i class="bi bi-youtube"></i></a>
+          </div>
+        </div>
+        <div class="col-lg-8 col-md-6">
+          <hr class="site-footer__divider">
+          <div class="row g-3">
+            <div class="col-sm-6 d-flex align-items-start gap-2">
+              <i class="bi bi-geo-alt-fill mt-1 site-footer__icon"></i>
+              <span class="site-footer__contact">Wearside Innovation Hub<br>Sunderland, SR1 3DR, United Kingdom</span>
+            </div>
+            <div class="col-sm-6 d-flex align-items-center gap-2">
+              <i class="bi bi-telephone-fill site-footer__icon"></i>
+              <a href="tel:+441915550140" class="footer-link site-footer__contact">+44 191 555 0140</a>
+            </div>
+            <div class="col-sm-6 d-flex align-items-center gap-2">
+              <i class="bi bi-envelope-fill site-footer__icon"></i>
+              <a href="mailto:support@aisolutions.com" class="footer-link site-footer__contact">support@aisolutions.com</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="site-footer__bar">
+      <div class="container py-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <p class="mb-0 site-footer__copy">&copy; 2025 AI Solutions. All rights reserved.</p>
+        <div class="d-flex gap-3">
+          <a href="#" class="footer-link site-footer__copy">Privacy Policy</a>
+          <a href="#" class="footer-link site-footer__copy">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/events.js"></script>
+  <script src="js/main.js"></script>
+  <!-- Feedback Modal -->
+  <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="border-radius:16px;">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fw-bold" id="feedbackModalLabel" style="color:darkslategray;"><i class="bi bi-chat-square-text me-2" style="color:blue;"></i>Send Feedback</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-success d-none" id="feedbackSuccess" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>Thank you! Your feedback has been submitted.
+          </div>
+          <form id="feedbackForm" novalidate>
+
+            <div class="mb-3">
+              <label for="feedbackName" class="form-label fw-semibold" style="font-size:.85rem;">Name</label>
+              <input type="text" class="form-control" id="feedbackName" required>
+              <div class="invalid-feedback">Please enter your name.</div>
+            </div>
+            <div class="mb-3">
+              <label for="feedbackEmail" class="form-label fw-semibold" style="font-size:.85rem;">Email</label>
+              <input type="email" class="form-control" id="feedbackEmail" required>
+              <div class="invalid-feedback">Please enter a valid Email.</div>
+            </div>
+
+            <div class="mb-3">
+              <div class="d-flex gap-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="fbSvcDemo" value="demo">
+                  <label class="form-check-label" for="fbSvcDemo">Demo</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="fbSvcEvent" value="event">
+                  <label class="form-check-label" for="fbSvcEvent">Event</label>
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold" style="font-size:.85rem;">Overall satisfaction</label>
+              <div id="feedbackStarRating" style="font-size:1.8rem; cursor:pointer;">
+                <span data-value="1" style="color:lightgray;">&#9733;</span>
+                <span data-value="2" style="color:lightgray;">&#9733;</span>
+                <span data-value="3" style="color:lightgray;">&#9733;</span>
+                <span data-value="4" style="color:lightgray;">&#9733;</span>
+                <span data-value="5" style="color:lightgray;">&#9733;</span>
+              </div>
+              <input type="hidden" id="feedbackRating" value="0">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold" style="font-size:.85rem;">Would you recommend AI-Solutions to others?</label>
+              <div class="d-flex gap-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="feedbackRec" id="recYes" value="yes">
+                  <label class="form-check-label" for="recYes">Yes</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="feedbackRec" id="recNo" value="no">
+                  <label class="form-check-label" for="recNo">No</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="feedbackRec" id="recMaybe" value="maybe">
+                  <label class="form-check-label" for="recMaybe">Maybe</label>
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-indigo">Send</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var stars = document.querySelectorAll('#feedbackStarRating span');
+      var ratingInput = document.getElementById('feedbackRating');
+      stars.forEach(function(s) {
+        s.addEventListener('click', function() {
+          var val = parseInt(this.getAttribute('data-value'));
+          ratingInput.value = val;
+          stars.forEach(function(s2) {
+            var v = parseInt(s2.getAttribute('data-value'));
+            s2.style.color = v <= val ? 'gold' : 'lightgray';
+          });
+        });
+      });
+      var storedName = sessionStorage.getItem('feedbackName') || sessionStorage.getItem('aiSolutionsName') || '';
+      var storedEmail = sessionStorage.getItem('feedbackEmail') || sessionStorage.getItem('aiSolutionsEmail') || '';
+      if (storedName) document.getElementById('feedbackName').value = storedName;
+      if (storedEmail) document.getElementById('feedbackEmail').value = storedEmail;
+      var form = document.getElementById('feedbackForm');
+      if (!form) return;
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (!this.checkValidity()) { this.classList.add('was-validated'); return; }
+        var rec = document.querySelector('input[name="feedbackRec"]:checked');
+        var data = {
+          name: document.getElementById('feedbackName').value.trim(),
+          email: document.getElementById('feedbackEmail').value.trim(),
+          service_used: [document.getElementById("fbSvcDemo").checked ? "demo" : null, document.getElementById("fbSvcEvent").checked ? "event" : null].filter(Boolean).join(","),
+          satisfaction_rating: parseInt(document.getElementById('feedbackRating').value) || null,
+          recommendation: rec ? rec.value : ''
+        };
+        fetch('/api/feedback', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          if (d.success || d.id) {
+            document.getElementById('feedbackSuccess').classList.remove('d-none');
+            form.reset();
+            form.classList.remove('was-validated');
+            stars.forEach(function(s) { s.style.color = 'lightgray'; });
+            ratingInput.value = '0';
+            setTimeout(function() { document.getElementById('feedbackSuccess').classList.add('d-none'); }, 3000);
+          } else { showMessage('Error: ' + (d.error || 'Unknown error'), 'danger'); }
+        })
+        .catch(function() { showMessage('Error submitting feedback', 'danger'); });
+      });
+      document.getElementById('feedbackModal').addEventListener('hidden.bs.modal', function() {
+        form.reset();
+        form.classList.remove('was-validated');
+        stars.forEach(function(s) { s.style.color = 'lightgray'; });
+        ratingInput.value = '0';
+        document.getElementById('feedbackSuccess').classList.add('d-none');
+      });
+    });
+  </script>
+</body>
+</html>
+
+
+

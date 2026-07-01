@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="photos/logo.png?v=20260522" type="image/png" />
+  <title>Services &mdash; AI Solutions</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/@fontsource/cascadia-code@4.2.1/index.css" rel="stylesheet" />
+  <link href="css/theme.css?v=20260522" rel="stylesheet" />
+  <link href="css/footer.css?v=20260522" rel="stylesheet" />
+
+  <style>
+    body, * { font-family: 'Cascadia Code' !important; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    :root { --color-primary: blue; }
+
+    .navbar { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+    .navbar-brand span { color: blue; font-weight: 700; }
+    .nav-link { font-weight: 500; position: relative; }
+    .nav-link::after {
+      content: ''; position: absolute; bottom: 0;
+      left: .5rem; right: .5rem; height: 2px;
+      background: blue; border-radius: 2px;
+      transform: scaleX(0); transition: transform .25s ease;
+    }
+    .nav-link:hover::after, .nav-link.active::after { transform: scaleX(1); }
+
+    .page-hero {
+      background: lightblue;
+      padding: 120px 0 60px;
+      min-height: 400px;
+    }
+
+    .page-hero .hero-icon {
+      font-size: 8rem;
+      line-height: 1;
+      color: blue;
+      opacity: 0.2;
+    }
+
+    .hero-glow {
+      animation: pulse-glow 4s ease-in-out infinite;
+    }
+    @keyframes pulse-glow {
+      0%, 100% { opacity: .6; }
+      50% { opacity: 1; }
+    }
+
+    
+    
+
+    .service-nav-link {
+      display: block;
+      padding: .65rem 1rem;
+      border-radius: 8px;
+      color: slategray;
+      text-decoration: none;
+      font-size: .88rem;
+      font-weight: 500;
+      transition: background .2s, color .2s;
+    }
+    .service-nav-link:hover,
+    .service-nav-link.active {
+      background: lavender;
+      color: blue;
+    }
+
+    .service-block {
+      scroll-margin-top: 96px;
+    }
+
+    .service-block .service-card-inner {
+      border: 1px solid lightgray;
+      border-radius: 16px;
+      background: white;
+      transition: box-shadow .3s, border-color .3s;
+    }
+    .service-block .service-card-inner:hover {
+      box-shadow: 0 12px 32px lightgray;
+      border-color: lightgray;
+    }
+
+    .tech-badge {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 600;
+      padding: .35rem .75rem;
+      border-radius: 999px;
+      background: whitesmoke;
+      color: slategray;
+      border: 1px solid lightgray;
+    }
+
+    .service-list li {
+      position: relative;
+      padding-left: 1.25rem;
+      margin-bottom: .5rem;
+      color: slategray;
+      font-size: .92rem;
+      line-height: 1.65;
+    }
+    .service-list li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: .55rem;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: blue;
+    }
+
+    @media (max-width: 991.98px) {
+      .service-sidebar { position: static !important; }
+    }
+  </style>
+  <script src="js/api-config.js"></script>
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white bg-opacity-90 border-bottom fixed-top shadow-sm">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2 fw-semibold fs-5" href="index.html">
+        <img src="photos/logo.png?v=20260522" alt="AI" class="site-logo" width="56" height="56">
+        <span class="brand-word"><strong>Solutions</strong></span>
+      </a>
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"
+        aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav mx-auto gap-1">
+          <li class="nav-item"><a class="nav-link px-3" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link px-3" href="about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link active px-3" href="services.html">Services</a></li>
+          <li class="nav-item"><a class="nav-link px-3" href="events.html">Events</a></li>
+          <li class="nav-item"><a class="nav-link px-3" href="contact.html">Contact</a></li>
+        </ul>
+        <div class="d-flex align-items-center gap-2 mt-2 mt-lg-0">
+          <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#feedbackModal">Feedback</button>
+
+          <div id="navAuthSlot"></div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== PAGE HERO ===== -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-7">
+          <span class="badge rounded-pill mb-3 px-3 py-2" style="background:lavender;color:blue;font-size:.8rem;letter-spacing:.06em;">What We Offer</span>
+          <h1 class="fw-bold mb-3" style="font-size:clamp(2rem,5vw,3rem);color:darkslategray;letter-spacing:-.02em;">Our Services</h1>
+          <p class="text-muted mb-4" style="font-size:1.05rem;line-height:1.75;">
+            Practical, affordable AI-powered solutions designed to help businesses grow smarter,
+            automate workflows, and deliver better customer experiences.
+          </p>
+          <a href="scheduledemo.html" class="btn btn-indigo btn-lg px-4 py-2">Schedule Demo</a>
+        </div>
+        <div class="col-lg-5 text-center d-none d-lg-block">
+          <div class="hero-glow hero-icon" aria-hidden="true">
+            <i class="bi bi-gear"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="py-5" style="background:aliceblue;">
+    <div class="container py-4">
+      <div class="row g-5">
+
+        <!-- Sidebar navigation -->
+        <div class="col-lg-3">
+          <nav class="service-sidebar sticky-top" style="top:96px;" aria-label="Service categories">
+            <p class="fw-bold mb-3" style="color:darkslategray;font-size:.85rem;letter-spacing:.04em;text-transform:uppercase;">Categories</p>
+            <div class="d-flex flex-column gap-1 p-3 rounded-4 border bg-white">
+              <a href="#ai-virtual-assistant" class="service-nav-link">AI Virtual Assistant Development</a>
+              <a href="#chatbot-integration" class="service-nav-link">Chatbot Integration</a>
+              <a href="#business-automation" class="service-nav-link">Business Automation Tools</a>
+              <a href="#software-prototyping" class="service-nav-link">Software Prototyping</a>
+              <a href="#custom-ai" class="service-nav-link">Custom AI Solutions</a>
+              <a href="#customer-support" class="service-nav-link">Customer Support Solutions</a>
+            </div>
+          </nav>
+        </div>
+
+        <!-- Service blocks -->
+        <div class="col-lg-9 d-flex flex-column gap-5">
+
+          <!-- 1. AI Virtual Assistant Development -->
+          <article class="service-block" id="ai-virtual-assistant">
+            <div class="service-card-inner p-4 p-lg-5">
+              <div class="d-flex align-items-start gap-3 mb-4">
+                <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
+                  style="width:56px;height:56px;background:lavender;">
+                  <i class="bi bi-robot fs-4" style="color:blue;"></i>
+                </div>
+                <div>
+                  <h2 class="fw-bold mb-2" style="color:darkslategray;font-size:clamp(1.25rem,3vw,1.75rem);">AI Virtual Assistant Development</h2>
+                  <p class="text-muted mb-0" style="line-height:1.8;">
+                    We design and deploy intelligent virtual assistants that understand natural language, respond instantly,
+                    and automate customer interactions around the clock &mdash; tailored to your brand and business workflows.
+                  </p>
+                </div>
+              </div>
+              <div class="row g-4">
+                <div class="col-md-6">
+                  <h3 class="fw-bold mb-3" style="color:darkslategray;font-size:1rem;">Use Cases</h3>
+                  <ul class="service-list list-unstyled mb-0">
+                    <li>24/7 customer support and FAQ handling</li>
+                    <li>Lead qualification and appointment booking</li>
+                    <li>Order tracking and product recommendations</li>
+                    <li>Internal HR and employee self-service queries</li>
+                  </ul>
+                </div>
+                <div class="col-md-6">
+                  <h3 class="fw-bold mb-3" style="color:darkslategray;font-size:1rem;">Benefits</h3>
+                  <ul class="service-list list-unstyled mb-0">
+                    <li>Reduce response time and support workload</li>
+                    <li>Improve customer satisfaction with instant replies</li>
+                    <li>Scale support without adding headcount</li>
+                    <li>Capture leads and insights from every conversation</li>
+                  </ul>
+                </div>
+                <div class="col-12">
+                  <h3 class="fw-bold mb-3" style="color:darkslategray;font-size:1rem;">Technology Stack</h3>
+                  <div class="d-flex flex-wrap gap-2">
+                    <span class="tech-badge">Python</span>
+                    <span class="tech-badge">Node.js</span>
+                    <span class="tech-badge">OpenAI / LLM APIs</span>
+                    <span class="tech-badge">NLP &amp; Intent Recognition</span>
+                    <span class="tech-badge">REST APIs</span>
+                    <span class="tech-badge">Cloud Hosting (AWS / Azure)</span>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-4 pt-4 border-top">
+                <a href="scheduledemo.html?service=ai-virtual-assistant" class="btn btn-indigo">Request Demo</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- 2. Chatbot Integration -->
+          <article class="service-block" id="chatbot-integration">
+            <div class="service-card-inner p-4 p-lg-5">
+              <div class="d-flex align-items-start gap-3 mb-4">
+                <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
+                  style="width:56px;height:56px;background:moccasin;">
+                  <i class="bi bi-chat-dots-fill fs-4" style="color:darkorange;"></i>
+                </div>
+                <div>
+                  <h2 class="fw-bold mb-2" style="color:darkslategray;font-size:clamp(1.25rem,3vw,1.75rem);">Chatbot Integration</h2>
+                  <p class="text-muted mb-0" style="line-height:1.8;">
+                    Seamlessly embed AI chatbots into your existing website, mobile app, or business systems.
+                    We handle API setup, plugin configuration, and full deployment so your assistant works where your customers already are.
+                  </p>
+                </div>
+              </div>
+              <div class="row g-4">
+                <div class="col-md-6">
+                  <h3 class="fw-bold mb-3" style="color:darkslategray;font-size:1rem;">Use Cases</h3>
+                  <ul class="service-list list-unstyled mb-0">
+                    <li>Website live chat widgets and floating assistants</li>
+                    <li>WhatsApp, Messenger, and social channel bots</li>
+                    <li>CRM and helpdesk system integration</li>
+                    <li>E-commerce checkout and product inquiry support</li>
+                  </ul>
+                </div>
+                <div class="col-md-6">
+                  <h3 class="fw-bold mb-3" style="color:darkslategray;font-size:1rem;">Benefits</h3>
+                  <ul class="service-list list-unstyled mb-0">
+                    <li>Quick deployment with minimal disruption</li>
+                    <li>Unified customer experience across channels</li>
+                    <li>Secure API-based connections to your stack</li>
+                    <li>Ongoing integration support and maintenance</li>
+                  </ul>
+                </div>
+                <div class="col-12">
+                  <h3 class="fw-bold mb-3" style="color:darkslategray;font-size:1rem;">Technology Stack</h3>
+                  <div class="d-flex flex-wrap gap-2">
+                    <span class="tech-badge">WordPress</span>
+                    <span class="tech-badge">React</span>
+                    <span class="tech-badge">PHP</span>
+                    <span class="tech-badge">JavaScript / TypeScript</span>
+                    <span class="tech-badge">Webhooks &amp; REST APIs</span>
+                    <span class="tech-badge">OAuth &amp; Secure Tokens</span>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-4 pt-4 border-top">
+                <a href="scheduledemo.html?service=chatbot-integration" class="btn btn-indigo">Request Demo</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- 3. Business Automation Tools -->
+          <article class="service-block" id="business-automation">
+            <div class="service-card-inner p-4 p-lg-5">
+              <div class="d-flex align-items-start gap-3 mb-4">
+                <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
+                  style="width:56px;height:56px;background:lightgreen;">
+                  <i class="bi bi-gear-wide-connected fs-4" style="color:mediumseagreen;"></i>
+                </div>
+                <div>
+                  <h2 class="fw-bold mb-2" style="color:darkslategray;font-size:clamp(1.25rem,3vw,1.75rem);">Business Automation Tools</h2>
+                  <p class="text-muted mb-0" style="line-height:1.8;">
+                    Automate repetitive business processes &mdash; from data entry and approvals to reporting and notifications &mdash;
+                    so your team can focus on high-value work while errors and delays are reduced.
+                  </p>
+                </div>
+              </div>
+              <div class="row g-4">
+                <div class="col-md-6">
+                  <h3 class="fw-bold mb-3" style="color:darkslategray;font-size:1rem;">Use Cases</h3>
+                  <ul class="service-list list-unstyled mb-0">
+                    <li>Invoice processing and payment reminders</li>
+                    <li>Employee onboarding and leave approvals</li>
+                    <li>Inventory alerts and sales reporting</li>
+                    <li>Marketing email triggers and follow-ups</li>
+                  </ul>
+                </div>
+                <div class="col-md-6">
+                  <h3 class="fw-bold mb-3" style="color:darkslategray;font-size:1rem;">Benefits</h3>
+                  <ul class="service-list list-unstyled mb-0">
+                    <li>Save hours of manual work every week</li>
+                    <li>Reduce human error in routine tasks</li>
+                    <li>Faster turnaround on internal processes</li>
+                    <li>Clear audit trails and workflow visibility</li>
+                  </ul>
+                </div>
+                <div class="col-12">
+                  <h3 class="fw-bold mb-3" style="color:darkslategray;font-size:1rem;">Technology Stack</h3>
+                  <div class="d-flex flex-wrap gap-2">
+                    <span class="tech-badge">Python</span>
+                    <span class="tech-badge">Zapier / Make</span>
+                    <span class="tech-badge">Custom Workflow Engines</span>
+                    <span class="tech-badge">SQL Databases</span>
+                    <span class="tech-badge">Google Workspace / Microsoft 365</span>
+                    <span class="tech-badge">Scheduled Jobs &amp; Cron</span>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-4 pt-4 border-top">
+                <a href="scheduledemo.html?service=business-automation" class="btn btn-indigo">Request Demo</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- 4. Software Prototyping -->
+          <article class="service-block" id="software-prototyping">
+            <div class="service-card-inner p-4 p-lg-5">
+              <div class="d-flex align-items-start gap-3 mb-4">
+                <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
+                  style="width:56px;height:56px;background:moccasin;">
+                  <i class="bi bi-lightning-charge-fill fs-4" style="color:darkorange;"></i>
+                </div>
+                <div>
+                  <h2 class="fw-bold mb-2" style="color:darkslategray;font-size:clamp(1.25rem,3vw,1.75rem);">Software Prototyping</h2>
+                  <p class="text-muted mb-0" style="line-height:1.8;">
+                    Rapidly build functional prototypes and MVPs to validate ideas, test AI features, and demonstrate
+                    digital transformation concepts before full-scale development &mdash; ideal for startups and innovation teams.
+                  </p>
+                </div>
+              </div>
+              <div class="row g-4">
+                <div class="col-md-6">
+                  <h3 class="fw-bold mb-3" style="color:darkslategray;font-size:1rem;">Use Cases</h3>
+                  <ul class="service-list list-unstyled mb-0">
+                    <li>AI product concept validation</li>
+                    <li>Interactive demos for investors and stakeholders</li>
+                    <li>UX testing for new digital tools</li>
+                    <li>Proof-of-concept for automation workflows</li>
+                  </ul>
+                </div>
+                <div class="col-md-6">
+                  <h3 class="fw-bold mb-3" style="color:darkslategray;font-size:1rem;">Benefits</h3>
+                  <ul class="service-list list-unstyled mb-0">
+                    <li>Launch faster with lower upfront investment</li>
+                    <li>Test ideas with real users before committing</li>
+                    <li>Reduce risk in full product development</li>
+                    <li>Clear roadmap from prototype to production</li>
+                  </ul>
+                </div>
+                <div class="col-12">
+                  <h3 class="fw-bold mb-3" style="color:darkslategray;font-size:1rem;">Technology Stack</h3>
+                  <div class="d-flex flex-wrap gap-2">
+                    <span class="tech-badge">React</span>
+                    <span class="tech-badge">Figma</span>
+                    <span class="tech-badge">Node.js / Express</span>
+                    <span class="tech-badge">Firebase</span>
+                    <span class="tech-badge">Rapid UI Frameworks</span>
+                    <span class="tech-badge">Agile / Iterative Sprints</span>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-4 pt-4 border-top">
+                <a href="scheduledemo.html?service=software-prototyping" class="btn btn-indigo">Request Demo</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- 5. Custom AI Solutions -->
+          <article class="service-block" id="custom-ai">
+            <div class="service-card-inner p-4 p-lg-5">
+              <div class="d-flex align-items-start gap-3 mb-4">
+                <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
+                  style="width:56px;height:56px;background:lavender;">
+                  <i class="bi bi-cpu-fill fs-4" style="color:mediumpurple;"></i>
+                </div>
+                <div>
+                  <h2 class="fw-bold mb-2" style="color:darkslategray;font-size:clamp(1.25rem,3vw,1.75rem);">Custom AI Solutions</h2>
+                  <p class="text-muted mb-0" style="line-height:1.8;">
+                    End-to-end custom AI systems built for your unique business requirements &mdash; from predictive analytics
+                    and intelligent dashboards to enterprise-scale automation tailored for complex organizations.
+                  </p>
+                </div>
+              </div>
+              <div class="row g-4">
+                <div class="col-md-6">
+                  <h3 class="fw-bold mb-3" style="color:darkslategray;font-size:1rem;">Use Cases</h3>
+                  <ul class="service-list list-unstyled mb-0">
+                    <li>Industry-specific AI for healthcare, finance, and education</li>
+                    <li>Predictive analytics and KPI dashboards</li>
+                    <li>Document processing and data extraction</li>
+                    <li>Enterprise workflow and decision-support systems</li>
+                  </ul>
+                </div>
+                <div class="col-md-6">
+                  <h3 class="fw-bold mb-3" style="color:darkslategray;font-size:1rem;">Benefits</h3>
+                  <ul class="service-list list-unstyled mb-0">
+                    <li>Fully tailored to your workflows and branding</li>
+                    <li>Scalable architecture for growing businesses</li>
+                    <li>Secure API access for system integration</li>
+                    <li>Dedicated support for setup and maintenance</li>
+                  </ul>
+                </div>
+                <div class="col-12">
+                  <h3 class="fw-bold mb-3" style="color:darkslategray;font-size:1rem;">Technology Stack</h3>
+                  <div class="d-flex flex-wrap gap-2">
+                    <span class="tech-badge">Python / TensorFlow</span>
+                    <span class="tech-badge">Machine Learning Pipelines</span>
+                    <span class="tech-badge">Cloud AI Services</span>
+                    <span class="tech-badge">PostgreSQL / MongoDB</span>
+                    <span class="tech-badge">Docker &amp; Kubernetes</span>
+                    <span class="tech-badge">Custom REST / GraphQL APIs</span>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-4 pt-4 border-top">
+                <a href="scheduledemo.html?service=custom-ai-solution" class="btn btn-indigo">Request Demo</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- 6. Customer Support Solutions -->
+          <article class="service-block" id="customer-support">
+            <div class="service-card-inner p-4 p-lg-5">
+              <div class="d-flex align-items-start gap-3 mb-4">
+                <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
+                  style="width:56px;height:56px;background:moccasin;">
+                  <i class="bi bi-headset fs-4" style="color:darkorange;"></i>
+                </div>
+                <div>
+                  <h2 class="fw-bold mb-2" style="color:darkslategray;font-size:clamp(1.25rem,3vw,1.75rem);">Customer Support Solutions</h2>
+                  <p class="text-muted mb-0" style="line-height:1.8;">
+                    AI-powered helpdesk and ticketing systems that streamline customer service, reduce resolution time,
+                    and boost satisfaction across every support channel.
+                  </p>
+                </div>
+              </div>
+              <div class="row g-4">
+                <div class="col-md-6">
+                  <h3 class="fw-bold mb-3" style="color:darkslategray;font-size:1rem;">Use Cases</h3>
+                  <ul class="service-list list-unstyled mb-0">
+                    <li>Automated ticket routing and prioritisation</li>
+                    <li>AI-powered knowledge base and self-service portals</li>
+                    <li>Multi-channel support (email, chat, social media)</li>
+                    <li>Sentiment analysis and customer feedback tracking</li>
+                  </ul>
+                </div>
+                <div class="col-md-6">
+                  <h3 class="fw-bold mb-3" style="color:darkslategray;font-size:1rem;">Benefits</h3>
+                  <ul class="service-list list-unstyled mb-0">
+                    <li>Faster response and resolution times</li>
+                    <li>Reduced workload for support teams</li>
+                    <li>Consistent service quality across channels</li>
+                    <li>Actionable insights from support data</li>
+                  </ul>
+                </div>
+                <div class="col-12">
+                  <h3 class="fw-bold mb-3" style="color:darkslategray;font-size:1rem;">Technology Stack</h3>
+                  <div class="d-flex flex-wrap gap-2">
+                    <span class="tech-badge">Helpdesk Platforms</span>
+                    <span class="tech-badge">AI Chat &amp; Ticketing</span>
+                    <span class="tech-badge">CRM Integration</span>
+                    <span class="tech-badge">Sentiment Analysis</span>
+                    <span class="tech-badge">Automated Workflows</span>
+                    <span class="tech-badge">Reporting Dashboards</span>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-4 pt-4 border-top">
+                <a href="scheduledemo.html?service=customer-support" class="btn btn-indigo">Request Demo</a>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+      <!-- Bottom CTA -->
+      <div class="row justify-content-center mt-5 pt-3">
+        <div class="col-lg-8 text-center">
+          <div class="p-4 p-lg-5 rounded-4" style="background:blue;color:white;">
+            <h2 class="fw-bold mb-3">Ready to transform your business with AI?</h2>
+            <p class="mb-4 opacity-90" style="line-height:1.75;">
+              Book a free demo and our team will recommend the right service &mdash; from virtual assistants to custom enterprise solutions.
+            </p>
+            <a href="scheduledemo.html" class="btn btn-light fw-semibold px-4 py-2" style="border-radius:8px;color:blue;">Request Demo</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer" style="margin:0;padding-bottom:0;">
+    <div class="container py-5">
+      <div class="row g-5">
+        <div class="col-lg-4 col-md-6">
+          <a href="index.html" class="d-flex align-items-center gap-2 text-decoration-none mb-3">
+            <img src="photos/logo.png?v=20260522" alt="AI" class="site-logo" width="56" height="56">
+            <span class="fw-semibold fs-5 site-footer__brand brand-word"><strong>Solutions</strong></span>
+          </a>
+          <div class="d-flex gap-3 mt-2">
+            <a href="https://www.facebook.com" class="social-icon" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><i class="bi bi-facebook"></i></a>
+            <a href="https://www.twitter.com" class="social-icon" aria-label="Twitter/X" target="_blank" rel="noopener noreferrer"><i class="bi bi-twitter-x"></i></a>
+            <a href="https://www.linkedin.com" class="social-icon" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer"><i class="bi bi-linkedin"></i></a>
+            <a href="https://www.instagram.com" class="social-icon" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><i class="bi bi-instagram"></i></a>
+            <a href="https://www.youtube.com" class="social-icon" aria-label="YouTube" target="_blank" rel="noopener noreferrer"><i class="bi bi-youtube"></i></a>
+          </div>
+        </div>
+        <div class="col-lg-8 col-md-6">
+          <hr class="site-footer__divider">
+          <div class="row g-3">
+            <div class="col-sm-6 d-flex align-items-start gap-2">
+              <i class="bi bi-geo-alt-fill mt-1 site-footer__icon"></i>
+              <span class="site-footer__contact">Wearside Innovation Hub<br>Sunderland, SR1 3DR, United Kingdom</span>
+            </div>
+            <div class="col-sm-6 d-flex align-items-center gap-2">
+              <i class="bi bi-telephone-fill site-footer__icon"></i>
+              <a href="tel:+441915550140" class="footer-link site-footer__contact">+44 191 555 0140</a>
+            </div>
+            <div class="col-sm-6 d-flex align-items-center gap-2">
+              <i class="bi bi-envelope-fill site-footer__icon"></i>
+              <a href="mailto:support@aisolutions.com" class="footer-link site-footer__contact">support@aisolutions.com</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="site-footer__bar">
+      <div class="container py-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <p class="mb-0 site-footer__copy">&copy; 2025 AI Solutions. All rights reserved.</p>
+        <div class="d-flex gap-3">
+          <a href="#" class="footer-link site-footer__copy">Privacy Policy</a>
+          <a href="#" class="footer-link site-footer__copy">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    (function () {
+      // Store selected service before navigating to demo form
+      document.querySelectorAll('.service-block .btn[href*="scheduledemo.html"]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var m = this.href.match(/[?&]service=([^&]+)/);
+          if (m) sessionStorage.setItem('pendingDemoService', decodeURIComponent(m[1]));
+        });
+      });
+
+      var links = document.querySelectorAll('.service-nav-link');
+      var blocks = document.querySelectorAll('.service-block');
+      if (!links.length || !blocks.length) return;
+
+      function setActive(id) {
+        links.forEach(function (link) {
+          link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+        });
+      }
+
+      if ('IntersectionObserver' in window) {
+        var observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) setActive(entry.target.id);
+          });
+        }, { rootMargin: '-40% 0px -55% 0px' });
+        blocks.forEach(function (block) { observer.observe(block); });
+      }
+    })();
+  </script>
+  <script src="js/main.js"></script>
+  <!-- Feedback Modal -->
+  <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="border-radius:16px;">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fw-bold" id="feedbackModalLabel" style="color:darkslategray;"><i class="bi bi-chat-square-text me-2" style="color:blue;"></i>Send Feedback</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-success d-none" id="feedbackSuccess" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>Thank you! Your feedback has been submitted.
+          </div>
+          <form id="feedbackForm" novalidate>
+
+            <div class="mb-3">
+              <label for="feedbackName" class="form-label fw-semibold" style="font-size:.85rem;">Name</label>
+              <input type="text" class="form-control" id="feedbackName" required>
+              <div class="invalid-feedback">Please enter your name.</div>
+            </div>
+            <div class="mb-3">
+              <label for="feedbackEmail" class="form-label fw-semibold" style="font-size:.85rem;">Email</label>
+              <input type="email" class="form-control" id="feedbackEmail" required>
+              <div class="invalid-feedback">Please enter a valid Email.</div>
+            </div>
+
+            <div class="mb-3">
+              <div class="d-flex gap-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="fbSvcDemo" value="demo">
+                  <label class="form-check-label" for="fbSvcDemo">Demo</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="fbSvcEvent" value="event">
+                  <label class="form-check-label" for="fbSvcEvent">Event</label>
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold" style="font-size:.85rem;">Overall satisfaction</label>
+              <div id="feedbackStarRating" style="font-size:1.8rem; cursor:pointer;">
+                <span data-value="1" style="color:lightgray;">&#9733;</span>
+                <span data-value="2" style="color:lightgray;">&#9733;</span>
+                <span data-value="3" style="color:lightgray;">&#9733;</span>
+                <span data-value="4" style="color:lightgray;">&#9733;</span>
+                <span data-value="5" style="color:lightgray;">&#9733;</span>
+              </div>
+              <input type="hidden" id="feedbackRating" value="0">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold" style="font-size:.85rem;">Would you recommend AI-Solutions to others?</label>
+              <div class="d-flex gap-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="feedbackRec" id="recYes" value="yes">
+                  <label class="form-check-label" for="recYes">Yes</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="feedbackRec" id="recNo" value="no">
+                  <label class="form-check-label" for="recNo">No</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="feedbackRec" id="recMaybe" value="maybe">
+                  <label class="form-check-label" for="recMaybe">Maybe</label>
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-indigo">Send</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var stars = document.querySelectorAll('#feedbackStarRating span');
+      var ratingInput = document.getElementById('feedbackRating');
+      stars.forEach(function(s) {
+        s.addEventListener('click', function() {
+          var val = parseInt(this.getAttribute('data-value'));
+          ratingInput.value = val;
+          stars.forEach(function(s2) {
+            var v = parseInt(s2.getAttribute('data-value'));
+            s2.style.color = v <= val ? 'gold' : 'lightgray';
+          });
+        });
+      });
+      var storedName = sessionStorage.getItem('feedbackName') || sessionStorage.getItem('aiSolutionsName') || '';
+      var storedEmail = sessionStorage.getItem('feedbackEmail') || sessionStorage.getItem('aiSolutionsEmail') || '';
+      if (storedName) document.getElementById('feedbackName').value = storedName;
+      if (storedEmail) document.getElementById('feedbackEmail').value = storedEmail;
+      var form = document.getElementById('feedbackForm');
+      if (!form) return;
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (!this.checkValidity()) { this.classList.add('was-validated'); return; }
+        var rec = document.querySelector('input[name="feedbackRec"]:checked');
+        var data = {
+          name: document.getElementById('feedbackName').value.trim(),
+          email: document.getElementById('feedbackEmail').value.trim(),
+          service_used: [document.getElementById("fbSvcDemo").checked ? "demo" : null, document.getElementById("fbSvcEvent").checked ? "event" : null].filter(Boolean).join(","),
+          satisfaction_rating: parseInt(document.getElementById('feedbackRating').value) || null,
+          recommendation: rec ? rec.value : ''
+        };
+        fetch('/api/feedback', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          if (d.success || d.id) {
+            document.getElementById('feedbackSuccess').classList.remove('d-none');
+            form.reset();
+            form.classList.remove('was-validated');
+            stars.forEach(function(s) { s.style.color = 'lightgray'; });
+            ratingInput.value = '0';
+            setTimeout(function() { document.getElementById('feedbackSuccess').classList.add('d-none'); }, 3000);
+          } else { showMessage('Error: ' + (d.error || 'Unknown error'), 'danger'); }
+        })
+        .catch(function() { showMessage('Error submitting feedback', 'danger'); });
+      });
+      document.getElementById('feedbackModal').addEventListener('hidden.bs.modal', function() {
+        form.reset();
+        form.classList.remove('was-validated');
+        stars.forEach(function(s) { s.style.color = 'lightgray'; });
+        ratingInput.value = '0';
+        document.getElementById('feedbackSuccess').classList.add('d-none');
+      });
+    });
+  </script>
+</body>
+</html>
+
+
+

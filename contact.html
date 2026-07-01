@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="photos/logo.png?v=20260522" type="image/png" />
+  <title>Contact &mdash; AI Solutions</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/@fontsource/cascadia-code@4.2.1/index.css" rel="stylesheet" />
+  <link href="css/theme.css?v=20260522" rel="stylesheet" />
+  <link href="css/footer.css?v=20260522" rel="stylesheet" />
+  <script src="js/api-config.js"></script>
+
+  <style>
+    body, * { font-family: 'Cascadia Code' !important; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    .navbar { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+    .navbar-brand span { color: blue; font-weight: 700; }
+    .nav-link { font-weight: 500; position: relative; }
+    .nav-link::after {
+      content: ''; position: absolute; bottom: 0;
+      left: .5rem; right: .5rem; height: 2px;
+      background: blue; border-radius: 2px;
+      transform: scaleX(0); transition: transform .25s ease;
+    }
+    .nav-link:hover::after, .nav-link.active::after { transform: scaleX(1); }
+
+    .page-hero {
+      background: lightblue;
+      padding: 120px 0 60px;
+      min-height: 400px;
+    }
+
+    .page-hero .hero-icon {
+      font-size: 8rem;
+      line-height: 1;
+      color: blue;
+      opacity: 0.2;
+    }
+
+    .hero-glow {
+      animation: pulse-glow 4s ease-in-out infinite;
+    }
+    @keyframes pulse-glow {
+      0%, 100% { opacity: .6; }
+      50% { opacity: 1; }
+    }
+
+    .section-badge {
+      display: inline-block;
+      background: lavender;
+      color: blue;
+      font-size: .8rem;
+      font-weight: 600;
+      letter-spacing: .06em;
+      padding: .3rem .9rem;
+      border-radius: 999px;
+    }
+
+    .contact-card {
+      border: 1px solid lightgray;
+      border-radius: 16px;
+      background: white;
+      height: 100%;
+    }
+
+    .map-wrap {
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid lightgray;
+      min-height: 320px;
+      height: 100%;
+    }
+
+    .map-wrap iframe {
+      display: block;
+      width: 100%;
+      min-height: 360px;
+      height: 100%;
+      border: 0;
+    }
+
+    .map-link {
+      font-size: .85rem;
+      color: blue;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .map-link:hover { text-decoration: underline; }
+
+    .contact-info-item {
+      font-size: .9rem;
+      color: slategray;
+    }
+
+    .contact-info-item i {
+      color: blue;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white bg-opacity-90 border-bottom fixed-top shadow-sm">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2 fw-semibold fs-5" href="index.html">
+        <img src="photos/logo.png?v=20260522" alt="AI" class="site-logo" width="56" height="56">
+        <span class="brand-word"><strong>Solutions</strong></span>
+      </a>
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"
+        aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav mx-auto gap-1">
+          <li class="nav-item"><a class="nav-link px-3" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link px-3" href="about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link px-3" href="services.html">Services</a></li>
+          <li class="nav-item"><a class="nav-link px-3" href="events.html">Events</a></li>
+          <li class="nav-item"><a class="nav-link active px-3" href="contact.html">Contact</a></li>
+        </ul>
+        <div class="d-flex align-items-center gap-2 mt-2 mt-lg-0">
+          <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#feedbackModal">Feedback</button>
+
+          <div id="navAuthSlot"></div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== PAGE HERO ===== -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-7">
+          <span class="section-badge">Get in Touch</span>
+          <h1 class="fw-bold mt-3 mb-3" style="font-size:clamp(2rem,5vw,3rem);color:darkslategray;letter-spacing:-.02em;">Contact Us</h1>
+          <p class="text-muted mb-0" style="font-size:1.05rem;line-height:1.75;">
+            Have a question or want to work with us? Send a message &mdash; we'd love to hear from you.
+          </p>
+        </div>
+        <div class="col-lg-5 text-center d-none d-lg-block">
+          <div class="hero-glow hero-icon" aria-hidden="true">
+            <i class="bi bi-envelope"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="py-5" style="background:aliceblue;">
+    <div class="container py-2">
+      <div class="row g-4 g-lg-5">
+
+        <!-- Contact form -->
+        <div class="col-lg-6">
+          <div class="contact-card p-4 p-lg-5">
+            <h2 class="fw-bold mb-1" style="color:darkslategray;font-size:1.35rem;">Send a Message</h2>
+            <p class="text-muted mb-4" style="font-size:.9rem;">Fill out the form and our team will get back to you shortly.</p>
+
+            <div class="alert alert-success d-none" id="contactSuccess" role="alert">
+              <i class="bi bi-check-circle-fill me-2"></i>
+              Thank you! Your message has been sent. We'll respond soon.
+            </div>
+
+            <form id="contactForm" novalidate>
+              <div class="mb-3">
+                <label for="contactName" class="form-label fw-semibold" style="font-size:.85rem;">Name </label>
+                <input type="text" class="form-control" id="contactName" name="name" required />
+                <div class="text-danger small mt-1 d-none" id="contactNameError">Please provide your name.</div>
+              </div>
+              <div class="mb-3">
+                <label for="contactEmail" class="form-label fw-semibold" style="font-size:.85rem;">Email </label>
+                <input type="email" class="form-control" id="contactEmail" name="email" required />
+                <div class="text-danger small mt-1 d-none" id="contactEmailError">Please use a valid email</div>
+              </div>
+              <div class="mb-4">
+                <label for="contactMessage" class="form-label fw-semibold" style="font-size:.85rem;">Message </label>
+                <textarea class="form-control" id="contactMessage" name="message" rows="5" required></textarea>
+                <div class="text-danger small mt-1 d-none" id="contactMessageError">Please enter a message.</div>
+              </div>
+              <button type="submit" class="btn btn-indigo py-2" style="max-width: 300px;">Send Message</button>
+            </form>
+
+            <div class="mt-4 pt-4 border-top">
+              <div class="d-flex align-items-start gap-2 contact-info-item mb-2">
+                <i class="bi bi-geo-alt-fill mt-1"></i>
+                <span>Wearside Innovation Hub, Sunderland, SR1 3DR, United Kingdom</span>
+              </div>
+              <div class="d-flex align-items-center gap-2 contact-info-item mb-2">
+                <i class="bi bi-telephone-fill"></i>
+                <a href="tel:+441915550140" class="text-decoration-none" style="color:slategray;">+44 191 555 0140</a>
+              </div>
+              <div class="d-flex align-items-center gap-2 contact-info-item">
+                <i class="bi bi-envelope-fill"></i>
+                <a href="mailto:support@aisolutions.com" class="text-decoration-none" style="color:slategray;">support@aisolutions.com</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Embedded map -->
+        <div class="col-lg-6">
+          <div class="contact-card p-3 p-lg-4 d-flex flex-column">
+            <h2 class="fw-bold mb-3 px-1" style="color:darkslategray;font-size:1.35rem;">Our Location</h2>
+            <p class="text-muted px-1 mb-3" style="font-size:.88rem;line-height:1.6;">
+              Visit us at Wearside Innovation Hub in Sunderland, or get directions below.
+            </p>
+            <div class="map-wrap flex-grow-1">
+              <iframe
+                src="https://www.openstreetmap.org/export/embed.html?bbox=-1.4050%2C54.8980%2C-1.3620%2C54.9180&amp;layer=mapnik&amp;marker=54.9078%2C-1.3835"
+                allowfullscreen=""
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                title="AI Solutions &mdash; Wearside Innovation Hub, Sunderland">
+              </iframe>
+            </div>
+            <div class="px-1 pt-3 d-flex flex-wrap gap-3">
+              <a href="https://www.google.com/maps/search/?api=1&amp;query=54.9078,-1.3835" class="map-link" target="_blank" rel="noopener noreferrer">
+                <i class="bi bi-geo-alt me-1"></i>Open in Google Maps
+              </a>
+              <a href="https://www.openstreetmap.org/?mlat=54.9078&amp;mlon=-1.3835#map=15/54.9078/-1.3835" class="map-link" target="_blank" rel="noopener noreferrer">
+                <i class="bi bi-map me-1"></i>Open in OpenStreetMap
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer" style="margin:0;padding-bottom:0;">
+    <div class="container py-5">
+      <div class="row g-5">
+        <div class="col-lg-4 col-md-6">
+          <a href="index.html" class="d-flex align-items-center gap-2 text-decoration-none mb-3">
+            <img src="photos/logo.png?v=20260522" alt="AI" class="site-logo" width="56" height="56">
+            <span class="fw-semibold fs-5 site-footer__brand brand-word"><strong>Solutions</strong></span>
+          </a>
+          <div class="d-flex gap-3 mt-2">
+            <a href="https://www.facebook.com" class="social-icon" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><i class="bi bi-facebook"></i></a>
+            <a href="https://www.twitter.com" class="social-icon" aria-label="Twitter/X" target="_blank" rel="noopener noreferrer"><i class="bi bi-twitter-x"></i></a>
+            <a href="https://www.linkedin.com" class="social-icon" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer"><i class="bi bi-linkedin"></i></a>
+            <a href="https://www.instagram.com" class="social-icon" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><i class="bi bi-instagram"></i></a>
+            <a href="https://www.youtube.com" class="social-icon" aria-label="YouTube" target="_blank" rel="noopener noreferrer"><i class="bi bi-youtube"></i></a>
+          </div>
+        </div>
+        <div class="col-lg-8 col-md-6">
+          <hr class="site-footer__divider">
+          <div class="row g-3">
+            <div class="col-sm-6 d-flex align-items-start gap-2">
+              <i class="bi bi-geo-alt-fill mt-1 site-footer__icon"></i>
+              <span class="site-footer__contact">Wearside Innovation Hub<br>Sunderland, SR1 3DR, United Kingdom</span>
+            </div>
+            <div class="col-sm-6 d-flex align-items-center gap-2">
+              <i class="bi bi-telephone-fill site-footer__icon"></i>
+              <a href="tel:+441915550140" class="footer-link site-footer__contact">+44 191 555 0140</a>
+            </div>
+            <div class="col-sm-6 d-flex align-items-center gap-2">
+              <i class="bi bi-envelope-fill site-footer__icon"></i>
+              <a href="mailto:support@aisolutions.com" class="footer-link site-footer__contact">support@aisolutions.com</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="site-footer__bar">
+      <div class="container py-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <p class="mb-0 site-footer__copy">&copy; 2025 AI Solutions. All rights reserved.</p>
+        <div class="d-flex gap-3">
+          <a href="#" class="footer-link site-footer__copy">Privacy Policy</a>
+          <a href="#" class="footer-link site-footer__copy">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    ['contactName', 'contactEmail', 'contactMessage'].forEach(function (id) {
+      document.getElementById(id).addEventListener('input', function () {
+        document.getElementById(id + 'Error').classList.add('d-none');
+      });
+    });
+    document.getElementById('contactForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      
+      // Validate all required fields
+      const name = document.getElementById('contactName').value.trim();
+      const email = document.getElementById('contactEmail').value.trim();
+      const message = document.getElementById('contactMessage').value.trim();
+      
+      var hasError = false;
+      ['contactName', 'contactEmail', 'contactMessage'].forEach(function (id) {
+        var el = document.getElementById(id);
+        var err = document.getElementById(id + 'Error');
+        if (!el.value.trim()) {
+          err.classList.remove('d-none');
+          hasError = true;
+        } else {
+          err.classList.add('d-none');
+        }
+      });
+      if (hasError) return;
+      
+      // Validate email domain (allowed: gmail, yahoo, outlook, hotmail, icloud, any .edu)
+      var allowedDomains = ['gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com', 'icloud.com'];
+      var emailParts = email.split('@');
+      var domain = emailParts.length === 2 ? emailParts[1].toLowerCase() : '';
+      var isEdu = /\.edu$/.test(domain);
+      var emailError = document.getElementById('contactEmailError');
+      if (!domain || (!isEdu && allowedDomains.indexOf(domain) === -1)) {
+        emailError.classList.remove('d-none');
+        return;
+      }
+      emailError.classList.add('d-none');
+      
+      // Prepare inquiry data for API
+      const inquiryData = {
+        name: name,
+        email: email,
+        message: message
+      };
+      
+      // Save to database via API
+      fetch('/api/inquiries', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(inquiryData)
+      })
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(data) {
+        if (data.success || data.id) {
+          // Show success message
+          document.getElementById('contactSuccess').classList.remove('d-none');
+          document.getElementById('contactForm').reset();
+          document.getElementById('contactForm').classList.remove('was-validated');
+          ['contactName', 'contactEmail', 'contactMessage'].forEach(function (id) {
+            document.getElementById(id + 'Error').classList.add('d-none');
+          });
+        } else {
+          showMessage('Error sending inquiry: ' + (data.error || 'Unknown error'), 'danger');
+        }
+      })
+      .catch(function(error) {
+        console.error('Error:', error);
+        showMessage('Error sending inquiry. Please try again.', 'danger');
+      });
+    });
+  </script>
+  <script src="js/main.js"></script>
+  <!-- Feedback Modal -->
+  <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="border-radius:16px;">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fw-bold" id="feedbackModalLabel" style="color:darkslategray;"><i class="bi bi-chat-square-text me-2" style="color:blue;"></i>Send Feedback</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-success d-none" id="feedbackSuccess" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>Thank you! Your feedback has been submitted.
+          </div>
+          <form id="feedbackForm" novalidate>
+
+            <div class="mb-3">
+              <label for="feedbackName" class="form-label fw-semibold" style="font-size:.85rem;">Name</label>
+              <input type="text" class="form-control" id="feedbackName" required>
+              <div class="invalid-feedback">Please enter your name.</div>
+            </div>
+            <div class="mb-3">
+              <label for="feedbackEmail" class="form-label fw-semibold" style="font-size:.85rem;">Email</label>
+              <input type="email" class="form-control" id="feedbackEmail" required>
+              <div class="invalid-feedback">Please enter a valid Email.</div>
+            </div>
+
+            <div class="mb-3">
+              <div class="d-flex gap-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="fbSvcDemo" value="demo">
+                  <label class="form-check-label" for="fbSvcDemo">Demo</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="fbSvcEvent" value="event">
+                  <label class="form-check-label" for="fbSvcEvent">Event</label>
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold" style="font-size:.85rem;">Overall satisfaction</label>
+              <div id="feedbackStarRating" style="font-size:1.8rem; cursor:pointer;">
+                <span data-value="1" style="color:lightgray;">&#9733;</span>
+                <span data-value="2" style="color:lightgray;">&#9733;</span>
+                <span data-value="3" style="color:lightgray;">&#9733;</span>
+                <span data-value="4" style="color:lightgray;">&#9733;</span>
+                <span data-value="5" style="color:lightgray;">&#9733;</span>
+              </div>
+              <input type="hidden" id="feedbackRating" value="0">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold" style="font-size:.85rem;">Would you recommend AI-Solutions to others?</label>
+              <div class="d-flex gap-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="feedbackRec" id="recYes" value="yes">
+                  <label class="form-check-label" for="recYes">Yes</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="feedbackRec" id="recNo" value="no">
+                  <label class="form-check-label" for="recNo">No</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="feedbackRec" id="recMaybe" value="maybe">
+                  <label class="form-check-label" for="recMaybe">Maybe</label>
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-indigo">Send</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var stars = document.querySelectorAll('#feedbackStarRating span');
+      var ratingInput = document.getElementById('feedbackRating');
+      stars.forEach(function(s) {
+        s.addEventListener('click', function() {
+          var val = parseInt(this.getAttribute('data-value'));
+          ratingInput.value = val;
+          stars.forEach(function(s2) {
+            var v = parseInt(s2.getAttribute('data-value'));
+            s2.style.color = v <= val ? 'gold' : 'lightgray';
+          });
+        });
+      });
+      var storedName = sessionStorage.getItem('feedbackName') || sessionStorage.getItem('aiSolutionsName') || '';
+      var storedEmail = sessionStorage.getItem('feedbackEmail') || sessionStorage.getItem('aiSolutionsEmail') || '';
+      if (storedName) document.getElementById('feedbackName').value = storedName;
+      if (storedEmail) document.getElementById('feedbackEmail').value = storedEmail;
+      var form = document.getElementById('feedbackForm');
+      if (!form) return;
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (!this.checkValidity()) { this.classList.add('was-validated'); return; }
+        var rec = document.querySelector('input[name="feedbackRec"]:checked');
+        var data = {
+          name: document.getElementById('feedbackName').value.trim(),
+          email: document.getElementById('feedbackEmail').value.trim(),
+          service_used: [document.getElementById("fbSvcDemo").checked ? "demo" : null, document.getElementById("fbSvcEvent").checked ? "event" : null].filter(Boolean).join(","),
+          satisfaction_rating: parseInt(document.getElementById('feedbackRating').value) || null,
+          recommendation: rec ? rec.value : ''
+        };
+        fetch('/api/feedback', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          if (d.success || d.id) {
+            document.getElementById('feedbackSuccess').classList.remove('d-none');
+            form.reset();
+            form.classList.remove('was-validated');
+            stars.forEach(function(s) { s.style.color = 'lightgray'; });
+            ratingInput.value = '0';
+            setTimeout(function() { document.getElementById('feedbackSuccess').classList.add('d-none'); }, 3000);
+          } else { showMessage('Error: ' + (d.error || 'Unknown error'), 'danger'); }
+        })
+        .catch(function() { showMessage('Error submitting feedback', 'danger'); });
+      });
+      document.getElementById('feedbackModal').addEventListener('hidden.bs.modal', function() {
+        form.reset();
+        form.classList.remove('was-validated');
+        stars.forEach(function(s) { s.style.color = 'lightgray'; });
+        ratingInput.value = '0';
+        document.getElementById('feedbackSuccess').classList.add('d-none');
+      });
+    });
+  </script>
+</body>
+</html>
+
+
+

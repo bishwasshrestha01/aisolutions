@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="../photos/logo.png?v=20260522" type="image/png" />
+  <title>Analytics & Reports — Admin Panel — AI Solutions</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/@fontsource/cascadia-code@4.2.1/index.css" rel="stylesheet" />
+  <link href="../css/theme.css?v=20260522" rel="stylesheet" />
+  <style>
+    body, * { font-family: 'Cascadia Code' !important; }
+    body { background: whitesmoke; margin: 0; padding: 0; }
+    .admin-sidebar { background: white; height: 100vh; box-shadow: 2px 0 12px rgba(0,0,0,.08); position: fixed; left: 0; top: 0; width: 250px; overflow-y: auto; padding: 1.5rem 0; }
+    .admin-header { padding: 0 1.5rem 1.5rem; border-bottom: 1px solid lightgray; margin-bottom: 1.5rem; }
+    .admin-logo { display: flex; align-items: center; gap: .6rem; text-decoration: none; margin-bottom: 1rem; }
+    .admin-logo img { width: 40px; height: 40px; }
+    .admin-logo-text { font-weight: 700; color: darkslategray; font-size: 1.1rem; }
+    .admin-logo-text strong { color: blue; }
+    .admin-badges { display: flex; align-items: center; gap: .5rem; }
+    .admin-badge { display: inline-block; background: crimson; color: white; padding: .3rem .8rem; border-radius: 6px; font-size: .75rem; font-weight: 600; }
+    .logout-sidebar-btn { background: crimson; color: white; border: none; padding: .3rem .8rem; border-radius: 6px; cursor: pointer; font-weight: 600; transition: background .2s; font-size: .75rem; white-space: nowrap; display: inline-block; }
+    .logout-sidebar-btn:hover { background: firebrick; color: white; text-decoration: none; }
+    .admin-menu { list-style: none; padding: 0 1rem; margin: 0; }
+    .admin-menu li { margin-bottom: 0.5rem; }
+    .admin-menu a { display: flex; align-items: center; gap: .8rem; padding: .75rem 1rem; border-radius: 8px; color: slategray; text-decoration: none; transition: all .2s; font-weight: 500; }
+    .admin-menu a:hover, .admin-menu a.active { background: rgba(79,70,229,.1); color: blue; }
+    .admin-menu i { width: 20px; text-align: center; }
+    .admin-main { margin-left: 250px; padding: 2rem; }
+    .admin-topbar { background: white; padding: 1rem 2rem; border-radius: 12px; display: flex; justify-content: flex-start; align-items: center; margin-bottom: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,.06); }
+    .admin-topbar h1 { margin: 0; font-size: 1.8rem; color: darkslategray; font-weight: 700; }
+    .logout-btn { background: crimson; color: white; border: none; padding: .6rem 1.2rem; border-radius: 8px; cursor: pointer; font-weight: 600; transition: background .2s; }
+    .logout-btn:hover { background: firebrick; color: white; text-decoration: none; }
+    .dashboard-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+    .dashboard-card { background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.06); border-left: 4px solid blue; }
+    .dashboard-card h5 { margin: 0 0 .5rem; color: slategray; font-size: .9rem; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; }
+    .dashboard-card .stat { font-size: 2rem; font-weight: 700; color: darkslategray; margin: 0; }
+    .last-updated { text-align: right; color: lightslategray; font-size: .75rem; margin-bottom: 10px; }
+    .del-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,.5); z-index: 9999; align-items: center; justify-content: center; }
+    .del-modal.show { display: flex; }
+    .del-modal-content { background: white; padding: 2rem; border-radius: 12px; width: 90%; max-width: 420px; text-align: center; }
+    .del-modal-content h5 { margin-bottom: 1rem; font-weight: 700; }
+    .del-modal-content p { color: slategray; margin-bottom: 1.5rem; font-size: .95rem; }
+    .del-modal-buttons { display: flex; gap: 1rem; justify-content: center; }
+  </style>
+  <script src="../js/api-config.js"></script>
+</head>
+<body>
+  <aside class="admin-sidebar">
+    <div class="admin-header">
+      <a href="../index.html" class="admin-logo">
+        <img src="../photos/logo.png?v=20260522" alt="AI">
+        <div class="admin-logo-text brand-word"><strong>Solutions</strong></div>
+      </a>
+      <div class="admin-badges">
+        <span class="admin-badge"><i class="bi bi-shield-check"></i> Admin</span>
+        <button class="logout-sidebar-btn" onclick="logout()" title="Logout">Logout</button>
+      </div>
+    </div>
+    <ul class="admin-menu">
+      <li><a href="dashboard.html" class="admin-link"><i class="bi bi-speedometer2"></i> <span>Dashboard</span></a></li>
+      <li><a href="analytics.html" class="admin-link active"><i class="bi bi-graph-up"></i> <span>Analytics</span></a></li>
+      <li><a href="inquiries.html" class="admin-link"><i class="bi bi-chat-dots"></i> <span>Customer Inquiries</span></a></li>
+      <li><a href="feedback.html" class="admin-link"><i class="bi bi-megaphone"></i> <span>Feedback</span></a></li>
+
+      <li><a href="demos.html" class="admin-link"><i class="bi bi-calendar-check"></i> <span>Demo Requests</span></a></li>
+      <li><a href="registrations.html" class="admin-link"><i class="bi bi-clipboard-check"></i> <span>Event Registrations</span></a></li>
+      <li><a href="events.html" class="admin-link"><i class="bi bi-calendar-event"></i> <span>Events</span></a></li>
+      <li><a href="settings.html" class="admin-link"><i class="bi bi-gear"></i> <span>Settings</span></a></li>
+    </ul>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar" style="display:flex; justify-content:space-between; align-items:center;">
+      <h1 style="margin:0;">Analytics & Reports</h1>
+      <div style="display:flex; gap:.6rem;">
+        <button onclick="exportCSV()" style="background:#28a745; color:white; border:none; padding:.5rem 1rem; border-radius:8px; cursor:pointer; font-weight:600; font-size:.85rem;"><i class="bi bi-file-earmark-spreadsheet"></i> CSV</button>
+        <button onclick="printReport()" style="background:blue; color:white; border:none; padding:.5rem 1rem; border-radius:8px; cursor:pointer; font-weight:600; font-size:.85rem;"><i class="bi bi-printer"></i> Print</button>
+      </div>
+    </div>
+
+
+
+
+    <div style="background: white; padding: 1.5rem 2rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.06); margin-bottom: 2rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-end;">
+      <div>
+        <label style="font-size:.8rem; font-weight:600; color:darkslategray; display:block; margin-bottom:.3rem;">From</label>
+        <input type="date" id="filterDateFrom" style="padding:.4rem .6rem; border:1px solid lightgray; border-radius:6px; font-size:.85rem;">
+      </div>
+      <div>
+        <label style="font-size:.8rem; font-weight:600; color:darkslategray; display:block; margin-bottom:.3rem;">To</label>
+        <input type="date" id="filterDateTo" style="padding:.4rem .6rem; border:1px solid lightgray; border-radius:6px; font-size:.85rem;">
+      </div>
+      <div>
+        <label style="font-size:.8rem; font-weight:600; color:darkslategray; display:block; margin-bottom:.3rem;">Service</label>
+        <select id="filterService" style="padding:.4rem .6rem; border:1px solid lightgray; border-radius:6px; font-size:.85rem;">
+          <option value="">All</option>
+          <option value="AI Virtual Assistant Development">AI Virtual Assistant Development</option>
+          <option value="Chatbot Integration">Chatbot Integration</option>
+          <option value="Business Automation Tools">Business Automation Tools</option>
+          <option value="Software Prototyping">Software Prototyping</option>
+          <option value="Custom AI Solutions">Custom AI Solutions</option>
+          <option value="Customer Support Solutions">Customer Support Solutions</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:.8rem; font-weight:600; color:darkslategray; display:block; margin-bottom:.3rem;">Event</label>
+        <select id="filterEvent" style="padding:.4rem .6rem; border:1px solid lightgray; border-radius:6px; font-size:.85rem;">
+          <option value="">All</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:.8rem; font-weight:600; color:darkslategray; display:block; margin-bottom:.3rem;">Country</label>
+        <select id="filterCountry" style="padding:.4rem .6rem; border:1px solid lightgray; border-radius:6px; font-size:.85rem;">
+          <option value="">All</option>
+        </select>
+      </div>
+      <button onclick="applyFilters()" style="background:blue; color:white; border:none; padding:.5rem 1.2rem; border-radius:8px; cursor:pointer; font-weight:600; font-size:.85rem;">Apply</button>
+      <button onclick="resetFilters()" style="background:slategray; color:white; border:none; padding:.5rem 1.2rem; border-radius:8px; cursor:pointer; font-weight:600; font-size:.85rem;">Reset</button>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem;">
+      <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.06);">
+        <h5 style="margin-bottom: 1rem; color: darkslategray; font-weight: 600;">Registration Distribution in Each Event</h5>
+        <canvas id="pieChart" style="max-height: 300px;"></canvas>
+      </div>
+      <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.06);">
+        <h5 style="margin-bottom: 1rem; color: darkslategray; font-weight: 600;">Total Visitors Per Day</h5>
+        <canvas id="visitsChart" style="max-height: 300px;"></canvas>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem;">
+      <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.06);">
+        <h5 style="margin-bottom: 1rem; color: darkslategray; font-weight: 600;">Registration Status Breakdown</h5>
+        <canvas id="doughnutChart" style="max-height: 300px;"></canvas>
+      </div>
+      <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.06);">
+        <h5 style="margin-bottom: 1rem; color: darkslategray; font-weight: 600;">Customer Interest Analysis</h5>
+        <canvas id="interestChart" style="max-height: 300px;"></canvas>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem;">
+      <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.06);">
+        <h5 style="margin-bottom: 1rem; color: darkslategray; font-weight: 600;">Monthly Customer Inquiries</h5>
+        <canvas id="monthlyInquiriesChart" style="max-height: 300px;"></canvas>
+      </div>
+      <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.06);">
+        <h5 style="margin-bottom: 1rem; color: darkslategray; font-weight: 600;">Business Growth Summary</h5>
+        <canvas id="growthChart" style="max-height: 350px;"></canvas>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem;">
+      <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.06);">
+        <h5 style="margin-bottom: 1rem; color: darkslategray; font-weight: 600;">Customer Conversion Funnel</h5>
+        <canvas id="funnelChart" style="max-height: 350px;"></canvas>
+      </div>
+      <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.06);">
+        <h5 style="margin-bottom: 1rem; color: darkslategray; font-weight: 600;">Daily Website Activity</h5>
+        <canvas id="dailyActivityChart" style="max-height: 300px;"></canvas>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem;">
+      <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.06);">
+        <h5 style="margin-bottom: 1rem; color: darkslategray; font-weight: 600;">Customers by Country</h5>
+        <table class="users-table">
+          <thead><tr><th style="padding:1rem 2rem 1rem 0;">Country</th><th style="padding:1rem 2rem;">Customers</th><th style="padding:1rem 0 1rem 2rem;">Percentage</th></tr></thead>
+          <tbody id="countryTableBody"></tbody>
+        </table>
+      </div>
+      <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.06);">
+        <h5 style="margin-bottom: 1rem; color: darkslategray; font-weight: 600;">Customer Satisfaction</h5>
+        <div style="text-align: center; font-size: 3rem; font-weight: 700; color: darkslategray;" id="avgSatisfaction">-</div>
+        <div style="text-align: center; color: slategray; font-size: .9rem; margin-bottom: .5rem;">Average Satisfaction</div>
+        <canvas id="satisfactionGauge" style="max-height: 260px;"></canvas>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem;">
+      <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.06);">
+        <h5 style="margin-bottom: 1rem; color: darkslategray; font-weight: 600;">Satisfaction Trend</h5>
+        <canvas id="satisfactionTrend" style="max-height: 280px;"></canvas>
+      </div>
+      <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.06);">
+        <h5 style="margin-bottom: 1rem; color: darkslategray; font-weight: 600;">Recommendation Rate</h5>
+        <div id="recommendationBreakdown"></div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Logout Modal -->
+  <div id="logoutModal" class="del-modal">
+    <div class="del-modal-content">
+      <h5 style="color: crimson;"><i class="bi bi-box-arrow-right"></i> Logout</h5>
+      <p>Are you sure you want to logout?</p>
+      <div class="del-modal-buttons">
+        <button type="button" class="action-btn" onclick="closeModal('logoutModal')" style="background: slategray;">Cancel</button>
+        <button type="button" class="action-btn" onclick="confirmLogout()" style="background: crimson;">Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      fetch('/api/auth/me/')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (!data.success) { window.location.href = 'index.html'; return; }
+        loadAnalytics();
+      })
+      .catch(function() { window.location.href = 'index.html'; });
+    });
+
+    var rawData = {};
+
+    function populateFilterOptions() {
+      var evtSelect = document.getElementById('filterEvent');
+      var ctrySelect = document.getElementById('filterCountry');
+      if (rawData.events) {
+        var existingEvents = {};
+        rawData.events.forEach(function(e) {
+          var title = e.title || e.id || 'Unknown';
+          if (!existingEvents[title]) { existingEvents[title] = true; evtSelect.innerHTML += '<option value="' + title.replace(/"/g, '&quot;') + '">' + title + '</option>'; }
+        });
+      }
+      if (rawData.demos) {
+        var existingCountries = {};
+        rawData.demos.forEach(function(d) {
+          var c = d.country || '';
+          if (c && !existingCountries[c]) { existingCountries[c] = true; ctrySelect.innerHTML += '<option value="' + c.replace(/"/g, '&quot;') + '">' + c + '</option>'; }
+        });
+      }
+    }
+
+    function applyFilters() {
+      var dateFrom = document.getElementById('filterDateFrom').value;
+      var dateTo = document.getElementById('filterDateTo').value;
+      var service = document.getElementById('filterService').value;
+      var eventFilter = document.getElementById('filterEvent').value;
+      var country = document.getElementById('filterCountry').value;
+
+      var d = rawData;
+
+      var filteredDemos = (d.demos || []).filter(function(item) {
+        if (service && item.service !== service) return false;
+        if (country && item.country !== country) return false;
+        if (dateFrom && item.created_at && item.created_at.slice(0, 10) < dateFrom) return false;
+        if (dateTo && item.created_at && item.created_at.slice(0, 10) > dateTo) return false;
+        return true;
+      });
+
+      var filteredRegs = (d.registrations || []).filter(function(item) {
+        if (eventFilter && item.event_title !== eventFilter) return false;
+        if (dateFrom && item.created_at && item.created_at.slice(0, 10) < dateFrom) return false;
+        if (dateTo && item.created_at && item.created_at.slice(0, 10) > dateTo) return false;
+        return true;
+      });
+
+      var filteredInquiries = (d.inquiries || []).filter(function(item) {
+        if (dateFrom && item.created_at && item.created_at.slice(0, 10) < dateFrom) return false;
+        if (dateTo && item.created_at && item.created_at.slice(0, 10) > dateTo) return false;
+        return true;
+      });
+
+      var filteredFeedback = (d.feedback || []).filter(function(item) {
+        if (dateFrom && item.created_at && item.created_at.slice(0, 10) < dateFrom) return false;
+        if (dateTo && item.created_at && item.created_at.slice(0, 10) > dateTo) return false;
+        return true;
+      });
+
+      var filteredVisits = (d.visitsData || []).filter(function(item) {
+        if (dateFrom && item.date < dateFrom) return false;
+        if (dateTo && item.date > dateTo) return false;
+        return true;
+      });
+
+      initCharts({
+        totalVisitors: filteredVisits.reduce(function(s, v) { return s + v.visits; }, 0),
+        inqCount: filteredInquiries.length,
+        demoCount: filteredDemos.length,
+        regCount: filteredRegs.length,
+        approvedDemos: filteredDemos.filter(function(dd) { return dd.status === 'approved'; }).length,
+        pendingDemos: filteredDemos.filter(function(dd) { return dd.status !== 'approved'; }).length,
+        users: d.users || [],
+        registrations: filteredRegs,
+        visitsData: filteredVisits,
+        demos: filteredDemos,
+        inquiries: filteredInquiries,
+        events: d.events || [],
+        feedback: filteredFeedback
+      });
+    }
+
+    function resetFilters() {
+      document.getElementById('filterDateFrom').value = '';
+      document.getElementById('filterDateTo').value = '';
+      document.getElementById('filterService').value = '';
+      document.getElementById('filterEvent').value = '';
+      document.getElementById('filterCountry').value = '';
+      applyFilters();
+    }
+
+    async function loadAnalytics() {
+      try {
+        const [usersRes, inquiriesRes, demosRes, regsRes, visitsRes, eventsRes, feedbackRes] = await Promise.all([
+          fetch('/api/users/').then(r => r.json()),
+          fetch('/api/inquiries/').then(r => r.json()),
+          fetch('/api/demos').then(r => r.json()),
+          fetch('/api/registrations/').then(r => r.json()),
+          fetch('/api/visits/').then(r => r.json()),
+          fetch('/api/events').then(r => r.json()),
+          fetch('/api/feedback').then(r => r.json())
+        ]);
+
+        var users = usersRes.data || [];
+        var inquiries = inquiriesRes.data || [];
+        var demos = Array.isArray(demosRes) ? demosRes : (demosRes.data || []);
+        var registrations = Array.isArray(regsRes) ? regsRes : (regsRes.data || []);
+        var visitsData = visitsRes.data || [];
+        var eventsData = Array.isArray(eventsRes) ? eventsRes : (eventsRes.data || []);
+        var feedbackData = Array.isArray(feedbackRes) ? feedbackRes : (feedbackRes.data || []);
+
+        rawData = { users, inquiries, demos, registrations, visitsData, events: eventsData, feedback: feedbackData };
+
+        populateFilterOptions();
+        applyFilters();
+      } catch (err) {
+        console.error('Error loading data:', err.message);
+      }
+    }
+
+    function exportCSV() {
+      var d = rawData;
+      var sections = [];
+
+      sections.push(['AI Solutions — Analytics Report', '']);
+      sections.push(['Generated:', new Date().toLocaleString()]);
+      sections.push(['', '']);
+
+      sections.push(['--- SUMMARY ---', '']);
+      sections.push(['Total Demo Requests', d.demos.length]);
+      sections.push(['Total Event Registrations', d.registrations.length]);
+      sections.push(['Total Inquiries', d.inquiries.length]);
+      sections.push(['Total Feedback Submissions', d.feedback.length]);
+      sections.push(['', '']);
+
+      sections.push(['--- DEMO REQUESTS ---', 'Name', 'Email', 'Phone', 'Service', 'Country', 'Status', 'Date']);
+      d.demos.forEach(function(x) { sections.push([x.name || '', x.email || '', x.phone || '', x.service || '', x.country || '', x.status || '', x.created_at ? x.created_at.slice(0, 10) : '']); });
+      sections.push(['', '']);
+
+      sections.push(['--- EVENT REGISTRATIONS ---', 'Name', 'Email', 'Event', 'Status', 'Date']);
+      d.registrations.forEach(function(x) { sections.push([x.attendee_name || x.name || '', x.attendee_email || x.email || '', x.event_title || x.event_id || '', x.status || '', x.created_at ? x.created_at.slice(0, 10) : '']); });
+      sections.push(['', '']);
+
+      sections.push(['--- INQUIRIES ---', 'Name', 'Email', 'Message', 'Status', 'Date']);
+      d.inquiries.forEach(function(x) { sections.push([x.name || '', x.email || '', (x.message || '').substring(0, 100), x.status || '', x.created_at ? x.created_at.slice(0, 10) : '']); });
+      sections.push(['', '']);
+
+      sections.push(['--- FEEDBACK ---', 'Name', 'Email', 'Service Used', 'Rating', 'Recommend', 'Date']);
+      d.feedback.forEach(function(x) { sections.push([x.name || '', x.email || '', x.service_used || '', x.satisfaction_rating || '', x.recommendation || '', x.created_at ? x.created_at.slice(0, 10) : '']); });
+
+      var csv = sections.map(function(row) { return row.map(function(v) { return '"' + String(v).replace(/"/g, '""') + '"'; }).join(','); }).join('\n');
+      var blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+      var link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = 'analytics_report.csv'; link.click();
+    }
+
+    function printReport() { window.print(); }
+
+    function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+    function logout() {
+      document.getElementById('logoutModal').classList.add('show');
+    }
+
+    function confirmLogout() {
+      closeModal('logoutModal');
+      fetch('/api/auth/logout/', { method: 'POST' })
+      .then(function() { window.location.href = 'index.html'; })
+      .catch(function() { window.location.href = 'index.html'; });
+    }
+
+    let charts = {};
+
+    function initCharts(data) {
+      Object.keys(charts).forEach(k => { if (charts[k]) charts[k].destroy(); });
+
+      const pieCtx = document.getElementById('pieChart');
+      if (pieCtx) {
+        var regs = data.registrations || [];
+        var events = data.events || [];
+        var eventRegCounts = {};
+        events.forEach(function(e) { eventRegCounts[e.title || e.id] = 0; });
+        regs.forEach(function(r) {
+          var evt = r.event_title || r.event_id || 'Unknown';
+          if (eventRegCounts[evt] !== undefined) eventRegCounts[evt]++;
+          else eventRegCounts[evt] = 1;
+        });
+        var pieLabels = Object.keys(eventRegCounts);
+        var pieData = pieLabels.map(function(e) { return eventRegCounts[e]; });
+        var pieColors = ['#4F46E5', '#FF6384', '#36A2EB', '#FFCE56', '#28a745', '#e67e22', '#8e44ad', '#1abc9c', '#e74c3c', '#f39c12'];
+        charts.pie = new Chart(pieCtx, {
+          type: 'pie',
+          data: {
+            labels: pieLabels.length ? pieLabels : ['No events'],
+            datasets: [{
+              data: pieData.length ? pieData : [1],
+              backgroundColor: pieColors.slice(0, pieLabels.length || 1),
+              borderColor: 'white',
+              borderWidth: 2
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: { legend: { position: 'bottom', labels: { font: { size: 10 } } } }
+          }
+        });
+      }
+
+      const visitsCtx = document.getElementById('visitsChart');
+      if (visitsCtx) {
+        const sorted = (data.visitsData || []).slice().sort((a, b) => a.date.localeCompare(b.date));
+        const labels = sorted.map(v => v.date);
+        const counts = sorted.map(v => v.visits);
+        charts.visits = new Chart(visitsCtx, {
+          type: 'line',
+          data: {
+            labels: labels.length ? labels : ['No data'],
+            datasets: [{
+              label: 'Visits',
+              data: counts.length ? counts : [0],
+              borderColor: '#4F46E5',
+              backgroundColor: 'rgba(79, 70, 229, 0.1)',
+              borderWidth: 3,
+              tension: 0.4,
+              fill: true,
+              pointBackgroundColor: '#4F46E5',
+              pointBorderColor: 'white',
+              pointBorderWidth: 2,
+              pointRadius: 5
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true, ticks: { stepSize: Math.max(1, Math.ceil(Math.max(...counts, 1) / 5)) } } }
+          }
+        });
+      }
+
+
+      const doughnutCtx = document.getElementById('doughnutChart');
+      if (doughnutCtx) {
+        const approved = data.registrations.filter(r => r.status === 'approved').length;
+        const pending = data.registrations.filter(r => r.status === 'pending' || !r.status).length;
+        const rejected = data.registrations.filter(r => r.status === 'rejected').length;
+        const total = data.regCount || 1;
+
+        charts.doughnut = new Chart(doughnutCtx, {
+          type: 'doughnut',
+          data: {
+            labels: ['Approved', 'Pending', 'Rejected'],
+            datasets: [{
+              data: [approved || total * 0.6, pending || total * 0.3, rejected || total * 0.1],
+              backgroundColor: ['#28a745', '#ffc107', '#dc3545'],
+              borderColor: 'white',
+              borderWidth: 2
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: { legend: { position: 'bottom', labels: { font: { size: 12 } } } }
+          }
+        });
+      }
+
+      var interestCtx = document.getElementById('interestChart');
+      if (interestCtx) {
+        var allSvcs = [
+          'AI Virtual Assistant Development',
+          'Chatbot Integration',
+          'Business Automation Tools',
+          'Software Prototyping',
+          'Custom AI Solutions',
+          'Customer Support Solutions'
+        ];
+        var demos = data.demos || [];
+        var svcCounts = {};
+        demos.forEach(function(d) {
+          var svc = d.service || 'Unknown';
+          svcCounts[svc] = (svcCounts[svc] || 0) + 1;
+        });
+        var interestData = allSvcs.map(function(s) { return svcCounts[s] || 0; });
+        var interestColors = ['#4F46E5', '#FF6384', '#36A2EB', '#FFCE56', '#28a745', '#e67e22'];
+        charts.interest = new Chart(interestCtx, {
+          type: 'bar',
+          data: {
+            labels: allSvcs,
+            datasets: [{
+              label: 'Demo Requests',
+              data: interestData,
+              backgroundColor: interestColors,
+              borderRadius: 8,
+              borderWidth: 0
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            indexAxis: 'y',
+            plugins: { legend: { display: false } },
+            scales: { x: { beginAtZero: true, ticks: { stepSize: 1 } } }
+          }
+        });
+      }
+
+      var monthlyCtx = document.getElementById('monthlyInquiriesChart');
+      if (monthlyCtx) {
+        var inquiries = data.inquiries || [];
+        var monthCounts = {};
+        inquiries.forEach(function(i) {
+          if (i.created_at) {
+            var m = i.created_at.slice(0, 7);
+            monthCounts[m] = (monthCounts[m] || 0) + 1;
+          }
+        });
+        var sortedMonths = Object.keys(monthCounts).sort();
+        var monthLabels = sortedMonths.map(function(m) {
+          var parts = m.split('-');
+          var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+          return months[parseInt(parts[1]) - 1] + ' ' + parts[0];
+        });
+        var monthData = sortedMonths.map(function(m) { return monthCounts[m]; });
+        charts.monthly = new Chart(monthlyCtx, {
+          type: 'line',
+          data: {
+            labels: monthLabels.length ? monthLabels : ['No data'],
+            datasets: [{
+              label: 'Inquiries',
+              data: monthData.length ? monthData : [0],
+              borderColor: '#FF6384',
+              backgroundColor: 'rgba(255, 99, 132, 0.1)',
+              borderWidth: 3,
+              tension: 0.4,
+              fill: true,
+              pointBackgroundColor: '#FF6384',
+              pointBorderColor: 'white',
+              pointBorderWidth: 2,
+              pointRadius: 5
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: { legend: { display: true, position: 'top' } },
+            scales: { y: { beginAtZero: true, ticks: { stepSize: Math.max(1, Math.ceil(Math.max.apply(null, monthData.length ? monthData : [1]) / 5)) } } }
+          }
+        });
+      }
+
+      var growthCtx = document.getElementById('growthChart');
+      if (growthCtx) {
+        var allInquiries = data.inquiries || [];
+      var recContainer = document.getElementById('recommendationBreakdown');
+      if (recContainer) {
+        var fbRecs = data.feedback || [];
+        var recCounts = { yes: 0, no: 0, maybe: 0 };
+        fbRecs.forEach(function(f) {
+          if (f.recommendation && recCounts[f.recommendation] !== undefined) recCounts[f.recommendation]++;
+        });
+        var recTotal = recCounts.yes + recCounts.no + recCounts.maybe;
+        var recLabels = { yes: 'Yes', no: 'No', maybe: 'Maybe' };
+        var recColors = { yes: '#28a745', no: '#dc3545', maybe: '#ffc107' };
+        var recHtml = '<div style="margin-bottom: 1rem; font-size: 1.1rem; font-weight: 600; color: darkslategray;">Would Recommend AI-Solutions</div>';
+        ['yes', 'maybe', 'no'].forEach(function(k) {
+          var pct = recTotal ? ((recCounts[k] / recTotal) * 100).toFixed(1) : 0;
+          recHtml += '<div style="display: flex; align-items: center; margin-bottom: .8rem;">' +
+            '<span style="width: 60px; font-weight: 600; color: darkslategray;">' + recLabels[k] + '</span>' +
+            '<div style="flex: 1; height: 24px; background: #e9ecef; border-radius: 12px; overflow: hidden; margin: 0 1rem;">' +
+            '<div style="height: 100%; width: ' + pct + '%; background: ' + recColors[k] + '; border-radius: 12px; transition: width .5s;"></div>' +
+            '</div>' +
+            '<span style="width: 50px; text-align: right; font-weight: 700; color: darkslategray;">' + pct + '%</span>' +
+            '</div>';
+        });
+        recContainer.innerHTML = recHtml;
+      }
+
+      var trendCtx = document.getElementById('satisfactionTrend');
+      if (trendCtx) {
+        var fb = data.feedback || [];
+        var monthRatings = {};
+        fb.forEach(function(f) {
+          if (f.created_at && f.satisfaction_rating !== null && f.satisfaction_rating !== undefined) {
+            var m = f.created_at.slice(0, 7);
+            if (!monthRatings[m]) monthRatings[m] = { sum: 0, count: 0 };
+            monthRatings[m].sum += f.satisfaction_rating;
+            monthRatings[m].count++;
+          }
+        });
+        var sortedMonths = Object.keys(monthRatings).sort();
+        var trendLabels = sortedMonths.map(function(m) {
+          var parts = m.split('-');
+          var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+          return months[parseInt(parts[1]) - 1] + ' ' + parts[0];
+        });
+        var trendData = sortedMonths.map(function(m) { return +(monthRatings[m].sum / monthRatings[m].count).toFixed(1); });
+        charts.satisfactionTrend = new Chart(trendCtx, {
+          type: 'line',
+          data: {
+            labels: trendLabels.length ? trendLabels : ['No data'],
+            datasets: [{
+              label: 'Avg Satisfaction',
+              data: trendData.length ? trendData : [0],
+              borderColor: '#28a745',
+              backgroundColor: 'rgba(40, 167, 69, 0.1)',
+              borderWidth: 3,
+              tension: 0.3,
+              fill: true,
+              pointBackgroundColor: '#28a745',
+              pointBorderColor: 'white',
+              pointBorderWidth: 2,
+              pointRadius: 5
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true, max: 5, ticks: { stepSize: 1 } } }
+          }
+        });
+      }
+
+      var gaugeCtx = document.getElementById('satisfactionGauge');
+      if (gaugeCtx) {
+        var fb = data.feedback || [];
+        var ratings = fb.map(function(f) { return f.satisfaction_rating; }).filter(function(r) { return r !== null && r !== undefined; });
+        var avg = ratings.length ? (ratings.reduce(function(a, b) { return a + b; }, 0) / ratings.length) : 0;
+        document.getElementById('avgSatisfaction').textContent = ratings.length ? avg.toFixed(1) + ' / 5' : 'N/A';
+        var pct = avg / 5;
+        charts.satisfaction = new Chart(gaugeCtx, {
+          type: 'doughnut',
+          data: {
+            labels: ['Satisfaction', 'Remaining'],
+            datasets: [{
+              data: [pct, 1 - pct],
+              backgroundColor: ['#28a745', '#e9ecef'],
+              borderWidth: 0,
+              circumference: 180,
+              rotation: 270
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            cutout: '75%',
+            circumference: 180,
+            rotation: 270,
+            plugins: {
+              legend: { display: false },
+              tooltip: { enabled: false }
+            }
+          }
+        });
+      }
+
+      var allDemos = data.demos || [];
+        var allRegs = data.registrations || [];
+        var monthMap = {};
+        allInquiries.forEach(function(i) {
+          if (i.created_at) { var m = i.created_at.slice(0, 7); if (!monthMap[m]) monthMap[m] = { inquiries: 0, demos: 0, registrations: 0 }; monthMap[m].inquiries++; }
+        });
+        allDemos.forEach(function(d) {
+          if (d.created_at) { var m = d.created_at.slice(0, 7); if (!monthMap[m]) monthMap[m] = { inquiries: 0, demos: 0, registrations: 0 }; monthMap[m].demos++; }
+        });
+        allRegs.forEach(function(r) {
+          if (r.created_at) { var m = r.created_at.slice(0, 7); if (!monthMap[m]) monthMap[m] = { inquiries: 0, demos: 0, registrations: 0 }; monthMap[m].registrations++; }
+        });
+        var growthMonths = Object.keys(monthMap).sort();
+        var growthLabels = growthMonths.map(function(m) {
+          var parts = m.split('-');
+          var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+          return months[parseInt(parts[1]) - 1] + ' ' + parts[0];
+        });
+        var inqData = growthMonths.map(function(m) { return monthMap[m].inquiries; });
+        var demData = growthMonths.map(function(m) { return monthMap[m].demos; });
+        var regData = growthMonths.map(function(m) { return monthMap[m].registrations; });
+        charts.growth = new Chart(growthCtx, {
+          type: 'line',
+          data: {
+            labels: growthLabels.length ? growthLabels : ['No data'],
+            datasets: [
+              { label: 'Inquiries', data: inqData.length ? inqData : [0], borderColor: '#FF6384', backgroundColor: 'rgba(255,99,132,0.1)', borderWidth: 2, tension: 0.4, fill: false, pointRadius: 4 },
+              { label: 'Demo Requests', data: demData.length ? demData : [0], borderColor: '#36A2EB', backgroundColor: 'rgba(54,162,235,0.1)', borderWidth: 2, tension: 0.4, fill: false, pointRadius: 4 },
+              { label: 'Registrations', data: regData.length ? regData : [0], borderColor: '#28a745', backgroundColor: 'rgba(40,167,69,0.1)', borderWidth: 2, tension: 0.4, fill: false, pointRadius: 4 }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: { legend: { position: 'top', labels: { font: { size: 11 } } } },
+            scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+          }
+        });
+      }
+
+      var dailyCtx = document.getElementById('dailyActivityChart');
+      if (dailyCtx) {
+        var dailyMap = {};
+        var allInq = data.inquiries || [];
+        var allRegs = data.registrations || [];
+        allInq.forEach(function(i) {
+          if (i.created_at) {
+            var d = i.created_at.slice(0, 10);
+            if (!dailyMap[d]) dailyMap[d] = { inquiries: 0, registrations: 0 };
+            dailyMap[d].inquiries++;
+          }
+        });
+        allRegs.forEach(function(r) {
+          if (r.created_at) {
+            var d = r.created_at.slice(0, 10);
+            if (!dailyMap[d]) dailyMap[d] = { inquiries: 0, registrations: 0 };
+            dailyMap[d].registrations++;
+          }
+        });
+        var dailyDates = Object.keys(dailyMap).sort();
+        var dailyLabels = dailyDates;
+        var dailyInq = dailyDates.map(function(d) { return dailyMap[d].inquiries; });
+        var dailyReg = dailyDates.map(function(d) { return dailyMap[d].registrations; });
+        charts.dailyActivity = new Chart(dailyCtx, {
+          type: 'line',
+          data: {
+            labels: dailyLabels.length ? dailyLabels : ['No data'],
+            datasets: [
+              {
+                label: 'Inquiries',
+                data: dailyInq.length ? dailyInq : [0],
+                borderColor: '#FF6384',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderWidth: 2,
+                tension: 0.3,
+                fill: true,
+                pointRadius: 3
+              },
+              {
+                label: 'Registrations',
+                data: dailyReg.length ? dailyReg : [0],
+                borderColor: '#36A2EB',
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderWidth: 2,
+                tension: 0.3,
+                fill: true,
+                pointRadius: 3
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: { legend: { position: 'top', labels: { font: { size: 11 } } } },
+            scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+          }
+        });
+      }
+
+      var allDemos = data.demos || [];
+      var countryCounts = {};
+      allDemos.forEach(function(d) {
+        var c = d.country || 'Unknown';
+        countryCounts[c] = (countryCounts[c] || 0) + 1;
+      });
+      var countryLabels = Object.keys(countryCounts).sort();
+      var countryData = countryLabels.map(function(c) { return countryCounts[c]; });
+      var totalCustomers = countryData.reduce(function(a, b) { return a + b; }, 0);
+      var tableBody = document.getElementById('countryTableBody');
+      if (tableBody) {
+        tableBody.innerHTML = countryLabels.map(function(c, i) {
+          var pct = totalCustomers ? ((countryData[i] / totalCustomers) * 100).toFixed(1) : 0;
+          return '<tr><td style="padding:.75rem 2rem .75rem 0;">' + c + '</td><td style="padding:.75rem 2rem;">' + countryData[i] + '</td><td style="padding:.75rem 0 .75rem 2rem;">' + pct + '%</td></tr>';
+        }).join('');
+      }
+
+      var funnelCtx = document.getElementById('funnelChart');
+      if (funnelCtx) {
+        var funnelVisitors = data.totalVisitors || 0;
+        var funnelInquiries = data.inqCount || 0;
+        var funnelDemos = data.demoCount || 0;
+        var funnelRegs = data.regCount || 0;
+        var funnelMax = Math.max(funnelVisitors, funnelInquiries, funnelDemos, funnelRegs, 1);
+        charts.funnel = new Chart(funnelCtx, {
+          type: 'bar',
+          data: {
+            labels: ['Visitors', 'Inquiries', 'Demo Requests', 'Registrations'],
+            datasets: [
+              {
+                label: 'Count',
+                data: [funnelVisitors, funnelInquiries, funnelDemos, funnelRegs],
+                backgroundColor: ['#4F46E5', '#FF6384', '#36A2EB', '#28a745'],
+                borderRadius: 4,
+                borderWidth: 0
+              },
+              {
+                label: 'Gap',
+                data: [0, funnelMax - funnelInquiries, funnelMax - funnelDemos, funnelMax - funnelRegs],
+                backgroundColor: 'rgba(0,0,0,0)',
+                borderWidth: 0
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            indexAxis: 'y',
+            stacked: true,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  label: function(ctx) {
+                    if (ctx.dataset.label === 'Gap') return null;
+                    return ctx.parsed.x + ' ' + ctx.chart.data.labels[ctx.dataIndex];
+                  }
+                }
+              }
+            },
+            scales: {
+              x: { stacked: true, display: false },
+              y: { stacked: true }
+            }
+          }
+        });
+      }
+    }
+  </script>
+</body>
+</html>

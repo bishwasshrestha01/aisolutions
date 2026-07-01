@@ -1,0 +1,76 @@
+﻿/* AI Solutions — shared site footer */
+
+footer.site-footer,
+.site-footer {
+  background-color: var(--color-footer-bg, black);
+  color: var(--color-footer-text, white);
+}
+
+.site-footer__brand {
+  color: white;
+}
+
+.site-footer__brand strong {
+  color: lightsteelblue;
+}
+
+.site-footer__text {
+  font-size: 0.92rem;
+  line-height: 1.8;
+  color: white;
+}
+
+.site-footer__icon {
+  color: lightsteelblue;
+  flex-shrink: 0;
+}
+
+.site-footer__contact {
+  font-size: 0.9rem;
+  color: white;
+}
+
+.site-footer__divider {
+  border-color: var(--color-footer-divider, dimgray);
+  margin: 0 0 1.25rem;
+}
+
+.site-footer__bar {
+  border-top: 1px solid var(--color-footer-divider, dimgray);
+}
+
+.site-footer__copy {
+  font-size: 0.85rem;
+  color: white;
+}
+
+.footer-link {
+  color: white;
+  text-decoration: none;
+  font-size: 0.92rem;
+  transition: color 0.2s, opacity 0.2s;
+}
+
+.footer-link:hover {
+  color: white;
+  opacity: 0.85;
+}
+
+.site-footer .social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: dimgray;
+  color: lightgray;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: background 0.25s, color 0.25s;
+}
+
+.site-footer .social-icon:hover {
+  background: blue;
+  color: white;
+}

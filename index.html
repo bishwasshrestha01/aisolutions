@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="photos/logo.png?v=20260522" type="image/png" />
+  <title>AI Solutions</title>
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <!-- Cascadia Code via jsDelivr -->
+  <link href="https://cdn.jsdelivr.net/npm/@fontsource/cascadia-code@4.2.1/index.css" rel="stylesheet" />
+  <link href="css/theme.css?v=20260522" rel="stylesheet" />
+  <link href="css/footer.css?v=20260522" rel="stylesheet" />
+
+  <style>
+    /* -- Global Font -- */
+    body, * {
+      font-family: 'Cascadia Code' !important;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    /* -- Custom overrides -- */
+    :root {
+      --bs-primary: blue;
+    }
+
+    /* Navbar */
+    .navbar {
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .navbar-brand span {
+      color: blue;
+      font-weight: 700;
+    }
+
+    .nav-link {
+      font-weight: 500;
+      position: relative;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: .5rem;
+      right: .5rem;
+      height: 2px;
+      background: blue;
+      border-radius: 2px;
+      transform: scaleX(0);
+      transition: transform .25s ease;
+    }
+
+    .nav-link:hover::after,
+    .nav-link.active::after {
+      transform: scaleX(1);
+    }
+
+    /* Hero */
+    .hero {
+      min-height: 100vh;
+      background: lightblue;
+      display: flex;
+      align-items: center;
+      padding-top: 72px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before,
+    .hero::after {
+      display: none;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: lavender;
+      color: blue;
+      font-size: .8rem;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: .3rem .9rem;
+      border-radius: 999px;
+    }
+
+    .hero-title {
+      font-size: clamp(2.2rem, 5vw, 3.75rem);
+      font-weight: 800;
+      line-height: 1.12;
+      letter-spacing: -.03em;
+      color: darkslategray;
+    }
+
+    .hero-subtitle {
+      font-size: 1.1rem;
+      color: slategray;
+      line-height: 1.75;
+      max-width: 560px;
+    }
+
+    
+
+    
+
+    .btn-outline-dark-custom {
+      font-weight: 600;
+      padding: .75rem 1.875rem;
+      border-radius: 8px;
+      border: 2px solid lightgray;
+      color: darkslategray;
+      background: transparent;
+      transition: background .25s, border-color .25s;
+    }
+
+    .btn-outline-dark-custom:hover {
+      background: whitesmoke;
+      border-color: lightslategray;
+      color: darkslategray;
+    }
+
+    /* Service card hover */
+    .service-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 32px lightgray;
+      border-color: blue !important;
+    }
+
+    /* Event card hover */
+    .event-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 32px lightgray;
+    }
+
+    /* Type badges on colored event headers */
+    .event-header-badge {
+      background: white;
+      color: darkslategray;
+    }
+
+    /* Testimonial dot indicators */
+    .testi-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: none;
+      background: lightgray;
+      padding: 0;
+      transition: background .3s;
+    }
+    .testi-dot.active {
+      background: blue;
+      width: 28px;
+      border-radius: 5px;
+    }
+
+    /* -- Fixed AI Chatbot: Hi bubble + launcher + panel -- */
+    .ai-chatbot-wrap {
+      position: fixed;
+      right: 20px;
+      bottom: 24px;
+      z-index: 10000;
+      user-select: none;
+    }
+
+    .ai-chatbot-launcher {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .ai-chatbot-fab {
+      position: relative;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: none;
+      background: blue;
+      padding: 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 8px 28px lightgray, 0 2px 8px lightgray;
+      flex-shrink: 0;
+      transition: transform 0.15s ease, box-shadow 0.2s ease;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .ai-chatbot-fab img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .ai-chatbot-fab:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 32px lightgray, 0 4px 12px lightgray;
+    }
+
+    .ai-chatbot-fab:active {
+      transform: scale(0.96);
+    }
+
+    .ai-chatbot-wrap--hint .ai-chatbot-fab {
+      animation: chatbot-fab-pulse 2.2s ease-in-out infinite;
+    }
+
+    @keyframes chatbot-fab-pulse {
+      0%, 100% {
+        box-shadow: 0 8px 28px lightgray, 0 2px 8px lightgray;
+      }
+      50% {
+        box-shadow: 0 8px 28px lightgray, 0 0 0 6px lavender;
+      }
+    }
+
+    .ai-chatbot-hint {
+      position: relative;
+      right: auto;
+      bottom: auto;
+      max-width: 220px;
+      min-width: 180px;
+      padding: 12px 36px 12px 14px;
+      background: white;
+      border: 1px solid lavender;
+      border-radius: 14px;
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.14), 0 2px 10px lightgray;
+      font-size: 0.82rem;
+      line-height: 1.45;
+      color: darkslategray;
+      display: none;
+      transform: translateY(6px);
+      transform-origin: bottom right;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      pointer-events: auto;
+      z-index: 3;
+    }
+
+    .ai-chatbot-hint--visible {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+      animation: chatbot-hint-pop 0.4s ease;
+    }
+
+    @keyframes chatbot-hint-pop {
+      from { opacity: 0; transform: translateY(8px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .ai-chatbot-hint__hi {
+      display: block;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: blue;
+      margin-bottom: 2px;
+    }
+
+    .ai-chatbot-hint::after {
+      content: '';
+      position: absolute;
+      right: 20px;
+      bottom: -7px;
+      width: 14px;
+      height: 14px;
+      background: white;
+      border-right: 1px solid lavender;
+      border-bottom: 1px solid lavender;
+      transform: rotate(45deg);
+    }
+
+    .ai-chatbot-hint__text {
+      margin: 0;
+    }
+
+    .ai-chatbot-hint__close {
+      position: absolute;
+      top: 6px;
+      right: 8px;
+      width: 24px;
+      height: 24px;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      background: transparent;
+      color: slategray;
+      font-size: 1.15rem;
+      line-height: 1;
+      cursor: pointer;
+      pointer-events: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ai-chatbot-hint__close:hover {
+      background: whitesmoke;
+      color: darkslategray;
+    }
+
+    .ai-chatbot-wrap--open .ai-chatbot-hint,
+    .ai-chatbot-hint--dismissed {
+      display: none !important;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .ai-chatbot-panel {
+      position: absolute;
+      right: 0;
+      bottom: calc(100% + 10px);
+      width: min(320px, calc(100vw - 40px));
+      max-height: min(520px, calc(100vh - 100px));
+      display: none;
+      flex-direction: column;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 12px 40px lightgray, 0 4px 16px lightgray;
+      border: 1px solid lavender;
+      background: white;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px) scale(0.98);
+      transform-origin: bottom right;
+      transition: opacity 0.22s ease, visibility 0.22s ease, transform 0.22s ease;
+      pointer-events: none;
+    }
+
+    .ai-chatbot-wrap--open .ai-chatbot-panel {
+      display: flex;
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      pointer-events: auto;
+    }
+
+    .ai-chatbot__header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      background: linear-gradient(135deg, blue 0%, blue 100%);
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .ai-chatbot__avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: white;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .ai-chatbot__avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .ai-chatbot__title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin: 0;
+    }
+
+    .ai-chatbot__status {
+      font-size: 0.7rem;
+      opacity: 0.85;
+      margin: 0;
+    }
+
+    .ai-chatbot__body {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .ai-chatbot__messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 220px;
+      max-height: 320px;
+      background: whitesmoke;
+      user-select: text;
+    }
+
+    .ai-chatbot__msg {
+      max-width: 92%;
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      line-height: 1.5;
+      word-break: break-word;
+    }
+
+    .ai-chatbot__msg--bot {
+      align-self: flex-start;
+      background: white;
+      color: darkslategray;
+      border: 1px solid lightgray;
+      border-bottom-left-radius: 4px;
+    }
+
+    .ai-chatbot__msg--bot .ai-chatbot__link {
+      color: blue;
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      cursor: pointer;
+      pointer-events: auto;
+    }
+
+    .ai-chatbot__msg--bot .ai-chatbot__link:hover {
+      color: blue;
+      opacity: 0.85;
+    }
+
+    .ai-chatbot__msg--user {
+      align-self: flex-end;
+      background: blue;
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+
+    .ai-chatbot__msg--typing {
+      align-self: flex-start;
+      background: white;
+      border: 1px solid lightgray;
+      padding: 10px 14px;
+    }
+
+    .ai-chatbot__typing-dots span {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      margin: 0 2px;
+      background: lightslategray;
+      border-radius: 50%;
+      animation: chatbot-dot 1.2s infinite ease-in-out;
+    }
+
+    .ai-chatbot__typing-dots span:nth-child(2) { animation-delay: 0.15s; }
+    .ai-chatbot__typing-dots span:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes chatbot-dot {
+      0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+
+    .ai-chatbot__quick {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 8px 12px 0;
+      background: whitesmoke;
+      user-select: none;
+    }
+
+    .ai-chatbot__chip {
+      font-size: 0.68rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid lavender;
+      background: lavender;
+      color: blue;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .ai-chatbot__chip:hover {
+      background: blue;
+      color: white;
+      border-color: blue;
+    }
+
+    .ai-chatbot__form {
+      display: flex;
+      gap: 8px;
+      padding: 10px 12px;
+      border-top: 1px solid lightgray;
+      background: white;
+    }
+
+    .ai-chatbot__input {
+      flex: 1;
+      border: 1px solid lightgray;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 0.8rem;
+      outline: none;
+      user-select: text;
+    }
+
+    .ai-chatbot__input:focus {
+      border-color: blue;
+      box-shadow: 0 0 0 3px lavender;
+    }
+
+    .ai-chatbot__send {
+      width: 38px;
+      height: 38px;
+      border: none;
+      border-radius: 8px;
+      background: blue;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.2s;
+    }
+
+    .ai-chatbot__send:hover {
+      background: blue;
+    }
+
+    .ai-chatbot__send:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 991.98px) {
+      .ai-chatbot-wrap {
+        right: 14px;
+        bottom: 18px;
+      }
+
+      .ai-chatbot-panel {
+        max-height: min(460px, calc(100vh - 88px));
+      }
+
+      .ai-chatbot__messages {
+        min-height: 180px;
+        max-height: 260px;
+      }
+    }
+
+    @media (max-width: 575.98px) {
+      .ai-chatbot-wrap {
+        right: 12px;
+        bottom: 16px;
+      }
+
+      .ai-chatbot-panel {
+        width: calc(100vw - 24px);
+      }
+
+      .ai-chatbot-hint {
+        max-width: min(220px, calc(100vw - 80px));
+      }
+    }
+  </style>
+  <script src="js/api-config.js"></script>
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white bg-opacity-90 border-bottom fixed-top shadow-sm">
+    <div class="container">
+
+      <!-- Logo -->
+      <a class="navbar-brand d-flex align-items-center gap-2 fw-semibold fs-5" href="#">
+        <img src="photos/logo.png?v=20260522" alt="AI" class="site-logo" width="56" height="56">
+        <span class="brand-word"><strong>Solutions</strong></span>
+      </a>
+
+      <!-- Hamburger -->
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"
+        aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Menu -->
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav mx-auto gap-1">
+          <li class="nav-item"><a class="nav-link active px-3" href="#home">Home</a></li>
+          <li class="nav-item"><a class="nav-link px-3" href="about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link px-3" href="services.html">Services</a></li>
+          <li class="nav-item"><a class="nav-link px-3" href="events.html">Events</a></li>
+          <li class="nav-item"><a class="nav-link px-3" href="contact.html">Contact</a></li>
+        </ul>
+
+        <!-- CTA Buttons -->
+        <div class="d-flex align-items-center gap-2 mt-2 mt-lg-0">
+          <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#feedbackModal">Feedback</button>
+
+          <div id="navAuthSlot"></div>
+        </div>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- ===== HERO SECTION ===== -->
+  <section class="hero" id="home">
+    <div class="container position-relative" style="z-index:1;">
+      <div class="row">
+        <div class="col-lg-8">
+          <h1 class="hero-title mb-4">
+            Empowering Businesses<br/>with Intelligent Technology
+          </h1>
+          <p class="hero-subtitle mb-4">
+            AI Solutions delivers cutting-edge AI solutions that automate workflows,
+            unlock deep insights, and drive measurable growth &mdash; so your team can focus on what matters most.
+          </p>
+          <div class="d-flex flex-wrap gap-3">
+            <a href="services.html" class="btn btn-outline-dark-custom">Explore Services</a>
+            <a href="scheduledemo.html" class="btn btn-indigo">Schedule Demo</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== COMPANY OVERVIEW ===== -->
+  <section class="py-5" id="about" style="background: aliceblue;">
+    <div class="container py-4">
+
+      <!-- Section Header -->
+      <div class="row justify-content-center text-center mb-5">
+        <div class="col-lg-7">
+          <span class="badge rounded-pill mb-3 px-3 py-2" style="background:lavender;color:blue;font-size:.8rem;letter-spacing:.06em;">About Us</span>
+          <h2 class="fw-bold mb-3" style="font-size:clamp(1.8rem,4vw,2.75rem);color:darkslategray;letter-spacing:-.02em;">Who We Are</h2>
+          <p class="text-muted" style="font-size:1.05rem;line-height:1.75;">
+            A Sunderland-based technology company using AI to transform the digital employee experience for organisations worldwide.
+          </p>
+        </div>
+      </div>
+
+      <!-- Company Intro + Mission -->
+      <div class="row g-5 align-items-center mb-5">
+
+        <!-- Intro -->
+        <div class="col-lg-6">
+          <h3 class="fw-bold mb-3" style="color:darkslategray;">Our Story</h3>
+          <p class="text-muted mb-3" style="line-height:1.8;">
+            <strong>AI Solutions</strong> is headquartered in Sunderland, United Kingdom. We use AI to help industries deliver
+            software solutions that rapidly and proactively address issues affecting the digital employee experience &mdash;
+            speeding up design, engineering, and innovation.
+          </p>
+          <p class="text-muted" style="line-height:1.8;">
+            Our integrated AI virtual assistant answers user inquiries on demand, while our affordable prototyping services
+            help teams move from concept to delivery with confidence &mdash; giving organisations a practical edge in today's
+            competitive digital landscape.
+          </p>
+        </div>
+
+        <!-- Mission -->
+        <div class="col-lg-6">
+          <div class="p-4 rounded-4 h-100" style="background:blue;color:white;">
+            <h4 class="fw-bold mb-3">Our Mission</h4>
+            <p class="mb-0" style="font-size:1.05rem;line-height:1.8;opacity:.92;">
+              Our mission is to innovate, promote, and deliver the future of the digital employee experience &mdash; with a strong
+              focus on supporting people at work. Through global expansion, we aim to make a worldwide impact and help every
+              organisation build a smarter, more human-centred workplace.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Key Achievements -->
+      <div class="row justify-content-center text-center mb-4">
+        <div class="col-lg-7">
+          <h3 class="fw-bold mb-2" style="color:darkslategray;">Key Achievements</h3>
+          <p class="text-muted">Milestones that reflect our growth in digital employee experience innovation.</p>
+        </div>
+      </div>
+
+      <div class="row g-4">
+
+        <div class="col-sm-6 col-lg-3">
+          <div class="p-4 rounded-4 text-center h-100 border" style="background:white;">
+            <div class="mb-3 fs-1" style="color:blue;"><i class="bi bi-buildings-fill"></i></div>
+            <h3 class="fw-bold mb-1" style="color:darkslategray;">45+</h3>
+            <p class="text-muted mb-0">Organisations Supported</p>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-3">
+          <div class="p-4 rounded-4 text-center h-100 border" style="background:white;">
+            <div class="mb-3 fs-1" style="color:blue;"><i class="bi bi-check2-circle"></i></div>
+            <h3 class="fw-bold mb-1" style="color:darkslategray;">90+</h3>
+            <p class="text-muted mb-0">DEX Solutions Deployed</p>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-3">
+          <div class="p-4 rounded-4 text-center h-100 border" style="background:white;">
+            <div class="mb-3 fs-1" style="color:blue;"><i class="bi bi-person-workspace"></i></div>
+            <h3 class="fw-bold mb-1" style="color:darkslategray;">28+</h3>
+            <p class="text-muted mb-0">AI &amp; Engineering Experts</p>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-3">
+          <div class="p-4 rounded-4 text-center h-100 border" style="background:white;">
+            <div class="mb-3 fs-1" style="color:blue;"><i class="bi bi-lightning-charge-fill"></i></div>
+            <h3 class="fw-bold mb-1" style="color:darkslategray;">60%</h3>
+            <p class="text-muted mb-0">Faster Issue Resolution</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SERVICES PREVIEW ===== -->
+  <section class="py-5" id="services" style="background:white;">
+    <div class="container py-4">
+
+      <!-- Section Header -->
+      <div class="row justify-content-center text-center mb-5">
+        <div class="col-lg-7">
+          <span class="badge rounded-pill mb-3 px-3 py-2" style="background:lavender;color:blue;font-size:.8rem;letter-spacing:.06em;">What We Offer</span>
+          <h2 class="fw-bold mb-3" style="font-size:clamp(1.8rem,4vw,2.75rem);color:darkslategray;letter-spacing:-.02em;">Our Services</h2>
+          <p class="text-muted" style="font-size:1.05rem;line-height:1.75;">
+            Practical, affordable AI-powered solutions designed to help organisations grow smarter and operate more efficiently.
+          </p>
+        </div>
+      </div>
+
+      <!-- Service Cards -->
+      <div class="row g-4">
+
+        <!-- AI Virtual Assistant Development -->
+        <div class="col-sm-6 col-lg-3">
+          <div class="p-4 rounded-4 h-100 border service-card" style="background:white;transition:all .3s;">
+            <div class="mb-4 d-inline-flex align-items-center justify-content-center rounded-3"
+              style="width:56px;height:56px;background:lavender;">
+              <i class="bi bi-robot fs-4" style="color:blue;"></i>
+            </div>
+            <h5 class="fw-bold mb-2" style="color:darkslategray;">AI Virtual Assistant Development</h5>
+            <p class="text-muted mb-4" style="font-size:.95rem;line-height:1.7;">
+              Intelligent virtual assistants that understand natural language, respond instantly, and automate customer interactions around the clock.
+            </p>
+            <a href="services.html#ai-virtual-assistant" class="text-decoration-none fw-semibold" style="color:blue;font-size:.9rem;">
+              Learn More <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Chatbot Integration -->
+        <div class="col-sm-6 col-lg-3">
+          <div class="p-4 rounded-4 h-100 border service-card" style="background:white;transition:all .3s;">
+            <div class="mb-4 d-inline-flex align-items-center justify-content-center rounded-3"
+              style="width:56px;height:56px;background:moccasin;">
+              <i class="bi bi-chat-dots-fill fs-4" style="color:darkorange;"></i>
+            </div>
+            <h5 class="fw-bold mb-2" style="color:darkslategray;">Chatbot Integration</h5>
+            <p class="text-muted mb-4" style="font-size:.95rem;line-height:1.7;">
+              Seamlessly embed AI chatbots into your website, mobile app, or business systems with full API setup and deployment support.
+            </p>
+            <a href="services.html#chatbot-integration" class="text-decoration-none fw-semibold" style="color:darkorange;font-size:.9rem;">
+              Learn More <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Business Automation Tools -->
+        <div class="col-sm-6 col-lg-3">
+          <div class="p-4 rounded-4 h-100 border service-card" style="background:white;transition:all .3s;">
+            <div class="mb-4 d-inline-flex align-items-center justify-content-center rounded-3"
+              style="width:56px;height:56px;background:lightgreen;">
+              <i class="bi bi-gear-wide-connected fs-4" style="color:mediumseagreen;"></i>
+            </div>
+            <h5 class="fw-bold mb-2" style="color:darkslategray;">Business Automation Tools</h5>
+            <p class="text-muted mb-4" style="font-size:.95rem;line-height:1.7;">
+              Automate repetitive business processes from data entry and approvals to reporting so your team can focus on high-value work.
+            </p>
+            <a href="services.html#business-automation" class="text-decoration-none fw-semibold" style="color:mediumseagreen;font-size:.9rem;">
+              Learn More <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Software Prototyping -->
+        <div class="col-sm-6 col-lg-3">
+          <div class="p-4 rounded-4 h-100 border service-card" style="background:white;transition:all .3s;">
+            <div class="mb-4 d-inline-flex align-items-center justify-content-center rounded-3"
+              style="width:56px;height:56px;background:moccasin;">
+              <i class="bi bi-lightning-charge-fill fs-4" style="color:darkorange;"></i>
+            </div>
+            <h5 class="fw-bold mb-2" style="color:darkslategray;">Software Prototyping</h5>
+            <p class="text-muted mb-4" style="font-size:.95rem;line-height:1.7;">
+              Rapidly build functional prototypes and MVPs to validate ideas and test AI features before full-scale development.
+            </p>
+            <a href="services.html#software-prototyping" class="text-decoration-none fw-semibold" style="color:darkorange;font-size:.9rem;">
+              Learn More <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CTA -->
+      <div class="text-center mt-5">
+        <a href="services.html" class="btn btn-indigo px-4">View All Services</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== TESTIMONIALS SLIDER ===== -->
+  <section class="py-5" id="testimonials" style="background:aliceblue;">
+    <div class="container py-4">
+
+      <!-- Section Header -->
+      <div class="row justify-content-center text-center mb-5">
+        <div class="col-lg-7">
+          <span class="badge rounded-pill mb-3 px-3 py-2" style="background:lavender;color:blue;font-size:.8rem;letter-spacing:.06em;">Testimonials</span>
+          <h2 class="fw-bold mb-3" style="font-size:clamp(1.8rem,4vw,2.75rem);color:darkslategray;letter-spacing:-.02em;">What Our Clients Say</h2>
+          <p class="text-muted" style="font-size:1.05rem;line-height:1.75;">
+            Real feedback from organisations across the UK and beyond who have transformed their operations with AI Solutions.
+          </p>
+        </div>
+      </div>
+
+      <!-- Carousel -->
+      <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+
+        <div class="carousel-inner">
+
+          <!-- Slide 1: 3 cards -->
+          <div class="carousel-item active">
+            <div class="row g-4">
+              <div class="col-md-4">
+                <div class="p-4 rounded-4 border h-100" style="background:white;">
+                  <p class="text-muted mb-4" style="font-size:.92rem;line-height:1.75;font-style:italic;">
+                    "AI Solutions transformed how we handle customer inquiries. Their AI virtual assistant reduced our response time by 60%."
+                  </p>
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold text-white flex-shrink-0"
+                      style="width:44px;height:44px;background:blue;">J</div>
+                    <div>
+                      <p class="fw-bold mb-0" style="color:darkslategray;font-size:.9rem;">James Richardson</p>
+                      <p class="mb-0 text-muted" style="font-size:.8rem;">CEO, Meridian Retail Group</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="p-4 rounded-4 border h-100" style="background:white;">
+                  <p class="text-muted mb-4" style="font-size:.92rem;line-height:1.75;font-style:italic;">
+                    "The workflow automation solution eliminated hours of manual data entry every day. Professional, responsive, and delivered exactly what we needed."
+                  </p>
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold text-white flex-shrink-0"
+                      style="width:44px;height:44px;background:mediumpurple;">S</div>
+                    <div>
+                      <p class="fw-bold mb-0" style="color:darkslategray;font-size:.9rem;">Sarah Mitchell</p>
+                      <p class="mb-0 text-muted" style="font-size:.8rem;">Operations Manager, FinServe UK</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="p-4 rounded-4 border h-100" style="background:white;">
+                  <p class="text-muted mb-4" style="font-size:.92rem;line-height:1.75;font-style:italic;">
+                    "Their AI analytics dashboard gave us real-time visibility into sales and inventory. We saw a 30% improvement in operational efficiency within months."
+                  </p>
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold text-white flex-shrink-0"
+                      style="width:44px;height:44px;background:mediumseagreen;">A</div>
+                    <div>
+                      <p class="fw-bold mb-0" style="color:darkslategray;font-size:.9rem;">Andrew Clarke</p>
+                      <p class="mb-0 text-muted" style="font-size:.8rem;">Director, Northgate Trade Ltd.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 2: 3 cards -->
+          <div class="carousel-item">
+            <div class="row g-4">
+              <div class="col-md-4">
+                <div class="p-4 rounded-4 border h-100" style="background:white;">
+                  <p class="text-muted mb-4" style="font-size:.92rem;line-height:1.75;font-style:italic;">
+                    "We integrated their customer support solution and the results were immediate. Ticket resolution time dropped and customer satisfaction scores went up."
+                  </p>
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold text-white flex-shrink-0"
+                      style="width:44px;height:44px;background:darkorange;">E</div>
+                    <div>
+                      <p class="fw-bold mb-0" style="color:darkslategray;font-size:.9rem;">Emma Walsh</p>
+                      <p class="mb-0 text-muted" style="font-size:.8rem;">Head of CX, Tyne Digital Services</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="p-4 rounded-4 border h-100" style="background:white;">
+                  <p class="text-muted mb-4" style="font-size:.92rem;line-height:1.75;font-style:italic;">
+                    "As a growing business, we needed affordable yet powerful tools. AI Solutions delivered an AI assistant that fits our budget and scales with us. Always available and helpful."
+                  </p>
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold text-white flex-shrink-0"
+                      style="width:44px;height:44px;background:mediumpurple;">D</div>
+                    <div>
+                      <p class="fw-bold mb-0" style="color:darkslategray;font-size:.9rem;">David Brooks</p>
+                      <p class="mb-0 text-muted" style="font-size:.8rem;">Founder, SwiftPay Solutions</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="p-4 rounded-4 border h-100" style="background:white;">
+                  <p class="text-muted mb-4" style="font-size:.92rem;line-height:1.75;font-style:italic;">
+                    "AI Solutions' automation tools streamlined our HR and payroll processes completely. What used to take days now takes hours. Highly recommend for any growing business."
+                  </p>
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold text-white flex-shrink-0"
+                      style="width:44px;height:44px;background:crimson;">H</div>
+                    <div>
+                      <p class="fw-bold mb-0" style="color:darkslategray;font-size:.9rem;">Helen Carter</p>
+                      <p class="mb-0 text-muted" style="font-size:.8rem;">HR Director, Summit Group UK</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Prev / Next arrows -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev"
+          style="width:40px;height:40px;background:blue;border-radius:50%;top:50%;transform:translateY(-50%);left:-20px;opacity:1;position:absolute;">
+          <i class="bi bi-chevron-left" style="color:white;font-size:1rem;"></i>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next"
+          style="width:40px;height:40px;background:blue;border-radius:50%;top:50%;transform:translateY(-50%);right:-20px;opacity:1;position:absolute;">
+          <i class="bi bi-chevron-right" style="color:white;font-size:1rem;"></i>
+          <span class="visually-hidden">Next</span>
+        </button>
+
+        <!-- Clean dot indicators -->
+        <div class="d-flex justify-content-center gap-2 mt-4">
+          <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="0"
+            class="testi-dot active" aria-current="true"></button>
+          <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="1"
+            class="testi-dot"></button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FEATURED EVENTS ===== -->
+  <section class="py-5" id="events" style="background:white;">
+    <div class="container py-4">
+
+      <!-- Section Header -->
+      <div class="row justify-content-center text-center mb-5">
+        <div class="col-lg-7">
+          <span class="badge rounded-pill mb-3 px-3 py-2" style="background:lavender;color:blue;font-size:.8rem;letter-spacing:.06em;">Upcoming Events</span>
+          <h2 class="fw-bold mb-3" style="font-size:clamp(1.8rem,4vw,2.75rem);color:darkslategray;letter-spacing:-.02em;">Featured Events</h2>
+          <p class="text-muted" style="font-size:1.05rem;line-height:1.75;">
+            Join our webinars, workshops, and live sessions to learn how AI can transform your business.
+          </p>
+        </div>
+      </div>
+
+      <!-- Events Carousel -->
+      <div id="eventsCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+
+        <div class="carousel-inner">
+
+          <!-- Slide 1: Events 1-3 -->
+          <div class="carousel-item active">
+            <div class="row g-4">
+
+              <div class="col-md-4">
+                <div class="rounded-4 border h-100 overflow-hidden event-card" style="background:white;transition:all .3s;">
+                  <div class="px-4 py-3 d-flex align-items-center gap-3" style="background:blue;">
+                    <div class="text-center text-white">
+                      <div class="fw-bold" style="font-size:1.75rem;line-height:1;">20</div>
+                      <div style="font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;">Jun 2025</div>
+                    </div>
+                    <div class="vr opacity-50"></div>
+                    <span class="badge rounded-pill event-header-badge" style="font-size:.75rem;">Webinar</span>
+                  </div>
+                  <div class="p-4">
+                    <h5 class="fw-bold mb-2" style="color:darkslategray;">Introduction to AI for the Digital Workplace</h5>
+                    <p class="text-muted mb-3" style="font-size:.9rem;line-height:1.7;">
+                      A beginner-friendly webinar on how AI tools improve the digital employee experience and support smarter, more efficient work.
+                    </p>
+                    <div class="d-flex align-items-center gap-2 text-muted mb-4" style="font-size:.85rem;">
+                      <i class="bi bi-clock"></i> 2:00 PM &mdash; 3:30 PM
+                      <span class="mx-1">&mdash;</span>
+                      <i class="bi bi-camera-video"></i> Online
+                    </div>
+                    <a href="register.html?event=intro-ai-dex" class="btn btn-indigo">Register</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="rounded-4 border h-100 overflow-hidden event-card" style="background:white;transition:all .3s;">
+                  <div class="px-4 py-3 d-flex align-items-center gap-3" style="background:mediumpurple;">
+                    <div class="text-center text-white">
+                      <div class="fw-bold" style="font-size:1.75rem;line-height:1;">05</div>
+                      <div style="font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;">Jul 2025</div>
+                    </div>
+                    <div class="vr opacity-50"></div>
+                    <span class="badge rounded-pill event-header-badge" style="font-size:.75rem;">Workshop</span>
+                  </div>
+                  <div class="p-4">
+                    <h5 class="fw-bold mb-2" style="color:darkslategray;">Workflow Automation Hands-On Workshop</h5>
+                    <p class="text-muted mb-3" style="font-size:.9rem;line-height:1.7;">
+                      A practical workshop where participants will build and deploy their first automated workflow using AI Solutions' automation platform &mdash; no coding required.
+                    </p>
+                    <div class="d-flex align-items-center gap-2 text-muted mb-4" style="font-size:.85rem;">
+                      <i class="bi bi-clock"></i> 10:00 AM &mdash; 1:00 PM
+                      <span class="mx-1">&mdash;</span>
+                      <i class="bi bi-geo-alt"></i> Sunderland
+                    </div>
+                    <a href="register.html?event=workflow-workshop" class="btn btn-indigo">Register</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="rounded-4 border h-100 overflow-hidden event-card" style="background:white;transition:all .3s;">
+                  <div class="px-4 py-3 d-flex align-items-center gap-3" style="background:mediumseagreen;">
+                    <div class="text-center text-white">
+                      <div class="fw-bold" style="font-size:1.75rem;line-height:1;">18</div>
+                      <div style="font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;">Jul 2025</div>
+                    </div>
+                    <div class="vr opacity-50"></div>
+                    <span class="badge rounded-pill event-header-badge" style="font-size:.75rem;">Live Demo</span>
+                  </div>
+                  <div class="p-4">
+                    <h5 class="fw-bold mb-2" style="color:darkslategray;">AI Virtual Assistant Live Demo</h5>
+                    <p class="text-muted mb-3" style="font-size:.9rem;line-height:1.7;">
+                      Watch a live demonstration of our AI virtual assistant in action &mdash; handling real customer queries, bookings, and support requests for a retail business.
+                    </p>
+                    <div class="d-flex align-items-center gap-2 text-muted mb-4" style="font-size:.85rem;">
+                      <i class="bi bi-clock"></i> 4:00 PM &mdash; 5:00 PM
+                      <span class="mx-1">&mdash;</span>
+                      <i class="bi bi-camera-video"></i> Online
+                    </div>
+                    <a href="register.html?event=va-live-demo" class="btn btn-indigo">Register</a>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Slide 2: Events 4-6 -->
+          <div class="carousel-item">
+            <div class="row g-4">
+
+              <div class="col-md-4">
+                <div class="rounded-4 border h-100 overflow-hidden event-card" style="background:white;transition:all .3s;">
+                  <div class="px-4 py-3 d-flex align-items-center gap-3" style="background:darkorange;">
+                    <div class="text-center text-white">
+                      <div class="fw-bold" style="font-size:1.75rem;line-height:1;">02</div>
+                      <div style="font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;">Aug 2025</div>
+                    </div>
+                    <div class="vr opacity-50"></div>
+                    <span class="badge rounded-pill event-header-badge" style="font-size:.75rem;">Seminar</span>
+                  </div>
+                  <div class="p-4">
+                    <h5 class="fw-bold mb-2" style="color:darkslategray;">Digital Transformation Seminar for SMEs</h5>
+                    <p class="text-muted mb-3" style="font-size:.9rem;line-height:1.7;">
+                      A half-day seminar designed for small and medium enterprises looking to understand the roadmap for digital transformation and AI adoption in the UK.
+                    </p>
+                    <div class="d-flex align-items-center gap-2 text-muted mb-4" style="font-size:.85rem;">
+                      <i class="bi bi-clock"></i> 9:00 AM &mdash; 12:00 PM
+                      <span class="mx-1">&mdash;</span>
+                      <i class="bi bi-geo-alt"></i> Newcastle
+                    </div>
+                    <a href="register.html?event=digital-transformation" class="btn btn-indigo">Register</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="rounded-4 border h-100 overflow-hidden event-card" style="background:white;transition:all .3s;">
+                  <div class="px-4 py-3 d-flex align-items-center gap-3" style="background:mediumpurple;">
+                    <div class="text-center text-white">
+                      <div class="fw-bold" style="font-size:1.75rem;line-height:1;">15</div>
+                      <div style="font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;">Aug 2025</div>
+                    </div>
+                    <div class="vr opacity-50"></div>
+                    <span class="badge rounded-pill event-header-badge" style="font-size:.75rem;">Webinar</span>
+                  </div>
+                  <div class="p-4">
+                    <h5 class="fw-bold mb-2" style="color:darkslategray;">AI Analytics: Turning Data into Decisions</h5>
+                    <p class="text-muted mb-3" style="font-size:.9rem;line-height:1.7;">
+                      Learn how to use AI-powered analytics dashboards to track KPIs, forecast trends, and make smarter business decisions with your existing data.
+                    </p>
+                    <div class="d-flex align-items-center gap-2 text-muted mb-4" style="font-size:.85rem;">
+                      <i class="bi bi-clock"></i> 3:00 PM &mdash; 4:30 PM
+                      <span class="mx-1">&mdash;</span>
+                      <i class="bi bi-camera-video"></i> Online
+                    </div>
+                    <a href="register.html?event=ai-analytics-webinar" class="btn btn-indigo">Register</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="rounded-4 border h-100 overflow-hidden event-card" style="background:white;transition:all .3s;">
+                  <div class="px-4 py-3 d-flex align-items-center gap-3" style="background:crimson;">
+                    <div class="text-center text-white">
+                      <div class="fw-bold" style="font-size:1.75rem;line-height:1;">10</div>
+                      <div style="font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;">Sep 2025</div>
+                    </div>
+                    <div class="vr opacity-50"></div>
+                    <span class="badge rounded-pill event-header-badge" style="font-size:.75rem;">Conference</span>
+                  </div>
+                  <div class="p-4">
+                    <h5 class="fw-bold mb-2" style="color:darkslategray;">North East AI & Tech Summit 2026</h5>
+                    <p class="text-muted mb-3" style="font-size:.9rem;line-height:1.7;">
+                      The North East's premier AI and technology conference bringing together industry leaders, enterprises, and innovators shaping the future of work.
+                    </p>
+                    <div class="d-flex align-items-center gap-2 text-muted mb-4" style="font-size:.85rem;">
+                      <i class="bi bi-clock"></i> 9:00 AM &mdash; 6:00 PM
+                      <span class="mx-1">&mdash;</span>
+                      <i class="bi bi-geo-alt"></i> Sunderland
+                    </div>
+                    <a href="register.html?event=uk-ai-summit" class="btn btn-indigo">Register</a>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Prev / Next arrows -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#eventsCarousel" data-bs-slide="prev"
+          style="width:40px;height:40px;background:blue;border-radius:50%;top:50%;transform:translateY(-50%);left:-20px;opacity:1;position:absolute;">
+          <i class="bi bi-chevron-left" style="color:white;font-size:1rem;"></i>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#eventsCarousel" data-bs-slide="next"
+          style="width:40px;height:40px;background:blue;border-radius:50%;top:50%;transform:translateY(-50%);right:-20px;opacity:1;position:absolute;">
+          <i class="bi bi-chevron-right" style="color:white;font-size:1rem;"></i>
+          <span class="visually-hidden">Next</span>
+        </button>
+
+        <!-- Dot indicators -->
+        <div class="d-flex justify-content-center gap-2 mt-4">
+          <button type="button" data-bs-target="#eventsCarousel" data-bs-slide-to="0" class="testi-dot active" aria-current="true"></button>
+          <button type="button" data-bs-target="#eventsCarousel" data-bs-slide-to="1" class="testi-dot"></button>
+        </div>
+
+      </div>
+
+      <!-- View All CTA -->
+      <div class="text-center mt-5">
+        <a href="events.html" class="btn btn-outline-dark-custom px-4">View All Events</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer" style="margin:0;padding-bottom:0;">
+    <div class="container py-5">
+      <div class="row g-5">
+
+        <!-- Brand & Social -->
+        <div class="col-lg-4 col-md-6">
+          <a href="index.html" class="d-flex align-items-center gap-2 text-decoration-none mb-3">
+            <img src="photos/logo.png?v=20260522" alt="AI" class="site-logo" width="56" height="56">
+            <span class="fw-semibold fs-5 site-footer__brand brand-word"><strong>Solutions</strong></span>
+          </a>
+          <!-- Social Icons -->
+          <div class="d-flex gap-3 mt-2">
+            <a href="https://www.facebook.com" class="social-icon" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><i class="bi bi-facebook"></i></a>
+            <a href="https://www.twitter.com" class="social-icon" aria-label="Twitter/X" target="_blank" rel="noopener noreferrer"><i class="bi bi-twitter-x"></i></a>
+            <a href="https://www.linkedin.com" class="social-icon" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer"><i class="bi bi-linkedin"></i></a>
+            <a href="https://www.instagram.com" class="social-icon" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><i class="bi bi-instagram"></i></a>
+            <a href="https://www.youtube.com" class="social-icon" aria-label="YouTube" target="_blank" rel="noopener noreferrer"><i class="bi bi-youtube"></i></a>
+          </div>
+        </div>
+
+        <!-- Quick Links + Contact stacked -->
+        <div class="col-lg-8 col-md-6">
+
+          <!-- Quick Links horizontal -->
+          <!-- Divider -->
+          <hr class="site-footer__divider">
+
+          <!-- Contact Info -->
+          <div class="row g-3">
+            <div class="col-sm-6 d-flex align-items-start gap-2">
+              <i class="bi bi-geo-alt-fill mt-1 site-footer__icon"></i>
+              <span class="site-footer__contact">Wearside Innovation Hub<br>Sunderland, SR1 3DR, United Kingdom</span>
+            </div>
+            <div class="col-sm-6 d-flex align-items-center gap-2">
+              <i class="bi bi-telephone-fill site-footer__icon"></i>
+              <a href="tel:+441915550140" class="footer-link site-footer__contact">+44 191 555 0140</a>
+            </div>
+            <div class="col-sm-6 d-flex align-items-center gap-2">
+              <i class="bi bi-envelope-fill site-footer__icon"></i>
+              <a href="mailto:support@aisolutions.com" class="footer-link site-footer__contact">support@aisolutions.com</a>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="site-footer__bar">
+      <div class="container py-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <p class="mb-0 site-footer__copy">&copy; 2025 AI Solutions. All rights reserved.</p>
+        <div class="d-flex gap-3">
+          <a href="#" class="footer-link site-footer__copy">Privacy Policy</a>
+          <a href="#" class="footer-link site-footer__copy">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== FIXED AI CHATBOT (right FAB opens/closes panel) ===== -->
+  <aside class="ai-chatbot-wrap" id="aiChatbotWrap" aria-label="AI Solutions Assistant">
+    <div class="ai-chatbot-panel" id="aiChatbotPanel" aria-hidden="true">
+      <div class="ai-chatbot__header">
+        <div class="ai-chatbot__avatar" aria-hidden="true">
+          <i class="bi bi-robot" style="font-size:2rem;color:blue;"></i>
+        </div>
+        <div>
+          <p class="ai-chatbot__title">AI Solutions</p>
+          <p class="ai-chatbot__status"><i class="bi bi-circle-fill" style="font-size:.45rem;color:lightgreen;"></i> AI-powered &mdash; Online</p>
+        </div>
+      </div>
+      <div class="ai-chatbot__body">
+        <div class="ai-chatbot__messages" id="chatbotMessages" role="log" aria-live="polite"></div>
+        <div class="ai-chatbot__quick" id="chatbotQuick">
+          <button type="button" class="ai-chatbot__chip" data-prompt="I want an AI chatbot for my website">Website chatbot</button>
+          <button type="button" class="ai-chatbot__chip" data-prompt="How much does your prototype solution cost?">Prototype cost</button>
+          <button type="button" class="ai-chatbot__chip" data-prompt="When is your next AI event?">Next event</button>
+          <button type="button" class="ai-chatbot__chip" data-prompt="Can your AI integrate with my current system?">Integration</button>
+        </div>
+        <form class="ai-chatbot__form" id="chatbotForm">
+          <input type="text" class="ai-chatbot__input" id="chatbotInput" placeholder="Type your message&mdash;" autocomplete="off" maxlength="500" aria-label="Chat message" />
+          <button type="submit" class="ai-chatbot__send" id="chatbotSend" aria-label="Send message">
+            <i class="bi bi-send-fill"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+    <div class="ai-chatbot-launcher">
+      <div class="ai-chatbot-hint" id="chatbotHint" role="status" aria-live="polite" aria-hidden="true">
+        <button type="button" class="ai-chatbot-hint__close" id="chatbotHintClose" aria-label="Dismiss Hi message">&times;</button>
+        <p class="ai-chatbot-hint__text">
+          <span class="ai-chatbot-hint__hi">Hi! ??</span>
+        </p>
+      </div>
+      <button type="button" class="ai-chatbot-fab" id="chatbotFab" aria-label="Open AI chat" aria-expanded="false" aria-controls="aiChatbotPanel">
+        <i class="bi bi-chat-dots-fill" style="font-size:1.5rem;color:#fff;"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Bootstrap 5 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/chatbot.js?v=20260522f"></script>
+  <!-- Feedback Modal -->
+  <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="border-radius:16px;">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fw-bold" id="feedbackModalLabel" style="color:darkslategray;"><i class="bi bi-chat-square-text me-2" style="color:blue;"></i>Send Feedback</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-success d-none" id="feedbackSuccess" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>Thank you! Your feedback has been submitted.
+          </div>
+          <form id="feedbackForm" novalidate>
+
+            <div class="mb-3">
+              <label for="feedbackName" class="form-label fw-semibold" style="font-size:.85rem;">Name</label>
+              <input type="text" class="form-control" id="feedbackName" required>
+              <div class="invalid-feedback">Please enter your name.</div>
+            </div>
+            <div class="mb-3">
+              <label for="feedbackEmail" class="form-label fw-semibold" style="font-size:.85rem;">Email</label>
+              <input type="email" class="form-control" id="feedbackEmail" required>
+              <div class="invalid-feedback">Please enter a valid Email.</div>
+            </div>
+
+            <div class="mb-3">
+              <div class="d-flex gap-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="fbSvcDemo" value="demo">
+                  <label class="form-check-label" for="fbSvcDemo">Demo</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="fbSvcEvent" value="event">
+                  <label class="form-check-label" for="fbSvcEvent">Event</label>
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold" style="font-size:.85rem;">Overall satisfaction</label>
+              <div id="feedbackStarRating" style="font-size:1.8rem; cursor:pointer;">
+                <span data-value="1" style="color:lightgray;">&#9733;</span>
+                <span data-value="2" style="color:lightgray;">&#9733;</span>
+                <span data-value="3" style="color:lightgray;">&#9733;</span>
+                <span data-value="4" style="color:lightgray;">&#9733;</span>
+                <span data-value="5" style="color:lightgray;">&#9733;</span>
+              </div>
+              <input type="hidden" id="feedbackRating" value="0">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold" style="font-size:.85rem;">Would you recommend AI-Solutions to others?</label>
+              <div class="d-flex gap-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="feedbackRec" id="recYes" value="yes">
+                  <label class="form-check-label" for="recYes">Yes</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="feedbackRec" id="recNo" value="no">
+                  <label class="form-check-label" for="recNo">No</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="feedbackRec" id="recMaybe" value="maybe">
+                  <label class="form-check-label" for="recMaybe">Maybe</label>
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-indigo">Send</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var stars = document.querySelectorAll('#feedbackStarRating span');
+      var ratingInput = document.getElementById('feedbackRating');
+      stars.forEach(function(s) {
+        s.addEventListener('click', function() {
+          var val = parseInt(this.getAttribute('data-value'));
+          ratingInput.value = val;
+          stars.forEach(function(s2) {
+            var v = parseInt(s2.getAttribute('data-value'));
+            s2.style.color = v <= val ? 'gold' : 'lightgray';
+          });
+        });
+      });
+      var storedName = sessionStorage.getItem('feedbackName') || sessionStorage.getItem('aiSolutionsName') || '';
+      var storedEmail = sessionStorage.getItem('feedbackEmail') || sessionStorage.getItem('aiSolutionsEmail') || '';
+      if (storedName) document.getElementById('feedbackName').value = storedName;
+      if (storedEmail) document.getElementById('feedbackEmail').value = storedEmail;
+      var form = document.getElementById('feedbackForm');
+      if (!form) return;
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (!this.checkValidity()) { this.classList.add('was-validated'); return; }
+        var rec = document.querySelector('input[name="feedbackRec"]:checked');
+        var data = {
+          name: document.getElementById('feedbackName').value.trim(),
+          email: document.getElementById('feedbackEmail').value.trim(),
+          service_used: [document.getElementById("fbSvcDemo").checked ? "demo" : null, document.getElementById("fbSvcEvent").checked ? "event" : null].filter(Boolean).join(","),
+          satisfaction_rating: parseInt(document.getElementById('feedbackRating').value) || null,
+          recommendation: rec ? rec.value : ''
+        };
+        fetch('/api/feedback', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          if (d.success || d.id) {
+            document.getElementById('feedbackSuccess').classList.remove('d-none');
+            form.reset();
+            form.classList.remove('was-validated');
+            stars.forEach(function(s) { s.style.color = 'lightgray'; });
+            ratingInput.value = '0';
+            setTimeout(function() { document.getElementById('feedbackSuccess').classList.add('d-none'); }, 3000);
+          } else { showMessage('Error: ' + (d.error || 'Unknown error'), 'danger'); }
+        })
+        .catch(function() { showMessage('Error submitting feedback', 'danger'); });
+      });
+      document.getElementById('feedbackModal').addEventListener('hidden.bs.modal', function() {
+        form.reset();
+        form.classList.remove('was-validated');
+        stars.forEach(function(s) { s.style.color = 'lightgray'; });
+        ratingInput.value = '0';
+        document.getElementById('feedbackSuccess').classList.add('d-none');
+      });
+    });
+  </script>
+</body>
+</html>
+
+

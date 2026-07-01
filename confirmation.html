@@ -1,0 +1,242 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="photos/logo.png?v=20260522" type="image/png" />
+  <title>Thank You — AI Solutions</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/@fontsource/cascadia-code@4.2.1/index.css" rel="stylesheet" />
+  <link href="css/theme.css?v=20260522" rel="stylesheet" />
+  <link href="css/footer.css?v=20260522" rel="stylesheet" />
+
+  <style>
+    body, * { font-family: 'Cascadia Code' !important; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    .page-hero {
+      background: lightblue;
+      padding: 120px 0 60px;
+    }
+
+    .thankyou-card {
+      border: 1px solid lightgray;
+      border-radius: 16px;
+      background: white;
+    }
+
+    .booking-detail dt {
+      font-size: .78rem;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      color: slategray;
+      margin-bottom: .15rem;
+    }
+
+    .booking-detail dd {
+      font-weight: 600;
+      color: darkslategray;
+      margin-bottom: 1rem;
+    }
+
+    .success-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: lavender;
+      color: blue;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      margin: 0 auto 1rem;
+    }
+  </style>
+  <script src="js/api-config.js"></script>
+</head>
+<body>
+
+  <section class="page-hero" id="heroSection">
+    <div class="container">
+      <div class="row justify-content-center text-center">
+        <div class="col-lg-8">
+          <div class="success-icon"><i class="bi bi-check-lg"></i></div>
+          <h1 class="fw-bold mb-2" style="font-size:clamp(1.75rem,4vw,2.5rem);color:darkslategray;" id="heroTitle">Thank You!</h1>
+          <p class="text-muted mb-0" id="heroMessage">
+            Your submission has been received.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="py-5" style="background:aliceblue;">
+    <div class="container py-2">
+      <div class="row justify-content-center g-4">
+        <div class="col-lg-8">
+          <div class="thankyou-card p-4 p-lg-5">
+            <h2 class="fw-bold mb-4" style="color:darkslategray;font-size:1.25rem;">
+              <i class="bi bi-journal-text me-2" style="color:blue;"></i><span id="detailsTitle">Your Details</span>
+            </h2>
+
+            <dl class="row booking-detail mb-0" id="demoDetails">
+              <div class="col-sm-6">
+                <dt>Reference</dt>
+                <dd id="detail-bookingId">&mdash;</dd>
+              </div>
+              <div class="col-sm-6">
+                <dt>Interested Service</dt>
+                <dd id="detail-service">&mdash;</dd>
+              </div>
+              <div class="col-sm-6">
+                <dt>Full Name</dt>
+                <dd id="detail-fullName">&mdash;</dd>
+              </div>
+              <div class="col-sm-6">
+                <dt>Email Address</dt>
+                <dd id="detail-email">&mdash;</dd>
+              </div>
+              <div class="col-sm-6">
+                <dt>Phone Number</dt>
+                <dd id="detail-phone">&mdash;</dd>
+              </div>
+              <div class="col-sm-6">
+                <dt>Country</dt>
+                <dd id="detail-country">&mdash;</dd>
+              </div>
+              <div class="col-sm-6">
+                <dt>Preferred Date &amp; Time</dt>
+                <dd id="detail-preferredDateTime">&mdash;</dd>
+              </div>
+              <div class="col-12">
+                <dt>Message</dt>
+                <dd id="detail-message" style="font-weight:500;white-space:pre-wrap;">&mdash;</dd>
+              </div>
+            </dl>
+
+            <dl class="row booking-detail mb-0" id="regDetails" style="display:none;">
+              <div class="col-sm-6">
+                <dt>Reference</dt>
+                <dd id="detail-regId">&mdash;</dd>
+              </div>
+              <div class="col-sm-6">
+                <dt>Event</dt>
+                <dd id="detail-regEvent">&mdash;</dd>
+              </div>
+              <div class="col-sm-6">
+                <dt>Full Name</dt>
+                <dd id="detail-regName">&mdash;</dd>
+              </div>
+              <div class="col-sm-6">
+                <dt>Email Address</dt>
+                <dd id="detail-regEmail">&mdash;</dd>
+              </div>
+              <div class="col-sm-6">
+                <dt>Phone Number</dt>
+                <dd id="detail-regPhone">&mdash;</dd>
+              </div>
+              <div class="col-sm-6">
+                <dt>Country</dt>
+                <dd id="detail-regCountry">&mdash;</dd>
+              </div>
+            </dl>
+
+            <hr class="my-4">
+
+            <div class="d-flex flex-wrap gap-2">
+              <a id="addToCalendarBtn" href="#" class="btn btn-indigo" style="display:none;">
+                <i class="bi bi-google me-2"></i>Add to Google Calendar
+              </a>
+              <button type="button" id="downloadIcsBtn" class="btn btn-outline-primary" style="display:none;">
+                <i class="bi bi-download me-2"></i>Download .ics File
+              </button>
+              <a href="index.html" class="btn btn-outline-secondary ms-sm-auto">
+                <i class="bi bi-house me-2"></i>Back to Home
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-8">
+          <div id="demoAlert" class="alert alert-info mb-0" style="border-radius:12px;">
+            <i class="bi bi-info-circle me-2"></i>
+            Our team will reach out within one business day to confirm your demo slot. Check your inbox (and spam folder) for the confirmation message.
+          </div>
+          <div id="regAlert" class="alert alert-success mb-0" style="border-radius:12px; display:none;">
+            <i class="bi bi-check-circle me-2"></i>
+            You have been registered for the event. A confirmation email with joining instructions will be sent to your inbox shortly.
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer" style="margin:0;padding-bottom:0;">
+    <div class="site-footer__bar">
+      <div class="container py-3 text-center">
+        <p class="mb-0 site-footer__copy">&copy; 2025 AI Solutions. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      var params = new URLSearchParams(window.location.search);
+      var type = params.get('type') || 'demo';
+
+      if (type === 'registration') {
+        document.getElementById('heroTitle').textContent = 'Registration Submitted!';
+        document.getElementById('heroMessage').textContent = 'You will receive a confirmation email with joining instructions shortly.';
+        document.getElementById('detailsTitle').textContent = 'Your Registration Details';
+        document.getElementById('demoDetails').style.display = 'none';
+        document.getElementById('regDetails').style.display = '';
+        document.getElementById('demoAlert').style.display = 'none';
+        document.getElementById('regAlert').style.display = '';
+        document.getElementById('detail-regId').textContent = sessionStorage.getItem('regId') || '&mdash;';
+        document.getElementById('detail-regEvent').textContent = sessionStorage.getItem('regEvent') || '&mdash;';
+        document.getElementById('detail-regName').textContent = sessionStorage.getItem('regName') || '&mdash;';
+        document.getElementById('detail-regEmail').textContent = sessionStorage.getItem('regEmail') || '&mdash;';
+        document.getElementById('detail-regPhone').textContent = sessionStorage.getItem('regPhone') || '&mdash;';
+        document.getElementById('detail-regCountry').textContent = sessionStorage.getItem('regCountry') || '&mdash;';
+      } else if (type === 'contact') {
+        document.getElementById('heroTitle').textContent = 'Message Sent!';
+        document.getElementById('heroMessage').textContent = 'We have received your message and will get back to you soon.';
+        document.getElementById('detailsTitle').textContent = 'Your Message';
+        document.getElementById('demoDetails').style.display = 'none';
+        document.getElementById('regDetails').style.display = 'none';
+        document.getElementById('demoAlert').style.display = 'none';
+        document.getElementById('regAlert').style.display = 'none';
+      } else {
+        document.body.dataset.page = 'demo-thankyou';
+        document.getElementById('heroTitle').textContent = 'Demo Scheduled!';
+        document.getElementById('heroMessage').innerHTML = 'A confirmation email will be sent to <strong id="detail-confirmEmail">&mdash;</strong>.';
+        document.getElementById('regDetails').style.display = 'none';
+        document.getElementById('regAlert').style.display = 'none';
+        try {
+          var demoData = JSON.parse(sessionStorage.getItem('aiSolutionsDemoBooking'));
+          if (demoData) {
+            var demoFields = { bookingId: demoData.id, fullName: demoData.fullName, email: demoData.email, phone: demoData.phone, country: demoData.country, service: demoData.service, preferredDateTime: demoData.preferredDateTimeDisplay, message: demoData.message || '&mdash;', confirmEmail: demoData.email };
+            Object.keys(demoFields).forEach(function(k) { var el = document.getElementById('detail-' + k); if (el) el.textContent = demoFields[k]; });
+          }
+        } catch(_) {}
+      }
+    })();
+  </script>
+  <script src="js/scheduledemo.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
+
+
+

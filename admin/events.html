@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="../photos/logo.png?v=20260522" type="image/png" />
+  <title>Events — Admin Panel — AI Solutions</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/@fontsource/cascadia-code@4.2.1/index.css" rel="stylesheet" />
+  <link href="../css/theme.css?v=20260522" rel="stylesheet" />
+
+  <style>
+    body, * { font-family: 'Cascadia Code' !important; }
+    body { background: whitesmoke; margin: 0; padding: 0; }
+    .admin-sidebar { background: white; height: 100vh; box-shadow: 2px 0 12px rgba(0,0,0,.08); position: fixed; left: 0; top: 0; width: 250px; overflow-y: auto; padding: 1.5rem 0; }
+    .admin-header { padding: 0 1.5rem 1.5rem; border-bottom: 1px solid lightgray; margin-bottom: 1.5rem; }
+    .admin-logo { display: flex; align-items: center; gap: .6rem; text-decoration: none; margin-bottom: 1rem; }
+    .admin-logo img { width: 40px; height: 40px; }
+    .admin-logo-text { font-weight: 700; color: darkslategray; font-size: 1.1rem; }
+    .admin-logo-text strong { color: blue; }
+    .admin-badges { display: flex; align-items: center; gap: .5rem; }
+    .admin-badge { display: inline-block; background: crimson; color: white; padding: .3rem .8rem; border-radius: 6px; font-size: .75rem; font-weight: 600; }
+    .logout-sidebar-btn { background: crimson; color: white; border: none; padding: .3rem .8rem; border-radius: 6px; cursor: pointer; font-weight: 600; transition: background .2s; font-size: .75rem; white-space: nowrap; display: inline-block; }
+    .logout-sidebar-btn:hover { background: firebrick; color: white; text-decoration: none; }
+    .admin-menu { list-style: none; padding: 0 1rem; margin: 0; }
+    .admin-menu li { margin-bottom: 0.5rem; }
+    .admin-menu a { display: flex; align-items: center; gap: .8rem; padding: .75rem 1rem; border-radius: 8px; color: slategray; text-decoration: none; transition: all .2s; font-weight: 500; }
+    .admin-menu a:hover, .admin-menu a.active { background: rgba(79,70,229,.1); color: blue; }
+    .admin-menu i { width: 20px; text-align: center; }
+    .admin-main { margin-left: 250px; padding: 2rem; }
+    .admin-topbar { background: white; padding: 1rem 2rem; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,.06); }
+    .admin-topbar h1 { margin: 0; font-size: 1.8rem; color: darkslategray; font-weight: 700; }
+    .content-card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.06); margin-bottom: 2rem; }
+    .form-group { margin-bottom: 1.5rem; }
+    .form-group label { display: block; margin-bottom: .5rem; font-weight: 600; color: darkslategray; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: .75rem; border: 1px solid lightgray; border-radius: 8px; font-family: inherit; }
+    .form-group textarea { resize: vertical; min-height: 120px; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem; }
+    .action-btn { background: blue; color: white; border: none; padding: .6rem 1.2rem; border-radius: 8px; cursor: pointer; font-weight: 600; transition: background .2s; margin-right: .5rem; margin-bottom: .5rem; }
+    .action-btn:hover { background: darkblue; color: white; text-decoration: none; }
+    .action-btn.delete { background: crimson; }
+    .action-btn.delete:hover { background: firebrick; }
+    .action-btn.cancel { background: slategray; }
+    .action-btn.cancel:hover { background: dimgray; }
+    .events-table { width: 100%; border-collapse: collapse; }
+    .events-table th { background: whitesmoke; padding: 1rem; text-align: left; font-weight: 600; color: darkslategray; border-bottom: 2px solid lightgray; }
+    .events-table td { padding: 1rem; border-bottom: 1px solid lightgray; }
+    .events-table tr:hover { background: whitesmoke; }
+    .alert-box { padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; display: none; }
+    .alert-box.show { display: block; }
+    .alert-success { background: palegreen; color: darkgreen; border: 1px solid palegreen; }
+    .alert-danger { background: mistyrose; color: darkred; border: 1px solid lightpink; }
+    .alert-info { background: lightcyan; color: teal; border: 1px solid powderblue; }
+    .time-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,.5); z-index: 9999; align-items: center; justify-content: center; }
+    .time-modal.show { display: flex; }
+    .modal-content { background: white; padding: 2rem; border-radius: 12px; width: 90%; max-width: 400px; }
+    .modal-content h5 { margin-bottom: 1.5rem; color: darkslategray; font-weight: 700; }
+    .time-input-group { margin-bottom: 1.5rem; }
+    .time-input-group label { display: block; margin-bottom: .5rem; font-weight: 600; color: darkslategray; }
+    .time-input-group input { width: 100%; padding: .75rem; border: 1px solid lightgray; border-radius: 8px; }
+    .modal-buttons { display: flex; gap: 1rem; }
+    .del-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,.5); z-index: 9999; align-items: center; justify-content: center; }
+    .del-modal.show { display: flex; }
+    .del-modal-content { background: white; padding: 2rem; border-radius: 12px; width: 90%; max-width: 420px; text-align: center; }
+    .del-modal-content h5 { margin-bottom: 1rem; color: crimson; font-weight: 700; }
+    .del-modal-content p { color: slategray; margin-bottom: 1.5rem; font-size: .95rem; }
+    .del-modal-buttons { display: flex; gap: 1rem; justify-content: center; }
+  </style>
+</head>
+<body>
+
+  <aside class="admin-sidebar">
+    <div class="admin-header">
+      <a href="../index.html" class="admin-logo">
+        <img src="../photos/logo.png?v=20260522" alt="AI">
+        <div class="admin-logo-text brand-word"><strong>Solutions</strong></div>
+      </a>
+      <div class="admin-badges">
+        <span class="admin-badge"><i class="bi bi-shield-check"></i> Admin</span>
+        <button class="logout-sidebar-btn" onclick="logout()" title="Logout">Logout</button>
+      </div>
+    </div>
+
+    <ul class="admin-menu">
+      <li><a href="dashboard.html" class="admin-link"><i class="bi bi-speedometer2"></i> <span>Dashboard</span></a></li>
+      <li><a href="analytics.html" class="admin-link"><i class="bi bi-graph-up"></i> <span>Analytics</span></a></li>
+      <li><a href="inquiries.html" class="admin-link"><i class="bi bi-chat-dots"></i> <span>Customer Inquiries</span></a></li>
+      <li><a href="feedback.html" class="admin-link"><i class="bi bi-megaphone"></i> <span>Feedback</span></a></li>
+
+      <li><a href="demos.html" class="admin-link"><i class="bi bi-calendar-check"></i> <span>Demo Requests</span></a></li>
+      <li><a href="registrations.html" class="admin-link"><i class="bi bi-clipboard-check"></i> <span>Event Registrations</span></a></li>
+      <li><a href="events.html" class="admin-link active"><i class="bi bi-calendar-event"></i> <span>Events</span></a></li>
+      <li><a href="settings.html" class="admin-link"><i class="bi bi-gear"></i> <span>Settings</span></a></li>
+    </ul>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <h1><i class="bi bi-calendar-event"></i> Events</h1>
+    </div>
+
+    <div id="alertBox" class="alert-box"></div>
+
+    <div class="content-card">
+      <h5 style="margin-bottom: 1.5rem; color: darkslategray; font-weight: 700;" id="formTitle">Add New Event</h5>
+      
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Event Title <span style="color: crimson;">*</span></label>
+          <input type="text" id="eventTitle" placeholder="Enter event title">
+        </div>
+        <div class="form-group">
+          <label>Event Date <span style="color: crimson;">*</span></label>
+          <input type="date" id="eventDate">
+        </div>
+        <div class="form-group">
+          <label>Event Time</label>
+          <div style="display: flex; gap: .5rem;">
+            <input type="text" id="eventTime" placeholder="e.g., 2:00 PM – 4:00 PM" style="margin-bottom: 0; flex: 1;">
+            <button type="button" class="action-btn" onclick="openTimeModal()" style="width: 45px; padding: .75rem 0; margin-bottom: 0;"><i class="bi bi-clock"></i></button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Event Type</label>
+          <select id="eventType">
+            <option value="">-- Select --</option>
+            <option>Webinar</option>
+            <option>Workshop</option>
+            <option>Live Demo</option>
+            <option>Training</option>
+            <option>Conference</option>
+            <option>Seminar</option>
+            <option>Technology Showcase</option>
+            <option>Product Launch</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Location</label>
+          <select id="eventLocation">
+            <option value="">-- Select --</option>
+            <option>Online (Zoom)</option>
+            <option>Online (Google Meet)</option>
+            <option>AI Solutions HQ</option>
+            <option>Newcastle Conference Centre</option>
+            <option>National Glass Centre</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Speaker</label>
+          <input type="text" id="eventSpeaker" placeholder="Enter speaker name">
+        </div>
+        <div class="form-group">
+          <label>Capacity</label>
+          <input type="number" id="eventCapacity" placeholder="Leave empty for no capacity limit">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="eventDescription" placeholder="Enter event description (optional)"></textarea>
+      </div>
+
+      <div style="display: flex; gap: .5rem; align-items: center;">
+        <button type="button" class="action-btn" onclick="saveEvent()" id="submitBtn"><i class="bi bi-plus-circle"></i> Add Event</button>
+        <button type="button" id="cancelBtn" class="action-btn cancel" onclick="resetForm()" style="display: none;"><i class="bi bi-x-circle"></i> Cancel</button>
+        <span id="inlineMsg" style="color: mediumseagreen; font-weight: 600; font-size: .9rem; opacity: 0; transition: opacity .3s;"></span>
+      </div>
+    </div>
+
+    <div class="content-card">
+      <h5 style="margin-bottom: 1.5rem; color: darkslategray; font-weight: 700;">All Events</h5>
+      <div style="overflow-x: auto;">
+        <table class="events-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Type</th>
+              <th>Location</th>
+              <th style="width:60px;">Featured</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="eventsList">
+            <tr><td colspan="7" style="text-align: center; padding: 2rem;">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="deleteModal" class="del-modal">
+    <div class="del-modal-content">
+      <h5><i class="bi bi-exclamation-triangle"></i> Delete Event</h5>
+      <p>Are you sure you want to delete this event? This action cannot be undone.</p>
+      <div class="del-modal-buttons">
+        <button type="button" class="action-btn cancel" onclick="closeDeleteModal()"><i class="bi bi-x"></i> Cancel</button>
+        <button type="button" class="action-btn delete" onclick="confirmDelete()"><i class="bi bi-trash"></i> Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Logout Confirmation Modal -->
+  <div id="logoutModal" class="del-modal">
+    <div class="del-modal-content">
+      <h5><i class="bi bi-box-arrow-right" style="color: crimson;"></i> Logout</h5>
+      <p>Are you sure you want to logout?</p>
+      <div class="del-modal-buttons">
+        <button type="button" class="action-btn cancel" onclick="closeLogoutModal()"><i class="bi bi-x"></i> Cancel</button>
+        <button type="button" class="action-btn delete" onclick="confirmLogout()"><i class="bi bi-box-arrow-right"></i> Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Time Modal -->
+  <div id="timeModal" class="time-modal">
+    <div class="modal-content">
+      <h5><i class="bi bi-clock-history"></i> Select Time</h5>
+      <div class="time-input-group">
+        <label>Start Time</label>
+        <input type="time" id="startTime">
+      </div>
+      <div class="time-input-group">
+        <label>End Time</label>
+        <input type="time" id="endTime">
+      </div>
+      <div class="modal-buttons">
+        <button type="button" class="action-btn cancel" onclick="closeTimeModal()"><i class="bi bi-x"></i> Cancel</button>
+        <button type="button" class="action-btn" onclick="saveTime()"><i class="bi bi-check"></i> Save</button>
+      </div>
+    </div>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+let editingId = null;
+let eventsData = [];
+
+// Verify login and setup
+document.addEventListener('DOMContentLoaded', function() {
+  fetch('/api/auth/me/')
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (!data.success) { window.location.href = 'index.html'; return; }
+  })
+  .catch(function() { window.location.href = 'index.html'; });
+  
+  // Set active menu item
+  const activeLink = document.querySelector('.admin-menu a[href="events.html"]');
+  if (activeLink) {
+    document.querySelectorAll('.admin-menu a').forEach(link => link.classList.remove('active'));
+    activeLink.classList.add('active');
+  }
+  
+  loadEvents();
+});
+
+function showAlert(msg, type) {
+  const box = document.getElementById('alertBox');
+  const alertEl = document.createElement('div');
+  alertEl.className = 'alert-box show alert-' + type;
+  alertEl.textContent = msg;
+  box.innerHTML = '';
+  box.appendChild(alertEl);
+  
+  if (type === 'success') {
+    setTimeout(function() { 
+      alertEl.classList.remove('show');
+    }, 3000);
+  }
+}
+
+function loadEvents() {
+  var tbody = document.getElementById('eventsList');
+  tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">Loading...</td></tr>';
+  
+  fetch('/api/events')
+    .then(function(response) { return response.json(); })
+    .then(function(events) {
+      eventsData = events;
+      if (events.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 2rem;">No events created yet</td></tr>';
+        return;
+      }
+      var featuredId = localStorage.getItem('eventOfMonth');
+      tbody.innerHTML = events.map(function(e) {
+        var escapedTitle = (e.title || '').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        var escapedDate = (e.date || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        var escapedTime = (e.time || '-').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        var escapedType = (e.type || '-').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        var escapedLocation = (e.location || '-').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        var escapedId = (e.id || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        var isFeatured = (featuredId && featuredId === e.id) ? 'checked' : '';
+        
+        return '<tr>' +
+          '<td><strong>' + escapedTitle + '</strong></td>' +
+          '<td>' + escapedDate + '</td>' +
+          '<td>' + escapedTime + '</td>' +
+          '<td>' + escapedType + '</td>' +
+          '<td>' + escapedLocation + '</td>' +
+          '<td style="text-align:center;"><input type="checkbox" ' + isFeatured + ' onchange="setFeatured(this, \'' + escapedId + '\', \'' + escapedTitle.replace(/'/g, '&#39;') + '\')"></td>' +
+          '<td>' +
+            '<button class="action-btn" onclick="editEvent(\'' + escapedId + '\')" style="padding: .4rem .8rem; font-size: .85rem; margin-right: .3rem;"><i class="bi bi-pencil"></i> Edit</button>' +
+            '<button class="action-btn delete" onclick="deleteEvent(\'' + escapedId + '\')" style="padding: .4rem .8rem; font-size: .85rem;"><i class="bi bi-trash"></i> Delete</button>' +
+          '</td>' +
+        '</tr>';
+      }).join('');
+    })
+    .catch(function(error) {
+      console.error('Failed to load events:', error);
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 2rem; color: crimson;">Error loading events. Is the server running?</td></tr>';
+    });
+}
+
+function saveEvent() {
+  const title = document.getElementById('eventTitle').value.trim();
+  const dateInput = document.getElementById('eventDate').value;
+  const time = document.getElementById('eventTime').value.trim();
+  const type = document.getElementById('eventType').value.trim();
+  const location = document.getElementById('eventLocation').value.trim();
+  const speaker = document.getElementById('eventSpeaker').value.trim();
+  const description = document.getElementById('eventDescription').value.trim();
+  const capacityInput = document.getElementById('eventCapacity').value.trim();
+  
+  if (!title) {
+    showAlert('Event title is required', 'danger');
+    return;
+  }
+  if (!dateInput) {
+    showAlert('Event date is required', 'danger');
+    return;
+  }
+
+  const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+  if (!dateRegex.test(dateInput)) {
+    showAlert('Invalid date format. Use the calendar picker.', 'danger');
+    return;
+  }
+
+  const data = {
+    title: title,
+    date: dateInput,
+    time: time || '',
+    type: type || '',
+    location: location || '',
+    speaker: speaker || '',
+    description: description || '',
+    capacity: capacityInput ? parseInt(capacityInput) : null
+  };
+
+  console.log('editingId:', editingId);
+  console.log('Sending data:', JSON.stringify(data));
+
+  var submitBtn = document.getElementById('submitBtn');
+  if (submitBtn) submitBtn.disabled = true;
+
+  function handleResponse(result) {
+    console.log('Response:', JSON.stringify(result));
+    if (result.success || result.id) {
+      var msg = document.getElementById('inlineMsg');
+      msg.textContent = editingId ? 'Event is updated.' : 'New event is created.';
+      msg.style.opacity = '1';
+      setTimeout(function() { msg.style.opacity = '0'; }, 3000);
+      resetForm();
+      loadEvents();
+    } else {
+      showAlert('Error saving event: ' + (result.error || 'Unknown error'), 'danger');
+    }
+    if (submitBtn) submitBtn.disabled = false;
+  }
+
+  function handleError(error) {
+    console.error('Error saving event:', error);
+    showAlert('Error saving event. Is the server running?', 'danger');
+    if (submitBtn) submitBtn.disabled = false;
+  }
+
+  var url = editingId ? '/api/events/' + encodeURIComponent(editingId) : '/api/events';
+  var method = editingId ? 'PUT' : 'POST';
+  console.log('Fetching:', method, url);
+  fetch(url, {
+    method: method,
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(data)
+  })
+  .then(function(response) {
+    console.log('Response status:', response.status);
+    if (!response.ok) {
+      return response.text().then(function(text) {
+        throw new Error('HTTP ' + response.status + ': ' + text.substring(0, 200));
+      });
+    }
+    return response.json();
+  })
+  .then(handleResponse)
+  .catch(function(error) {
+    console.error('Error saving event:', error);
+    showAlert('Error saving event: ' + error.message, 'danger');
+    if (submitBtn) submitBtn.disabled = false;
+  });
+}
+
+function editEvent(id) {
+  if (!id || id.trim() === '') {
+    showAlert('Invalid event ID', 'danger');
+    return;
+  }
+
+  var event = null;
+  for (var i = 0; i < eventsData.length; i++) {
+    if (eventsData[i].id === id) { event = eventsData[i]; break; }
+  }
+  if (!event) {
+    showAlert('Event not found', 'danger');
+    return;
+  }
+
+  editingId = id;
+  document.getElementById('eventTitle').value = event.title || '';
+  document.getElementById('eventDate').value = event.date || '';
+  document.getElementById('eventTime').value = event.time || '';
+  document.getElementById('eventType').value = event.type || '';
+  document.getElementById('eventLocation').value = event.location || '';
+  document.getElementById('eventSpeaker').value = event.speaker || '';
+  document.getElementById('eventDescription').value = event.description || '';
+  document.getElementById('eventCapacity').value = event.capacity || '';
+
+  document.getElementById('formTitle').textContent = 'Edit Event';
+  document.getElementById('submitBtn').innerHTML = '<i class="bi bi-pencil-square"></i> Update Event';
+  document.getElementById('cancelBtn').style.display = 'inline-block';
+  
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  showAlert('Event loaded for editing', 'info');
+}
+
+var deleteId = null;
+
+function deleteEvent(id) {
+  if (!id || id.trim() === '') {
+    showAlert('Invalid event ID', 'danger');
+    return;
+  }
+  deleteId = id;
+  document.getElementById('deleteModal').classList.add('show');
+}
+
+function closeDeleteModal() {
+  document.getElementById('deleteModal').classList.remove('show');
+  deleteId = null;
+}
+
+function confirmDelete() {
+  if (!deleteId) { closeDeleteModal(); return; }
+  var id = deleteId;
+  closeDeleteModal();
+  fetch('/api/events/' + encodeURIComponent(id), {
+    method: 'DELETE'
+  })
+  .then(function(response) { return response.json(); })
+  .then(function(result) {
+    if (result.success) {
+      showAlert('Event deleted successfully!', 'success');
+      loadEvents();
+    } else {
+      showAlert('Error deleting event', 'danger');
+    }
+  })
+  .catch(function(error) {
+    console.error('Error deleting event:', error);
+    showAlert('Error deleting event. Is the server running?', 'danger');
+  });
+}
+
+function setFeatured(checkbox, id, title) {
+  if (checkbox.checked) {
+    document.querySelectorAll('#eventsList input[type=checkbox]').forEach(function(cb) {
+      if (cb !== checkbox) cb.checked = false;
+    });
+    localStorage.setItem('eventOfMonth', id);
+    showAlert('\u201c' + title + '\u201d set as Featured Event of the Month', 'success');
+  } else {
+    localStorage.removeItem('eventOfMonth');
+    showAlert('No event featured', 'info');
+  }
+}
+
+function resetForm() {
+  document.getElementById('eventTitle').value = '';
+  document.getElementById('eventDate').value = '';
+  document.getElementById('eventTime').value = '';
+  document.getElementById('eventType').value = '';
+  document.getElementById('eventLocation').value = '';
+  document.getElementById('eventSpeaker').value = '';
+  document.getElementById('eventDescription').value = '';
+  document.getElementById('eventCapacity').value = '';
+  editingId = null;
+  document.getElementById('formTitle').textContent = 'Add New Event';
+  document.getElementById('submitBtn').innerHTML = '<i class="bi bi-plus-circle"></i> Add Event';
+  document.getElementById('submitBtn').disabled = false;
+  document.getElementById('cancelBtn').style.display = 'none';
+}
+
+function openTimeModal() {
+  document.getElementById('timeModal').classList.add('show');
+}
+
+function closeTimeModal() {
+  document.getElementById('timeModal').classList.remove('show');
+}
+
+function saveTime() {
+  const start = document.getElementById('startTime').value;
+  const end = document.getElementById('endTime').value;
+
+  if (!start || !end) {
+    showAlert('Please select both start and end times', 'danger');
+    return;
+  }
+
+  const s12 = to12Hour(start);
+  const e12 = to12Hour(end);
+  document.getElementById('eventTime').value = s12 + ' – ' + e12;
+  closeTimeModal();
+}
+
+function to12Hour(time24) {
+  if (!time24) return '';
+  const parts = time24.split(':');
+  let h = parseInt(parts[0]);
+  const m = parts[1];
+  const p = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;
+  return h + ':' + m + ' ' + p;
+}
+
+function logout() {
+  document.getElementById('logoutModal').classList.add('show');
+}
+
+function closeLogoutModal() {
+  document.getElementById('logoutModal').classList.remove('show');
+}
+
+function confirmLogout() {
+  closeLogoutModal();
+  fetch('/api/auth/logout/', { method: 'POST' })
+  .then(function() { window.location.href = 'index.html'; })
+  .catch(function() { window.location.href = 'index.html'; });
+}
+</script>
+</body>
+</html>

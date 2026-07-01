@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="photos/logo.png?v=20260522" type="image/png" />
+  <title>About Us &mdash; AI Solutions</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/@fontsource/cascadia-code@4.2.1/index.css" rel="stylesheet" />
+  <link href="css/theme.css?v=20260522" rel="stylesheet" />
+  <link href="css/footer.css?v=20260522" rel="stylesheet" />
+
+  <style>
+    body, * { font-family: 'Cascadia Code' !important; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    :root { --color-primary: blue; }
+
+    /* Navbar */
+    .navbar { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+    .navbar-brand span { color: blue; font-weight: 700; }
+    .nav-link { font-weight: 500; position: relative; }
+    .nav-link::after {
+      content: ''; position: absolute; bottom: 0;
+      left: .5rem; right: .5rem; height: 2px;
+      background: blue; border-radius: 2px;
+      transform: scaleX(0); transition: transform .25s ease;
+    }
+    .nav-link:hover::after, .nav-link.active::after { transform: scaleX(1); }
+
+    /* Page hero */
+    .page-hero {
+      background: lightblue;
+      padding: 120px 0 60px;
+      min-height: 400px;
+    }
+
+    .page-hero .hero-icon {
+      font-size: 8rem;
+      line-height: 1;
+      color: blue;
+      opacity: 0.2;
+    }
+
+    .hero-glow {
+      animation: pulse-glow 4s ease-in-out infinite;
+    }
+    @keyframes pulse-glow {
+      0%, 100% { opacity: .6; }
+      50% { opacity: 1; }
+    }
+
+    /* Timeline */
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 20px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: lightgray;
+    }
+    .timeline-item { position: relative; padding-bottom: 2rem; }
+    .timeline-dot {
+      position: absolute;
+      left: -2rem;
+      top: 4px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .72rem;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    /* Buttons */
+    
+    
+  </style>
+  <script src="js/api-config.js"></script>
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white bg-opacity-90 border-bottom fixed-top shadow-sm">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2 fw-semibold fs-5" href="index.html">
+        <img src="photos/logo.png?v=20260522" alt="AI" class="site-logo" width="56" height="56">
+        <span class="brand-word"><strong>Solutions</strong></span>
+      </a>
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"
+        aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav mx-auto gap-1">
+          <li class="nav-item"><a class="nav-link px-3" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link active px-3" href="about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link px-3" href="services.html">Services</a></li>
+          <li class="nav-item"><a class="nav-link px-3" href="events.html">Events</a></li>
+          <li class="nav-item"><a class="nav-link px-3" href="contact.html">Contact</a></li>
+        </ul>
+        <div class="d-flex align-items-center gap-2 mt-2 mt-lg-0">
+          <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#feedbackModal">Feedback</button>
+
+          <div id="navAuthSlot"></div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== PAGE HERO ===== -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-7">
+          <span class="badge rounded-pill mb-3 px-3 py-2" style="background:lavender;color:blue;font-size:.8rem;letter-spacing:.06em;">Who We Are</span>
+          <h1 class="fw-bold mb-3" style="font-size:clamp(2rem,5vw,3rem);color:darkslategray;letter-spacing:-.02em;">About Us</h1>
+          <p class="text-muted mb-0" style="font-size:1.05rem;line-height:1.75;">
+            A Sunderland-based technology company shaping the future of the digital employee experience through intelligent, people-centred AI.
+          </p>
+        </div>
+        <div class="col-lg-5 text-center d-none d-lg-block">
+          <div class="hero-glow hero-icon" aria-hidden="true">
+            <i class="bi bi-info-circle"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main>
+
+    <!-- ===== COMPANY INTRODUCTION ===== -->
+    <section class="py-5" id="introduction" style="background:white;">
+      <div class="container py-4">
+        <div class="row justify-content-center text-center mb-5">
+          <div class="col-lg-7">
+            <span class="badge rounded-pill mb-3 px-3 py-2" style="background:lavender;color:blue;font-size:.8rem;letter-spacing:.06em;">Company Introduction</span>
+            <h2 class="fw-bold mb-3" style="font-size:clamp(1.6rem,4vw,2.5rem);color:darkslategray;letter-spacing:-.02em;">Our Story</h2>
+          </div>
+        </div>
+        <div class="row g-5 align-items-center">
+          <div class="col-lg-6">
+            <p class="text-muted mb-3" style="line-height:1.8;">
+              <strong>AI Solutions</strong> is headquartered in Sunderland, United Kingdom. We harness artificial intelligence
+              to help organisations across industries deliver software solutions that rapidly and proactively address issues
+              affecting the digital employee experience &mdash; accelerating design, engineering, and innovation along the way.
+            </p>
+            <p class="text-muted mb-4" style="line-height:1.8;">
+              Our integrated AI-powered virtual assistant responds to user inquiries in real time, alongside affordable,
+              AI-driven prototyping services. Together, these capabilities help clients move from idea to impact faster &mdash; with
+              measurable improvements in speed, quality, and employee satisfaction.
+            </p>
+            <div class="row g-3">
+              <div class="col-6">
+                <div class="p-3 rounded-3 text-center border">
+                  <h4 class="fw-bold mb-0" style="color:blue;">45+</h4>
+                  <p class="text-muted mb-0" style="font-size:.85rem;">Organisations Supported</p>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="p-3 rounded-3 text-center border">
+                  <h4 class="fw-bold mb-0" style="color:blue;">90+</h4>
+                  <p class="text-muted mb-0" style="font-size:.85rem;">DEX Solutions Deployed</p>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="p-3 rounded-3 text-center border">
+                  <h4 class="fw-bold mb-0" style="color:blue;">28+</h4>
+                  <p class="text-muted mb-0" style="font-size:.85rem;">AI &amp; Engineering Experts</p>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="p-3 rounded-3 text-center border">
+                  <h4 class="fw-bold mb-0" style="color:blue;">60%</h4>
+                  <p class="text-muted mb-0" style="font-size:.85rem;">Faster Issue Resolution</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="p-4 rounded-4" style="background:aliceblue;">
+              <h5 class="fw-bold mb-4" style="color:darkslategray;">What We Do</h5>
+              <div class="d-flex flex-column gap-3">
+                <div class="d-flex gap-3 align-items-start">
+                  <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
+                    style="width:44px;height:44px;background:lavender;">
+                    <i class="bi bi-robot" style="color:blue;font-size:1.1rem;"></i>
+                  </div>
+                  <div>
+                    <p class="fw-bold mb-1" style="color:darkslategray;font-size:.9rem;">AI Virtual Assistant</p>
+                    <p class="text-muted mb-0" style="font-size:.85rem;line-height:1.6;">Responds to inquiries instantly and guides users through complex digital workflows.</p>
+                  </div>
+                </div>
+                <div class="d-flex gap-3 align-items-start">
+                  <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
+                    style="width:44px;height:44px;background:aliceblue;">
+                    <i class="bi bi-gear-wide-connected" style="color:blue;font-size:1.1rem;"></i>
+                  </div>
+                  <div>
+                    <p class="fw-bold mb-1" style="color:darkslategray;font-size:.9rem;">Digital Employee Experience</p>
+                    <p class="text-muted mb-0" style="font-size:.85rem;line-height:1.6;">Proactively detects and resolves issues that affect how people work with technology every day.</p>
+                  </div>
+                </div>
+                <div class="d-flex gap-3 align-items-start">
+                  <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
+                    style="width:44px;height:44px;background:lightgreen;">
+                    <i class="bi bi-bar-chart-line-fill" style="color:mediumseagreen;font-size:1.1rem;"></i>
+                  </div>
+                  <div>
+                    <p class="fw-bold mb-1" style="color:darkslategray;font-size:.9rem;">Affordable Prototyping</p>
+                    <p class="text-muted mb-0" style="font-size:.85rem;line-height:1.6;">AI-based prototyping that speeds up design and engineering without enterprise-level cost.</p>
+                  </div>
+                </div>
+                <div class="d-flex gap-3 align-items-start">
+                  <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
+                    style="width:44px;height:44px;background:moccasin;">
+                    <i class="bi bi-headset" style="color:darkorange;font-size:1.1rem;"></i>
+                  </div>
+                  <div>
+                    <p class="fw-bold mb-1" style="color:darkslategray;font-size:.9rem;">Cross-Industry Solutions</p>
+                    <p class="text-muted mb-0" style="font-size:.85rem;line-height:1.6;">Flexible software tailored for sectors that need smarter, faster responses to workplace technology challenges.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== COMPANY HISTORY ===== -->
+    <section class="py-5" id="history" style="background:aliceblue;">
+      <div class="container py-4">
+        <div class="row justify-content-center text-center mb-5">
+          <div class="col-lg-7">
+            <span class="badge rounded-pill mb-3 px-3 py-2" style="background:lightgreen;color:mediumseagreen;font-size:.8rem;letter-spacing:.06em;">Our Journey</span>
+            <h2 class="fw-bold mb-3" style="font-size:clamp(1.6rem,4vw,2.5rem);color:darkslategray;letter-spacing:-.02em;">Company History</h2>
+            <p class="text-muted mb-0" style="font-size:1.05rem;line-height:1.75;">
+              From our Sunderland headquarters to partnerships across the UK and beyond &mdash; delivering trusted AI for the modern workplace.
+            </p>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <div class="timeline">
+
+              <div class="timeline-item">
+                <div class="timeline-dot" style="background:blue;">2022</div>
+                <div class="p-4 rounded-4 border ms-3" style="background:white;">
+                  <div class="d-flex align-items-center gap-2 mb-2">
+                    <span class="badge rounded-pill" style="background:lavender;color:blue;font-size:.75rem;">Founded</span>
+                  </div>
+                  <h5 class="fw-bold mb-2" style="color:darkslategray;">AI Solutions Established in Sunderland</h5>
+                  <p class="text-muted mb-0" style="font-size:.9rem;line-height:1.7;">
+                    AI Solutions was founded in Sunderland by a small team of AI engineers and UX specialists with one goal &mdash; to use artificial intelligence to improve how people experience technology at work.
+                  </p>
+                </div>
+              </div>
+
+              <div class="timeline-item">
+                <div class="timeline-dot" style="background:mediumpurple;">2023</div>
+                <div class="p-4 rounded-4 border ms-3" style="background:white;">
+                  <div class="d-flex align-items-center gap-2 mb-2">
+                    <span class="badge rounded-pill" style="background:moccasin;color:darkorange;font-size:.75rem;">Product Launch</span>
+                  </div>
+                  <h5 class="fw-bold mb-2" style="color:darkslategray;">AI Virtual Assistant Released</h5>
+                  <p class="text-muted mb-0" style="font-size:.9rem;line-height:1.7;">
+                    Launched our flagship AI-powered virtual assistant, enabling organisations to respond to user inquiries instantly and reduce friction in everyday digital workflows.
+                  </p>
+                </div>
+              </div>
+
+              <div class="timeline-item">
+                <div class="timeline-dot" style="background:mediumseagreen;">2024</div>
+                <div class="p-4 rounded-4 border ms-3" style="background:white;">
+                  <div class="d-flex align-items-center gap-2 mb-2">
+                    <span class="badge rounded-pill" style="background:lightgreen;color:mediumseagreen;font-size:.75rem;">Innovation</span>
+                  </div>
+                  <h5 class="fw-bold mb-2" style="color:darkslategray;">Prototyping Platform &amp; DEX Focus</h5>
+                  <p class="text-muted mb-0" style="font-size:.9rem;line-height:1.7;">
+                    Introduced affordable, AI-driven prototyping services and sharpened our focus on the digital employee experience &mdash; helping clients proactively resolve workplace technology issues before they escalate.
+                  </p>
+                </div>
+              </div>
+
+              <div class="timeline-item">
+                <div class="timeline-dot" style="background:darkorange;">2025</div>
+                <div class="p-4 rounded-4 border ms-3" style="background:white;">
+                  <div class="d-flex align-items-center gap-2 mb-2">
+                    <span class="badge rounded-pill" style="background:moccasin;color:darkorange;font-size:.75rem;">Growth</span>
+                  </div>
+                  <h5 class="fw-bold mb-2" style="color:darkslategray;">UK-Wide Partnerships</h5>
+                  <p class="text-muted mb-0" style="font-size:.9rem;line-height:1.7;">
+                    Expanded across the United Kingdom, partnering with organisations in healthcare, retail, finance, and public services &mdash; accelerating design, engineering, and innovation for diverse industries.
+                  </p>
+                </div>
+              </div>
+
+              <div class="timeline-item" style="padding-bottom:0;">
+                <div class="timeline-dot" style="background:crimson;">2026</div>
+                <div class="p-4 rounded-4 border ms-3" style="background:white;">
+                  <div class="d-flex align-items-center gap-2 mb-2">
+                    <span class="badge rounded-pill" style="background:mistyrose;color:crimson;font-size:.75rem;">Today</span>
+                  </div>
+                  <h5 class="fw-bold mb-2" style="color:darkslategray;">Global Expansion Underway</h5>
+                  <p class="text-muted mb-0" style="font-size:.9rem;line-height:1.7;">
+                    Today, AI Solutions supports 45+ organisations with 90+ digital employee experience solutions deployed. We are pursuing global expansion to deliver people-centred AI innovation with worldwide impact.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== VISION & MISSION ===== -->
+    <section class="py-5" id="vision-mission" style="background:white;">
+      <div class="container py-4">
+        <div class="row justify-content-center text-center mb-5">
+          <div class="col-lg-7">
+            <span class="badge rounded-pill mb-3 px-3 py-2" style="background:lavender;color:blue;font-size:.8rem;letter-spacing:.06em;">Our Purpose</span>
+            <h2 class="fw-bold mb-3" style="font-size:clamp(1.6rem,4vw,2.5rem);color:darkslategray;letter-spacing:-.02em;">Vision & Mission</h2>
+            <p class="text-muted mb-0" style="font-size:1.05rem;line-height:1.75;">
+              The principles that guide everything we build and every decision we make.
+            </p>
+          </div>
+        </div>
+        <div class="row g-4">
+
+          <!-- Vision -->
+          <div class="col-lg-6" id="vision">
+            <div class="p-4 p-lg-5 rounded-4 h-100" style="background:blue;color:white;">
+              <h3 class="fw-bold mb-3">Our Vision</h3>
+              <p class="mb-4" style="font-size:1rem;line-height:1.8;opacity:.92;">
+                To lead global innovation in the digital employee experience &mdash; making intelligent, supportive technology the standard
+                for every workplace, so organisations worldwide can help their people work smarter, feel empowered, and thrive in a
+                rapidly evolving digital world.
+              </p>
+              <ul class="list-unstyled d-flex flex-column gap-2 mb-0" style="opacity:.92;">
+                <li class="d-flex align-items-center gap-2"><i class="bi bi-check-circle-fill" style="color:lightsteelblue;"></i> Worldwide impact through global expansion</li>
+                <li class="d-flex align-items-center gap-2"><i class="bi bi-check-circle-fill" style="color:lightsteelblue;"></i> A trusted partner for the future of work</li>
+                <li class="d-flex align-items-center gap-2"><i class="bi bi-check-circle-fill" style="color:lightsteelblue;"></i> Technology that puts people first at every scale</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Mission -->
+          <div class="col-lg-6" id="mission">
+            <div class="p-4 p-lg-5 rounded-4 h-100" style="background:darkslategray;color:white;">
+              <h3 class="fw-bold mb-3">Our Mission</h3>
+              <p class="mb-4" style="font-size:1rem;line-height:1.8;opacity:.92;">
+                Our mission is to innovate, promote, and deliver the future of the digital employee experience. We build AI-powered
+                solutions that support people at work &mdash; combining responsive virtual assistance with affordable prototyping so
+                organisations can move faster, solve problems proactively, and create lasting value for their teams.
+              </p>
+              <ul class="list-unstyled d-flex flex-column gap-2 mb-0" style="opacity:.92;">
+                <li class="d-flex align-items-center gap-2"><i class="bi bi-check-circle-fill" style="color:lightsteelblue;"></i> Innovate with practical, AI-driven software</li>
+                <li class="d-flex align-items-center gap-2"><i class="bi bi-check-circle-fill" style="color:lightsteelblue;"></i> Promote a better experience for people at work</li>
+                <li class="d-flex align-items-center gap-2"><i class="bi bi-check-circle-fill" style="color:lightsteelblue;"></i> Deliver measurable impact through global reach</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer" style="margin:0;padding-bottom:0;">
+    <div class="container py-5">
+      <div class="row g-5">
+
+        <div class="col-lg-4 col-md-6">
+          <a href="index.html" class="d-flex align-items-center gap-2 text-decoration-none mb-3">
+            <img src="photos/logo.png?v=20260522" alt="AI" class="site-logo" width="56" height="56">
+            <span class="fw-semibold fs-5 site-footer__brand brand-word"><strong>Solutions</strong></span>
+          </a>
+          <div class="d-flex gap-3 mt-2">
+            <a href="https://www.facebook.com" class="social-icon" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><i class="bi bi-facebook"></i></a>
+            <a href="https://www.twitter.com" class="social-icon" aria-label="Twitter/X" target="_blank" rel="noopener noreferrer"><i class="bi bi-twitter-x"></i></a>
+            <a href="https://www.linkedin.com" class="social-icon" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer"><i class="bi bi-linkedin"></i></a>
+            <a href="https://www.instagram.com" class="social-icon" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><i class="bi bi-instagram"></i></a>
+            <a href="https://www.youtube.com" class="social-icon" aria-label="YouTube" target="_blank" rel="noopener noreferrer"><i class="bi bi-youtube"></i></a>
+          </div>
+        </div>
+
+        <div class="col-lg-8 col-md-6">
+          <hr class="site-footer__divider">
+          <div class="row g-3">
+            <div class="col-sm-6 d-flex align-items-start gap-2">
+              <i class="bi bi-geo-alt-fill mt-1 site-footer__icon"></i>
+              <span class="site-footer__contact">Wearside Innovation Hub<br>Sunderland, SR1 3DR, United Kingdom</span>
+            </div>
+            <div class="col-sm-6 d-flex align-items-center gap-2">
+              <i class="bi bi-telephone-fill site-footer__icon"></i>
+              <a href="tel:+441915550140" class="footer-link site-footer__contact">+44 191 555 0140</a>
+            </div>
+            <div class="col-sm-6 d-flex align-items-center gap-2">
+              <i class="bi bi-envelope-fill site-footer__icon"></i>
+              <a href="mailto:support@aisolutions.com" class="footer-link site-footer__contact">support@aisolutions.com</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="site-footer__bar">
+      <div class="container py-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <p class="mb-0 site-footer__copy">&copy; 2025 AI Solutions. All rights reserved.</p>
+        <div class="d-flex gap-3">
+          <a href="#" class="footer-link site-footer__copy">Privacy Policy</a>
+          <a href="#" class="footer-link site-footer__copy">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  <!-- Feedback Modal -->
+  <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="border-radius:16px;">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fw-bold" id="feedbackModalLabel" style="color:darkslategray;"><i class="bi bi-chat-square-text me-2" style="color:blue;"></i>Send Feedback</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-success d-none" id="feedbackSuccess" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>Thank you! Your feedback has been submitted.
+          </div>
+          <form id="feedbackForm" novalidate>
+
+            <div class="mb-3">
+              <label for="feedbackName" class="form-label fw-semibold" style="font-size:.85rem;">Name</label>
+              <input type="text" class="form-control" id="feedbackName" required>
+              <div class="invalid-feedback">Please enter your name.</div>
+            </div>
+            <div class="mb-3">
+              <label for="feedbackEmail" class="form-label fw-semibold" style="font-size:.85rem;">Email</label>
+              <input type="email" class="form-control" id="feedbackEmail" required>
+              <div class="invalid-feedback">Please enter a valid Email.</div>
+            </div>
+
+            <div class="mb-3">
+              <div class="d-flex gap-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="fbSvcDemo" value="demo">
+                  <label class="form-check-label" for="fbSvcDemo">Demo</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="fbSvcEvent" value="event">
+                  <label class="form-check-label" for="fbSvcEvent">Event</label>
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold" style="font-size:.85rem;">Overall satisfaction</label>
+              <div id="feedbackStarRating" style="font-size:1.8rem; cursor:pointer;">
+                <span data-value="1" style="color:lightgray;">&#9733;</span>
+                <span data-value="2" style="color:lightgray;">&#9733;</span>
+                <span data-value="3" style="color:lightgray;">&#9733;</span>
+                <span data-value="4" style="color:lightgray;">&#9733;</span>
+                <span data-value="5" style="color:lightgray;">&#9733;</span>
+              </div>
+              <input type="hidden" id="feedbackRating" value="0">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold" style="font-size:.85rem;">Would you recommend AI-Solutions to others?</label>
+              <div class="d-flex gap-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="feedbackRec" id="recYes" value="yes">
+                  <label class="form-check-label" for="recYes">Yes</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="feedbackRec" id="recNo" value="no">
+                  <label class="form-check-label" for="recNo">No</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="feedbackRec" id="recMaybe" value="maybe">
+                  <label class="form-check-label" for="recMaybe">Maybe</label>
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-indigo">Send</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var stars = document.querySelectorAll('#feedbackStarRating span');
+      var ratingInput = document.getElementById('feedbackRating');
+      stars.forEach(function(s) {
+        s.addEventListener('click', function() {
+          var val = parseInt(this.getAttribute('data-value'));
+          ratingInput.value = val;
+          stars.forEach(function(s2) {
+            var v = parseInt(s2.getAttribute('data-value'));
+            s2.style.color = v <= val ? 'gold' : 'lightgray';
+          });
+        });
+      });
+      var storedName = sessionStorage.getItem('feedbackName') || sessionStorage.getItem('aiSolutionsName') || '';
+      var storedEmail = sessionStorage.getItem('feedbackEmail') || sessionStorage.getItem('aiSolutionsEmail') || '';
+      if (storedName) document.getElementById('feedbackName').value = storedName;
+      if (storedEmail) document.getElementById('feedbackEmail').value = storedEmail;
+      var form = document.getElementById('feedbackForm');
+      if (!form) return;
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (!this.checkValidity()) { this.classList.add('was-validated'); return; }
+        var rec = document.querySelector('input[name="feedbackRec"]:checked');
+        var data = {
+          name: document.getElementById('feedbackName').value.trim(),
+          email: document.getElementById('feedbackEmail').value.trim(),
+          service_used: [document.getElementById("fbSvcDemo").checked ? "demo" : null, document.getElementById("fbSvcEvent").checked ? "event" : null].filter(Boolean).join(","),
+          satisfaction_rating: parseInt(document.getElementById('feedbackRating').value) || null,
+          recommendation: rec ? rec.value : ''
+        };
+        fetch('/api/feedback', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          if (d.success || d.id) {
+            document.getElementById('feedbackSuccess').classList.remove('d-none');
+            form.reset();
+            form.classList.remove('was-validated');
+            stars.forEach(function(s) { s.style.color = 'lightgray'; });
+            ratingInput.value = '0';
+            setTimeout(function() { document.getElementById('feedbackSuccess').classList.add('d-none'); }, 3000);
+          } else { showMessage('Error: ' + (d.error || 'Unknown error'), 'danger'); }
+        })
+        .catch(function() { showMessage('Error submitting feedback', 'danger'); });
+      });
+      document.getElementById('feedbackModal').addEventListener('hidden.bs.modal', function() {
+        form.reset();
+        form.classList.remove('was-validated');
+        stars.forEach(function(s) { s.style.color = 'lightgray'; });
+        ratingInput.value = '0';
+        document.getElementById('feedbackSuccess').classList.add('d-none');
+      });
+    });
+  </script>
+</body>
+</html>
+
+
+
