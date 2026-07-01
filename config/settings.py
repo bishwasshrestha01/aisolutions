@@ -4,12 +4,11 @@ Django settings for AI Solutions project.
 
 import os
 from pathlib import Path
-from decouple import config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = config('SECRET_KEY', default='django-insecure-development-key')
-DEBUG = config('DEBUG', default=True, cast=bool)
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-development-key')
+DEBUG = os.environ.get('DEBUG', 'True').lower() in ('true', '1', 'yes')
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
@@ -99,9 +98,9 @@ REST_FRAMEWORK = {
     'UNAUTHENTICATED_TOKEN': None,
 }
 
-OPENROUTER_API_KEY = config('OPENROUTER_API_KEY', default='')
-OPENROUTER_BASE_URL = config('OPENROUTER_BASE_URL', default='https://openrouter.ai/api/v1')
-OPENROUTER_MODEL = config('OPENROUTER_MODEL', default='openrouter/auto')
+OPENROUTER_API_KEY = os.environ.get('OPENROUTER_API_KEY', '')
+OPENROUTER_BASE_URL = os.environ.get('OPENROUTER_BASE_URL', 'https://openrouter.ai/api/v1')
+OPENROUTER_MODEL = os.environ.get('OPENROUTER_MODEL', 'openrouter/auto')
 
 # Session settings
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
@@ -112,5 +111,5 @@ SESSION_COOKIE_HTTPONLY = True
 SESSION_SAVE_EVERY_REQUEST = True
 
 # Admin credentials (from .env)
-ADMIN_USERNAME = config('ADMIN_USERNAME', default='admin')
-ADMIN_PASSWORD = config('ADMIN_PASSWORD', default='admin')
+ADMIN_USERNAME = os.environ.get('ADMIN_USERNAME', 'admin')
+ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'admin')
