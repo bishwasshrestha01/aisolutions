@@ -27,38 +27,28 @@ urlpatterns = [
     path('api/', include('core.urls')),
 ]
 
+# Static & media files (DEV only — PythonAnywhere handles these in production)
 if settings.DEBUG:
-    django_static_dir = os.path.join(settings.BASE_DIR, 'static')
-    urlpatterns += [
-        path('static/<path:path>', serve, {'document_root': django_static_dir}),
-    ]
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-    # Website asset directories
-    asset_dirs = ['css', 'js', 'photos', 'chatbot']
-    for d in asset_dirs:
-        full = os.path.join(settings.BASE_DIR, d)
-        if os.path.isdir(full):
-            urlpatterns += [
-                path(f'{d}/<path:path>', serve, {'document_root': full}),
-            ]
+# Website asset directories (css, js, photos)
+asset_dirs = ['css', 'js', 'photos', 'chatbot']
+for d in asset_dirs:
+    full = os.path.join(settings.BASE_DIR, d)
+    if os.path.isdir(full):
+        urlpatterns += [
+            path(f'{d}/<path:path>', serve, {'document_root': full}),
+        ]
 
-    # Admin panel at /panel/ (clean URLs, .html auto-appended)
-    urlpatterns += [
-        path('panel/', panel_view),
-        path('panel', lambda r: redirect('panel/')),
-        path('panel/<path:path>', panel_view),
-    ]
+# Admin panel at /admin/
+urlpatterns += [
+    path('admin/', panel_view),
+    path('admin', lambda r: redirect('admin/')),
+    path('admin/<path:path>', panel_view),
+]
 
-    # Admin at /admin/ (serves admin/index.html, etc.)
-    urlpatterns += [
-        path('admin/', panel_view),
-        path('admin', lambda r: redirect('admin/')),
-        path('admin/<path:path>', panel_view),
-    ]
-
-    # Website HTML pages
-    urlpatterns += [
-        path('', serve, {'document_root': settings.BASE_DIR, 'path': 'index.html'}),
-        re_path(r'^(?P<path>.*\.html)$', serve, {'document_root': settings.BASE_DIR}),
-    ]
+# Website HTML pages
+urlpatterns += [
+    path('', serve, {'document_root': settings.BASE_DIR, 'path': 'index.html'}),
+    re_path(r'^(?P<path>.*\.html)$', serve, {'document_root': settings.BASE_DIR}),
+]
