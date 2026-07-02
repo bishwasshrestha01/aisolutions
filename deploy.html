@@ -474,7 +474,60 @@ git push
 
 <!-- Step PA1 -->
 <div class="box">
-    <div class="step-head"><span class="num">1</span><span class="badge badge-pa">PythonAnywhere</span></div>
+    <div class="step-head"><span class="num">1</span><span class="badge badge-vs">VS Code</span></div>
+    <h3>Create a Repository on GitHub</h3>
+    <p><strong>Description:</strong> A GitHub repository stores your code online and acts as the bridge between your local development and PythonAnywhere. Create a new repository on GitHub before pushing your code.</p>
+    <pre>
+<span class="c"># In your web browser:</span>
+<span class="c"># 1. Go to https://github.com/yourusername</span>
+<span class="c"># 2. Click the "+" icon (top-right) &rarr; "New repository"</span>
+<span class="c"># 3. Repository name: aisolutions</span>
+<span class="c"># 4. Description (optional): AI Solutions Django application</span>
+<span class="c"># 5. Set to Public</span>
+<span class="c"># 6. Do NOT check "Add a README file"</span>
+<span class="c"># 7. Do NOT add .gitignore or license (we already have these)</span>
+<span class="c"># 8. Click "Create repository"</span>
+
+<span class="c"># After creation, copy the repository URL:</span>
+<span class="c"># https://github.com/yourusername/aisolutions.git</span>
+<span class="c"># You will need this in the next step.</span>
+    </pre>
+    <div class="note"><strong>Note:</strong> The repository name must match between GitHub and your local Git configuration. If you name it differently, update the remote URL accordingly.</div>
+</div>
+
+<!-- Step PA2 -->
+<div class="box">
+    <div class="step-head"><span class="num">2</span><span class="badge badge-vs">VS Code</span></div>
+    <h3>Initialize Git Repository &amp; Push to GitHub</h3>
+    <p><strong>Description:</strong> Initialize Git in your local project folder, commit all files, link your local repository to the GitHub repository you just created, and push the code. After this, your code is backed up on GitHub and ready for PythonAnywhere to clone.</p>
+    <pre>
+<span class="c"># In VS Code terminal (PowerShell), at C:\Users\DOS\Downloads\aisolutions:</span>
+
+<span class="c"># Initialize a new Git repository:</span>
+git init
+
+<span class="c"># Stage all files (except those in .gitignore):</span>
+git add .
+
+<span class="c"># Create the first commit:</span>
+git commit -m "Initial commit - AI Solutions project"
+
+<span class="c"># Link to your GitHub repository:</span>
+git remote add origin https://github.com/yourusername/aisolutions.git
+
+<span class="c"># Push to GitHub (first time with -u flag):</span>
+git push -u origin master
+
+<span class="c"># Verify on GitHub:</span>
+<span class="c"># Refresh your repository page at github.com/yourusername/aisolutions</span>
+<span class="c"># You should see all your project files listed.</span>
+    </pre>
+    <div class="warn"><strong>Important:</strong> If Git is not installed, download from <a href="https://git-scm.com/download/win" target="_blank">git-scm.com</a>. During installation, accept all defaults. After installing, close and reopen VS Code terminal, then try again.</div>
+</div>
+
+<!-- Step PA3 -->
+<div class="box">
+    <div class="step-head"><span class="num">3</span><span class="badge badge-pa">PythonAnywhere</span></div>
     <h3>Create a PythonAnywhere Account &amp; Web App</h3>
     <p><strong>Description:</strong> Sign up for a free PythonAnywhere account and create a new web application. The free tier provides one web app, 512 MB of storage, and a subdomain at <code>https://yourusername.pythonanywhere.com</code>. Choose Manual Configuration (not a template) to have full control over the WSGI file and settings.</p>
     <pre>
@@ -495,9 +548,9 @@ git push
     </pre>
 </div>
 
-<!-- Step PA2 -->
+<!-- Step PA4 -->
 <div class="box">
-    <div class="step-head"><span class="num">2</span><span class="badge badge-pa">PythonAnywhere</span></div>
+    <div class="step-head"><span class="num">4</span><span class="badge badge-pa">PythonAnywhere</span></div>
     <h3>Clone the Repository from GitHub</h3>
     <p><strong>Description:</strong> Open a Bash console on PythonAnywhere and clone your GitHub repository. This downloads all your source code to the server. The <code>~</code> symbol represents your home directory on PythonAnywhere (<code>/home/yourusername</code>).</p>
     <pre>
@@ -517,9 +570,9 @@ ls
     <div class="warn"><strong>Troubleshooting:</strong> If you get an authentication error, use a personal access token instead of your password. Generate one at GitHub &rarr; Settings &rarr; Developer settings &rarr; Personal access tokens. Use it as the password when cloning.</div>
 </div>
 
-<!-- Step PA3 -->
+<!-- Step PA5 -->
 <div class="box">
-    <div class="step-head"><span class="num">3</span><span class="badge badge-pa">PythonAnywhere</span></div>
+    <div class="step-head"><span class="num">5</span><span class="badge badge-pa">PythonAnywhere</span></div>
     <h3>Create &amp; Activate Virtual Environment</h3>
     <p><strong>Description:</strong> Just like on your local machine, create a Python virtual environment on PythonAnywhere to isolate the project's dependencies. Use <code>python3.13</code> to ensure the correct Python version. After activation, the prompt changes to show <code>(venv)</code>.</p>
     <pre>
@@ -540,9 +593,9 @@ python --version
     </pre>
 </div>
 
-<!-- Step PA4 -->
+<!-- Step PA6 -->
 <div class="box">
-    <div class="step-head"><span class="num">4</span><span class="badge badge-pa">PythonAnywhere</span></div>
+    <div class="step-head"><span class="num">6</span><span class="badge badge-pa">PythonAnywhere</span></div>
     <h3>Install Dependencies &amp; Set Up the Database</h3>
     <p><strong>Description:</strong> Install all Python packages from <code>requirements.txt</code>, run database migrations to create tables, and collect static files into the <code>staticfiles/</code> directory. These are the same commands you ran locally during development.</p>
     <pre>
@@ -562,9 +615,9 @@ python manage.py collectstatic --noinput
     </pre>
 </div>
 
-<!-- Step PA5 -->
+<!-- Step PA7 -->
 <div class="box">
-    <div class="step-head"><span class="num">5</span><span class="badge badge-pa">PythonAnywhere</span><span class="badge badge-vs">VS Code</span></div>
+    <div class="step-head"><span class="num">7</span><span class="badge badge-pa">PythonAnywhere</span><span class="badge badge-vs">VS Code</span></div>
     <h3>Set Up the WSGI File (with VS Code)</h3>
     <p><strong>Description:</strong> The WSGI file is the entry point for PythonAnywhere's web server. It sets environment variables, activates the virtual environment, and starts Django. You can use the PythonAnywhere Files tab editor OR you can do this efficiently from VS Code:</p>
     
@@ -620,9 +673,9 @@ application = get_wsgi_application()
     <div class="warn"><strong>Critical:</strong> Replace <code>yourusername</code> with your actual PythonAnywhere username in the <code>project_home</code> path and <code>ALLOWED_HOSTS</code>. Replace all secret values with strong, unique passwords and keys.</div>
 </div>
 
-<!-- Step PA6 -->
+<!-- Step PA8 -->
 <div class="box">
-    <div class="step-head"><span class="num">6</span><span class="badge badge-pa">PythonAnywhere</span></div>
+    <div class="step-head"><span class="num">8</span><span class="badge badge-pa">PythonAnywhere</span></div>
     <h3>Configure the Web Tab</h3>
     <p><strong>Description:</strong> The Web tab on PythonAnywhere controls how your application is served. You need to set the virtual environment path, configure static and media file mappings, enable HTTPS, and add CSRF trust origins.</p>
     <pre>
@@ -648,9 +701,9 @@ application = get_wsgi_application()
     </pre>
 </div>
 
-<!-- Step PA7 -->
+<!-- Step PA9 -->
 <div class="box">
-    <div class="step-head"><span class="num">7</span><span class="badge badge-pa">PythonAnywhere</span></div>
+    <div class="step-head"><span class="num">9</span><span class="badge badge-pa">PythonAnywhere</span></div>
     <h3>Reload the Web Application</h3>
     <p><strong>Description:</strong> Reloading restarts your web application, applying all changes made to the WSGI file, environment variables, static file mappings, and Python packages. You must reload every time you make changes that affect the server-side behavior.</p>
     <pre>
