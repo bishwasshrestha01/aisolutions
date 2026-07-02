@@ -618,22 +618,35 @@ python manage.py collectstatic --noinput
 <!-- Step PA7 -->
 <div class="box">
     <div class="step-head"><span class="num">7</span><span class="badge badge-pa">PythonAnywhere</span></div>
-    <h3>Configure the Web Tab (Source Code, WSGI &amp; Static Files)</h3>
-    <p><strong>Description:</strong> After creating the web app (step 3), the <strong>Web</strong> tab shows all configuration fields for your site. You need to set the source code path, working directory, edit the auto-generated WSGI file with your environment variables, and add static file mappings.</p>
-    <pre>
-<span class="c"># In the PythonAnywhere "Web" tab, configure these sections:</span>
+    <h3>Add a New Web App</h3>
+    <p><strong>Description:</strong> In the PythonAnywhere <strong>Web</strong> tab, click "Add a new web app" to create a new website. Choose <strong>Manual Configuration</strong> (not a template) and select <strong>Python 3.13</strong>. This creates the web app and generates a default WSGI file that you will edit in the following steps.</p>
+    <p><em>[Screenshot: PythonAnywhere Web tab → "Add a new web app" button → Manual Configuration → Select Python 3.13]</em></p>
+</div>
 
-<span class="c"># --- Code (top of the page) ---</span>
-<span class="c"># Source code:</span>
-/home/yourusername/aisolutions
+<!-- Step PA8 -->
+<div class="box">
+    <div class="step-head"><span class="num">8</span><span class="badge badge-pa">PythonAnywhere</span></div>
+    <h3>Configure Source Code Path</h3>
+    <p><strong>Description:</strong> In the <strong>Web</strong> tab, find the "Code" section at the top. Set the <strong>Source code</strong> field to the path of your project directory on PythonAnywhere. This tells the web server where your Django project lives.</p>
+    <p><em>[Screenshot: Web tab → Code section → Source code field highlighted]</em></p>
+    <pre>Source code: /home/yourusername/aisolutions</pre>
+</div>
 
-<span class="c"># Working directory:</span>
-/home/yourusername/aisolutions
+<!-- Step PA9 -->
+<div class="box">
+    <div class="step-head"><span class="num">9</span><span class="badge badge-pa">PythonAnywhere</span></div>
+    <h3>Configure Working Directory</h3>
+    <p><strong>Description:</strong> Below the source code field, set the <strong>Working directory</strong> to the same project path. This ensures Python runs from the correct directory when executing your Django application.</p>
+    <p><em>[Screenshot: Web tab → Code section → Working directory field highlighted]</em></p>
+    <pre>Working directory: /home/yourusername/aisolutions</pre>
+</div>
 
-<span class="c"># --- WSGI configuration file (click the link to edit) ---</span>
-<span class="c"># The file is at: /var/www/yourusername_pythonanywhere_com_wsgi.py</span>
-<span class="c"># PA created this automatically. Replace its content with:</span>
-    </pre>
+<!-- Step PA10 -->
+<div class="box">
+    <div class="step-head"><span class="num">10</span><span class="badge badge-pa">PythonAnywhere</span></div>
+    <h3>Configure the WSGI File</h3>
+    <p><strong>Description:</strong> In the <strong>Web</strong> tab, find the "Code" section and click the link to the <strong>WSGI configuration file</strong> (typically at <code>/var/www/yourusername_pythonanywhere_com_wsgi.py</code>). This opens the file editor. Replace all content with the code below, which sets your project path, activates the virtual environment, loads environment variables, and starts Django.</p>
+    <p><em>[Screenshot: Web tab → Code section → WSGI file link highlighted]</em></p>
     <pre>
 import os, sys
 project_home = '/home/yourusername/aisolutions'
@@ -653,46 +666,56 @@ os.environ['ADMIN_PASSWORD'] = 'your-admin-password'
 from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()
     </pre>
-    <pre>
-<span class="c"># --- Virtualenv ---</span>
-/home/yourusername/aisolutions/venv
-<span class="c"># Click the refresh icon (circular arrow) next to the field</span>
-
-<span class="c"># --- Static files (URL and path pairs) ---</span>
-<span class="c"># URL: /static/</span>
-<span class="c"># Path: /home/yourusername/aisolutions/staticfiles/</span>
-<span class="c"># Click "Add static file"</span>
-
-<span class="c"># URL: /media/</span>
-<span class="c"># Path: /home/yourusername/aisolutions/media/</span>
-<span class="c"># Click "Add static file"</span>
-
-<span class="c"># --- Security ---</span>
-<span class="c"># Force HTTPS: ON (toggle at the top of the page)</span>
-<span class="c"># CSRF trust origins: Add https://yourusername.pythonanywhere.com</span>
-    </pre>
-    <div class="warn"><strong>Critical:</strong> Replace <code>yourusername</code> with your actual PythonAnywhere username. Replace all secret values with strong, unique passwords and keys. The WSGI file content must match exactly.</div>
+    <p><em>[Screenshot: The WSGI file editor with the code above pasted in]</em></p>
+    <div class="warn"><strong>Critical:</strong> Replace <code>yourusername</code> with your actual PythonAnywhere username in all paths and <code>ALLOWED_HOSTS</code>. Replace secrets with strong unique values.</div>
 </div>
 
-<!-- Step PA8 -->
+<!-- Step PA11 -->
 <div class="box">
-    <div class="step-head"><span class="num">8</span><span class="badge badge-pa">PythonAnywhere</span></div>
+    <div class="step-head"><span class="num">11</span><span class="badge badge-pa">PythonAnywhere</span></div>
+    <h3>Add Static File Mapping</h3>
+    <p><strong>Description:</strong> Scroll down to the <strong>Static files</strong> section in the Web tab. Add a mapping for <code>/static/</code> pointing to your <code>staticfiles/</code> directory. This tells PythonAnywhere where to find your CSS, JavaScript, and image files when the browser requests them.</p>
+    <p><em>[Screenshot: Web tab → Static files section → "Add static file" button → URL and Path fields filled in]</em></p>
+    <pre>URL: /static/
+Path: /home/yourusername/aisolutions/staticfiles/</pre>
+</div>
+
+<!-- Step PA12 -->
+<div class="box">
+    <div class="step-head"><span class="num">12</span><span class="badge badge-pa">PythonAnywhere</span></div>
+    <h3>Configure Virtualenv</h3>
+    <p><strong>Description:</strong> In the <strong>Virtualenv</strong> section of the Web tab, enter the path to your virtual environment. Click the refresh icon (circular arrow) to verify PythonAnywhere can find it. A green checkmark means the venv is detected correctly.</p>
+    <p><em>[Screenshot: Web tab → Virtualenv section → path field with refresh icon highlighted]</em></p>
+    <pre>Virtualenv: /home/yourusername/aisolutions/venv</pre>
+</div>
+
+<!-- Step PA13 -->
+<div class="box">
+    <div class="step-head"><span class="num">13</span><span class="badge badge-pa">PythonAnywhere</span></div>
+    <h3>Add Media File Mapping</h3>
+    <p><strong>Description:</strong> Add a second static file mapping for <code>/media/</code> pointing to your <code>media/</code> directory. This serves user-uploaded files and images referenced in the application.</p>
+    <p><em>[Screenshot: Web tab → Static files section → second mapping for media]</em></p>
+    <pre>URL: /media/
+Path: /home/yourusername/aisolutions/media/</pre>
+</div>
+
+<!-- Step PA14 -->
+<div class="box">
+    <div class="step-head"><span class="num">14</span><span class="badge badge-pa">PythonAnywhere</span></div>
+    <h3>Configure Security (HTTPS &amp; CSRF)</h3>
+    <p><strong>Description:</strong> Enable <strong>Force HTTPS</strong> to redirect all HTTP traffic to HTTPS automatically. Then add your site URL to <strong>CSRF trust origins</strong> to allow Django to accept POST requests (like form submissions and logins) from your domain.</p>
+    <p><em>[Screenshot: Web tab → Security section → Force HTTPS toggle ON → CSRF trust origins field]</em></p>
+    <pre>Force HTTPS: ON
+CSRF trust origins: https://yourusername.pythonanywhere.com</pre>
+</div>
+
+<!-- Step PA15 -->
+<div class="box">
+    <div class="step-head"><span class="num">15</span><span class="badge badge-pa">PythonAnywhere</span></div>
     <h3>Reload the Web Application</h3>
-    <p><strong>Description:</strong> Reloading restarts your web application, applying all changes made to the WSGI file, environment variables, static file mappings, and Python packages. You must reload every time you make changes that affect the server-side behavior.</p>
-    <pre>
-<span class="c"># In the PythonAnywhere "Web" tab:</span>
-<span class="c"># 1. Scroll to the top of the page</span>
-<span class="c"># 2. Click the green "Reload" button</span>
-
-<span class="c"># Wait a few seconds for the reload to complete</span>
-<span class="c"># The page should show:</span>
-<span class="c">#   "Reloading your web app..."</span>
-<span class="c">#   followed by "Your web app is now running"</span>
-
-<span class="c"># Visit your live site:</span>
-<span class="c"># https://yourusername.pythonanywhere.com</span>
-    </pre>
-    <div class="note"><strong>Note:</strong> After reloading, check the error log if the site doesn't load: <code>cat /var/log/yourusername.pythonanywhere.com.error.log</code>. This will show any Python errors during startup.</div>
+    <p><strong>Description:</strong> After all configuration changes, scroll to the top of the <strong>Web</strong> tab and click the green <strong>Reload</strong> button. This restarts your web application and applies all changes. After reloading, visit your live site.</p>
+    <p><em>[Screenshot: Web tab → green "Reload" button at the top]</em></p>
+    <div class="note"><strong>Note:</strong> After reloading, if the site doesn't load, check the error log: <code>cat /var/log/yourusername.pythonanywhere.com.error.log</code> in the Bash console.</div>
 </div>
 
 <!-- ============================================================ -->
