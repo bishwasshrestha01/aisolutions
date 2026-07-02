@@ -197,7 +197,31 @@ C:\Users\DOS\Downloads\aisolutions\
 
 <!-- Step 3 -->
 <div class="box">
-    <div class="step-head"><span class="num">3</span><h3>Verify Python Installation</h3></div>
+    <div class="step-head"><span class="num">3</span><h3>Open the Project Folder in VS Code</h3></div>
+    <p><strong>Description:</strong> Visual Studio Code provides an integrated environment for editing code, running terminal commands, and managing Git operations. Opening the project folder in VS Code gives you access to the file explorer, built-in terminal, and source control tools so you can run Python and Git commands without leaving the editor.</p>
+    <pre>
+<span class="c"># Method 1: From File Manager</span>
+<span class="c"># 1. Navigate to: C:\Users\DOS\Downloads\aisolutions</span>
+<span class="c"># 2. RIGHT-CLICK on the "aisolutions" folder</span>
+<span class="c"># 3. Select "Open with Code"</span>
+
+<span class="c"># Method 2: From VS Code (if already open)</span>
+<span class="c"># 1. File &rarr; Open Folder (Ctrl+K Ctrl+O)</span>
+<span class="c"># 2. Navigate to C:\Users\DOS\Downloads\aisolutions</span>
+<span class="c"># 3. Select the "aisolutions" folder</span>
+<span class="c"># 4. Click "Select Folder"</span>
+
+<span class="c"># Open the integrated terminal:</span>
+<span class="c"># View &rarr; Terminal (Ctrl+`)</span>
+<span class="c"># The terminal should open at the project root:</span>
+PS C:\Users\DOS\Downloads\aisolutions&gt;
+    </pre>
+    <div class="info"><strong>Tip:</strong> Pin the aisolutions folder in VS Code (right-click folder in Explorer &rarr; "Add to Workspace") for quick access in future sessions.</div>
+</div>
+
+<!-- Step 4 -->
+<div class="box">
+    <div class="step-head"><span class="num">4</span><h3>Verify Python Installation</h3></div>
     <p><strong>Description:</strong> Django 5.1.3 requires Python 3.10 or higher. Verify that Python 3.13 is installed on your system. If you have multiple Python versions, use the <code>py</code> launcher on Windows to specify the exact version.</p>
     <pre>
 <span class="c"># In VS Code terminal (PowerShell), check Python version:</span>
@@ -218,9 +242,9 @@ py -m pip --version
     <div class="warn"><strong>Important:</strong> If Python 3.13 is not installed, the <code>pip install -r requirements.txt</code> command may fail or install incompatible package versions. Always use the Python version specified in the requirements.</div>
 </div>
 
-<!-- Step 4 -->
+<!-- Step 5 -->
 <div class="box">
-    <div class="step-head"><span class="num">4</span><h3>Create a Virtual Environment</h3></div>
+    <div class="step-head"><span class="num">5</span><h3>Create a Virtual Environment</h3></div>
     <p><strong>Description:</strong> A virtual environment is an isolated Python environment that keeps the project's dependencies separate from your system Python. This prevents version conflicts between different projects. The <code>venv</code> module (included with Python) creates a new virtual environment in a <code>venv/</code> folder inside the project directory. This folder is listed in <code>.gitignore</code> and will never be committed to Git.</p>
     <pre>
 <span class="c"># In VS Code terminal (PowerShell), at the project root:</span>
@@ -245,9 +269,9 @@ where python
     <div class="warn"><strong>Critical:</strong> Always activate the virtual environment before running any Python or Django commands. If you see packages installed but Python cannot find them, you likely forgot to activate the venv. The terminal prompt should show <code>(venv)</code> at the beginning.</div>
 </div>
 
-<!-- Step 5 -->
+<!-- Step 6 -->
 <div class="box">
-    <div class="step-head"><span class="num">5</span><h3>Install Project Dependencies</h3></div>
+    <div class="step-head"><span class="num">6</span><h3>Install Project Dependencies</h3></div>
     <p><strong>Description:</strong> The <code>requirements.txt</code> file lists every Python package the project needs to run. The <code>pip install</code> command reads this file and downloads each package and its dependencies from the Python Package Index (PyPI). All packages are installed into the active virtual environment, keeping your system Python clean.</p>
     <pre>
 <span class="c"># Make sure the virtual environment is activated (prompt shows (venv))</span>
@@ -271,9 +295,9 @@ pip list
     <div class="note"><strong>Troubleshooting:</strong> If you get a "pip is not recognized" error, ensure the virtual environment is activated. If a package fails to install, try installing it individually: <code>pip install django==5.1.3</code>.</div>
 </div>
 
-<!-- Step 6 -->
+<!-- Step 7 -->
 <div class="box">
-    <div class="step-head"><span class="num">6</span><h3>Configure Environment Variables</h3></div>
+    <div class="step-head"><span class="num">7</span><h3>Configure Environment Variables</h3></div>
     <p><strong>Description:</strong> The application reads configuration settings (secret key, database credentials, API keys) from environment variables. For local development, create a <code>.env</code> file in the project root directory. This file is listed in <code>.gitignore</code> and will NEVER be committed to Git, keeping your secrets safe. The <code>.env</code> file is read by the shell when you run the Django server.</p>
     <pre>
 <span class="c"># In VS Code, create a new file named .env in the project root</span>
@@ -300,9 +324,9 @@ ADMIN_PASSWORD=&#x3C;your-admin-password&#x3E;
     <div class="warn"><strong>Security:</strong> Never share your <code>.env</code> file, commit it to Git, or paste its contents in public. The <code>.gitignore</code> file already includes <code>.env</code> to prevent accidental commits.</div>
 </div>
 
-<!-- Step 7 -->
+<!-- Step 8 -->
 <div class="box">
-    <div class="step-head"><span class="num">7</span><h3>Apply Database Migrations</h3></div>
+    <div class="step-head"><span class="num">8</span><h3>Apply Database Migrations</h3></div>
     <p><strong>Description:</strong> Django models define the database structure (tables, columns, relationships). Migrations are Python files that translate these models into actual database tables. Running <code>python manage.py migrate</code> applies all pending migrations to the SQLite database, creating the <code>db.sqlite</code> file with tables for Events, Users, Inquiries, Demo Requests, Feedback, and Page Visits.</p>
     <pre>
 <span class="c"># Ensure virtual environment is activated</span>
@@ -328,9 +352,9 @@ python manage.py migrate
     <div class="note"><strong>Note:</strong> Run <code>python manage.py migrate</code> every time you pull code changes that include new or modified models. If you see "No migrations to apply," the database is already up-to-date.</div>
 </div>
 
-<!-- Step 8 -->
+<!-- Step 9 -->
 <div class="box">
-    <div class="step-head"><span class="num">8</span><h3>Collect Static Files</h3></div>
+    <div class="step-head"><span class="num">9</span><h3>Collect Static Files</h3></div>
     <p><strong>Description:</strong> Static files (CSS stylesheets, JavaScript files, images) are stored in separate directories (<code>css/</code>, <code>js/</code>, <code>photos/</code>). The <code>collectstatic</code> command copies all these files into a single <code>staticfiles/</code> directory. This is necessary because in production, the web server needs to serve all static assets from one location. Running this in development ensures the configuration is correct before deployment.</p>
     <pre>
 <span class="c"># Collect all static files into staticfiles/:</span>
@@ -349,9 +373,9 @@ python manage.py collectstatic --noinput
     </pre>
 </div>
 
-<!-- Step 9 -->
+<!-- Step 10 -->
 <div class="box">
-    <div class="step-head"><span class="num">9</span><h3>Verify the Database</h3></div>
+    <div class="step-head"><span class="num">10</span><h3>Verify the Database</h3></div>
     <p><strong>Description:</strong> Confirm that the SQLite database was created successfully and contains the expected tables. Django provides a built-in command to inspect the database schema.</p>
     <pre>
 <span class="c"># Check that db.sqlite was created:</span>
@@ -374,9 +398,9 @@ python manage.py dbshell
     </pre>
 </div>
 
-<!-- Step 10 -->
+<!-- Step 11 -->
 <div class="box">
-    <div class="step-head"><span class="num">10</span><h3>Run the Development Server</h3></div>
+    <div class="step-head"><span class="num">11</span><h3>Run the Development Server</h3></div>
     <p><strong>Description:</strong> Django's built-in development server starts a lightweight HTTP server that serves your application at <code>http://127.0.0.1:8000</code>. It automatically reloads when you modify Python files, making it ideal for development. Open the URL in your browser to see the AI Solutions website live on your local machine.</p>
     <pre>
 <span class="c"># Start the Django development server:</span>
@@ -405,9 +429,9 @@ python manage.py runserver
     <div class="warn"><strong>Important:</strong> The development server is for local testing only. It is not secure or performant enough for production. Always use Gunicorn (Linux VPS) or PythonAnywhere's WSGI runner for production.</div>
 </div>
 
-<!-- Step 11 -->
+<!-- Step 12 -->
 <div class="box">
-    <div class="step-head"><span class="num">11</span><h3>Initialize Git Repository &amp; Push to GitHub</h3></div>
+    <div class="step-head"><span class="num">12</span><h3>Initialize Git Repository &amp; Push to GitHub</h3></div>
     <p><strong>Description:</strong> Git is used for version control. Initialize a Git repository in the project folder, stage all files, create the first commit, and push to GitHub. This serves two purposes: it backs up your code remotely, and it provides the source for PythonAnywhere to clone during deployment.</p>
     <pre>
 <span class="c"># In VS Code terminal, at the project root:</span>
