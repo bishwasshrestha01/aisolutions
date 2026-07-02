@@ -228,7 +228,7 @@
           sessionStorage.setItem('regCountry', country);
           window.location.href = 'confirmation.html?type=registration';
         } else {
-          showMessage('Error registering: ' + (data.error || 'Unknown error'), 'danger');
+          showMessage(data.error || 'Unknown error', 'danger');
         }
       })
       .catch(function(error) {
