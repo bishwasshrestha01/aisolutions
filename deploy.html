@@ -626,24 +626,16 @@ python manage.py collectstatic --noinput
 <!-- Step PA8 -->
 <div class="box">
     <div class="step-head"><span class="num">8</span><span class="badge badge-pa">PythonAnywhere</span></div>
-    <h3>Configure Source Code Path</h3>
-    <p><strong>Description:</strong> In the <strong>Web</strong> tab, find the "Code" section at the top. Set the <strong>Source code</strong> field to the path of your project directory on PythonAnywhere. This tells the web server where your Django project lives.</p>
-    <p><em>[Screenshot: Web tab → Code section → Source code field highlighted]</em></p>
-    <pre>Source code: /home/yourusername/aisolutions</pre>
+    <h3>Configure Source Code &amp; Working Directory</h3>
+    <p><strong>Description:</strong> In the <strong>Web</strong> tab, find the "Code" section at the top. Set both the <strong>Source code</strong> and <strong>Working directory</strong> fields to the path of your project directory. This tells the web server where your Django project lives and ensures Python runs from the correct directory.</p>
+    <p><em>[Screenshot: Web tab → Code section → Source code and Working directory fields highlighted]</em></p>
+    <pre>Source code:      /home/yourusername/aisolutions
+Working directory: /home/yourusername/aisolutions</pre>
 </div>
 
 <!-- Step PA9 -->
 <div class="box">
     <div class="step-head"><span class="num">9</span><span class="badge badge-pa">PythonAnywhere</span></div>
-    <h3>Configure Working Directory</h3>
-    <p><strong>Description:</strong> Below the source code field, set the <strong>Working directory</strong> to the same project path. This ensures Python runs from the correct directory when executing your Django application.</p>
-    <p><em>[Screenshot: Web tab → Code section → Working directory field highlighted]</em></p>
-    <pre>Working directory: /home/yourusername/aisolutions</pre>
-</div>
-
-<!-- Step PA10 -->
-<div class="box">
-    <div class="step-head"><span class="num">10</span><span class="badge badge-pa">PythonAnywhere</span></div>
     <h3>Configure the WSGI File</h3>
     <p><strong>Description:</strong> In the <strong>Web</strong> tab, find the "Code" section and click the link to the <strong>WSGI configuration file</strong> (typically at <code>/var/www/yourusername_pythonanywhere_com_wsgi.py</code>). This opens the file editor. Replace all content with the code below, which sets your project path, activates the virtual environment, loads environment variables, and starts Django.</p>
     <p><em>[Screenshot: Web tab → Code section → WSGI file link highlighted]</em></p>
