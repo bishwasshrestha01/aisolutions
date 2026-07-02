@@ -167,13 +167,18 @@
       // Validate country code matches country
       var phoneCountry = document.getElementById('regPhoneCountry').value;
       var countryError = document.getElementById('regCountryError');
+      var phoneError2 = document.getElementById('regPhoneError');
       if (phoneCountry.toLowerCase() !== country.toLowerCase()) {
         countryError.textContent = 'Country code and country did not match';
         countryError.classList.remove('d-none');
+        phoneError2.textContent = 'Country code and country did not match';
+        phoneError2.classList.remove('d-none');
         return;
       }
       countryError.textContent = 'Please fill in all required fields';
       countryError.classList.add('d-none');
+      phoneError2.textContent = 'Please enter a valid phone number';
+      phoneError2.classList.add('d-none');
       
       // Validate agree to be contacted
       var agreeChecked = document.getElementById('regAgreeContact').checked;
