@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deployment Guide — AI Solutions</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; max-width: 960px; margin: 0 auto; padding: 2rem; line-height: 1.8; color: #1a1a2e; background: #f8f9fa; }
+        h1 { font-size: 2rem; color: #0a0a23; border-bottom: 4px solid #2563eb; padding-bottom: .6rem; margin-bottom: 1.5rem; }
+        h2 { font-size: 1.5rem; color: #0a0a23; margin-top: 2.5rem; padding-bottom: .4rem; border-bottom: 2px solid #ccc; }
+        h3 { font-size: 1.15rem; color: #1a1a2e; margin-top: 1.5rem; margin-bottom: .5rem; }
+        p { margin-bottom: .8rem; color: #333; }
+        code { background: #e2e8f0; padding: .15rem .45rem; border-radius: 4px; font-size: .88em; font-family: 'Cascadia Code', 'Fira Code', monospace; }
+        pre { background: #1e1e2e; color: #cdd6f4; padding: 1.2rem; border-radius: 8px; overflow-x: auto; font-size: .85em; line-height: 1.6; margin: .8rem 0; }
+        pre .c { color: #6c7086; font-style: italic; }
+        .box { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 1.2rem 1.5rem; margin: 1rem 0; }
+        .note { background: #fff3cd; border-left: 5px solid #ffc107; padding: .8rem 1.2rem; margin: 1rem 0; border-radius: 4px; }
+        .warn { background: #f8d7da; border-left: 5px solid #dc3545; padding: .8rem 1.2rem; margin: 1rem 0; border-radius: 4px; }
+        .info { background: #d1ecf1; border-left: 5px solid #0dcaf0; padding: .8rem 1.2rem; margin: 1rem 0; border-radius: 4px; }
+        .tag { display: inline-block; background: #2563eb; color: #fff; padding: .15rem .7rem; border-radius: 20px; font-size: .78em; font-weight: 600; margin-right: .4rem; }
+        .tag-g { background: #16a34a; }
+        .tag-o { background: #ea580c; }
+        .tag-p { background: #7c3aed; }
+        table { width: 100%; border-collapse: collapse; margin: .8rem 0; font-size: .93em; }
+        th, td { border: 1px solid #d0d0d0; padding: .6rem .8rem; text-align: left; }
+        th { background: #2563eb; color: #fff; font-weight: 600; }
+        tr:nth-child(even) { background: #f1f5f9; }
+        ul, ol { padding-left: 1.5rem; margin: .5rem 0; }
+        li { margin: .3rem 0; }
+        hr { border: none; border-top: 1px solid #ddd; margin: 2rem 0; }
+        .num { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; background: #2563eb; color: #fff; border-radius: 50%; font-size: .85em; font-weight: 700; margin-right: .6rem; flex-shrink: 0; }
+        .step-head { display: flex; align-items: center; }
+        .badge { display: inline-block; padding: .2rem .6rem; border-radius: 4px; font-size: .75em; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; margin-left: .6rem; }
+        .badge-vs { background: #007acc; color: #fff; }
+        .badge-pa { background: #1a5276; color: #fff; }
+        .badge-both { background: #7c3aed; color: #fff; }
+    </style>
+</head>
+<body>
+
+<h1>AI Solutions &mdash; Deployment Guide</h1>
+<p>Complete guide covering hardware and software requirements, installation from ZIP file to local development with VS Code, and production deployment to PythonAnywhere.</p>
+
+<!-- ============================================================ -->
+<!-- 1. TECHNICAL REQUIREMENTS -->
+<!-- ============================================================ -->
+<h2>1. Technical Requirements</h2>
+<p>This section describes the hardware specifications and software stack needed to run the AI Solutions application in both development and production environments.</p>
+
+<h3>1.1 Hardware Requirements</h3>
+<table>
+    <tr><th>Component</th><th>Minimum (Development)</th><th>Recommended (Production)</th><th>Description</th></tr>
+    <tr>
+        <td>Processor (CPU)</td>
+        <td>Dual-core, 1.8 GHz</td>
+        <td>Quad-core, 2.5 GHz or higher</td>
+        <td>The application is lightweight and does not require intensive computation. A dual-core processor is sufficient for running the Django development server locally. For production, a quad-core processor ensures smooth handling of multiple concurrent HTTP requests, database queries, and AI chatbot API calls.</td>
+    </tr>
+    <tr>
+        <td>Memory (RAM)</td>
+        <td>4 GB</td>
+        <td>8 GB or higher</td>
+        <td>Django + SQLite runs comfortably in 4 GB RAM during development. In production, 8 GB is recommended to accommodate the web server (Gunicorn), Django processes, SQLite, and the Python runtime without memory contention. PythonAnywhere's free tier provides 512 MB which is sufficient for low-traffic sites.</td>
+    </tr>
+    <tr>
+        <td>Storage (Disk)</td>
+        <td>500 MB free space</td>
+        <td>2 GB or higher</td>
+        <td>The source code is approximately 5&ndash;10 MB. The SQLite database grows with registrations, inquiries, and demo requests. Python packages and the virtual environment consume approximately 200&ndash;400 MB. Allocate at least 500 MB for development and 2 GB for production to accommodate logs, static files, and database growth.</td>
+    </tr>
+    <tr>
+        <td>Network</td>
+        <td>Broadband internet (1 Mbps)</td>
+        <td>Broadband internet (5 Mbps or higher)</td>
+        <td>Required for downloading Python packages via pip, pushing code to GitHub, cloning on PythonAnywhere, and the AI chatbot's OpenRouter API calls. A stable connection of at least 1 Mbps is sufficient for development; 5 Mbps or higher ensures fast deployment and responsive API calls in production.</td>
+    </tr>
+    <tr>
+        <td>Operating System</td>
+        <td>Windows 10/11, macOS 12+, or Linux</td>
+        <td>Linux (Ubuntu 22.04+ or Debian 11+)</td>
+        <td>The application is developed on Windows and deployed on PythonAnywhere's Linux environment. Any modern OS can run the Django development server. Production is strongly recommended on Linux for stability, security, and compatibility with Gunicorn and WSGI servers.</td>
+    </tr>
+</table>
+
+<h3>1.2 Software Requirements</h3>
+<table>
+    <tr><th>Category</th><th>Software</th><th>Version</th><th>Description</th></tr>
+    <tr><td>Runtime</td><td>Python</td><td>3.13</td><td>The application runtime. Django 5.1.3 requires Python 3.10 or higher. Python 3.13 is the latest stable release and provides better performance, security, and language features. The project uses only the Python standard library plus pip-installed packages.</td></tr>
+    <tr><td>Package Manager</td><td>pip</td><td>24.x or higher</td><td>Python's standard package manager. Installs all dependencies from the <code>requirements.txt</code> file. Keeping pip up-to-date avoids dependency resolution errors and ensures compatibility with the latest package versions.</td></tr>
+    <tr><td>Web Framework</td><td>Django</td><td>5.1.3 (pinned)</td><td>The core web framework. Provides URL routing, ORM, template engine (though this project uses static HTML), session management, CSRF protection, middleware system, and WSGI/ASGI support. Version 5.1.3 is pinned in <code>requirements.txt</code> to ensure consistent behavior across environments.</td></tr>
+    <tr><td>API Framework</td><td>Django REST Framework</td><td>3.15+</td><td>Extension for building RESTful APIs. Provides serializers, view decorators (<code>@api_view</code>), request parsing, response formatting, and browserable API. Powers all 20+ API endpoints.</td></tr>
+    <tr><td>Cross-Origin Support</td><td>django-cors-headers</td><td>4.3+</td><td>Django middleware that adds CORS (Cross-Origin Resource Sharing) headers to HTTP responses. Allows the frontend JavaScript (served on port 5500 or different domain) to call the Django REST API on port 8000.</td></tr>
+    <tr><td>HTTP Client</td><td>requests</td><td>2.31+</td><td>Python HTTP library used by the AI chatbot to make API calls to OpenRouter. Handles HTTP connection pooling, SSL verification, timeout management, and JSON response parsing.</td></tr>
+    <tr><td>Production Server</td><td>Gunicorn</td><td>22.0+</td><td>WSGI HTTP server for Linux production deployments. Handles multiple worker processes, load balancing, and graceful shutdown. Not used on PythonAnywhere (which has its own WSGI runner), but included for VPS deployments.</td></tr>
+    <tr><td>Database</td><td>SQLite</td><td>3.x (bundled with Python)</td><td>Embedded, zero-configuration database engine. The entire database is a single file (<code>db.sqlite</code>). No separate database server or configuration is needed. Suitable for low-to-medium traffic websites. PythonAnywhere includes SQLite in its Python distribution.</td></tr>
+    <tr><td>Version Control</td><td>Git</td><td>Any recent version</td><td>Distributed version control system. Used to track code changes locally and push to GitHub. PythonAnywhere uses Git to clone the repository during deployment. Download from <a href="https://git-scm.com/download/win" target="_blank">git-scm.com</a> for Windows.</td></tr>
+    <tr><td>Code Editor</td><td>VS Code</td><td>Latest stable</td><td>Integrated development environment used for editing code, running terminal commands, and managing Git operations. The built-in terminal and Git integration streamline the development and deployment workflow. Extensions: Python, Git Lens, Prettier recommended.</td></tr>
+    <tr><td>Web Browser</td><td>Chrome, Firefox, Edge, or Safari</td><td>Latest stable</td><td>The frontend uses modern JavaScript (Fetch API, ES6, async/await) and Bootstrap 5 CSS. All major browsers are supported. Browser DevTools (F12) are useful for debugging JavaScript and inspecting network requests.</td></tr>
+    <tr><td>AI Service</td><td>OpenRouter API</td><td>N/A (cloud service)</td><td>External API service that provides access to multiple AI models (Claude, GPT-4, Gemini, etc.). The chatbot sends user messages to OpenRouter and returns AI-generated responses. An API key is required for AI functionality; without it, the chatbot falls back to keyword-based responses.</td></tr>
+    <tr><td>Hosting (Production)</td><td>PythonAnywhere</td><td>N/A (cloud platform)</td><td>Cloud platform for hosting Python web applications. Provides a Linux environment, Bash console, file manager, web server configuration, and MySQL/SQLite support. The free tier includes one web app with 512 MB storage and a subdomain (<code>yourusername.pythonanywhere.com</code>).</td></tr>
+    <tr><td>Hosting (Code)</td><td>GitHub</td><td>N/A (cloud platform)</td><td>Cloud Git repository hosting. Stores the project source code and acts as the bridge between local development and PythonAnywhere deployment. The free tier allows unlimited public repositories.</td></tr>
+</table>
+
+<h3>1.3 Python Dependencies (requirements.txt)</h3>
+<table>
+    <tr><th>Package</th><th>Version</th><th>Purpose</th><th>Required For</th></tr>
+    <tr><td>django</td><td>==5.1.3</td><td>Core web framework</td><td>Development + Production</td></tr>
+    <tr><td>djangorestframework</td><td>&gt;=3.15.0</td><td>REST API toolkit</td><td>Development + Production</td></tr>
+    <tr><td>django-cors-headers</td><td>&gt;=4.3.0</td><td>Cross-origin request support</td><td>Development + Production</td></tr>
+    <tr><td>requests</td><td>&gt;=2.31.0</td><td>HTTP client for OpenRouter AI</td><td>Development + Production</td></tr>
+    <tr><td>gunicorn</td><td>&gt;=22.0.0</td><td>Production WSGI server</td><td>Production only (optional for dev)</td></tr>
+</table>
+
+<div class="info"><strong>Note on python-decouple:</strong> The project previously used <code>python-decouple</code> for environment variable management but has been refactored to use Python's built-in <code>os.environ.get()</code> instead. This removes an external dependency and eliminates import errors related to the <code>decouple</code> module. Environment variables are set directly in the WSGI file (production) or in a <code>.env</code> file loaded via shell (development).</div>
+
+<!-- ============================================================ -->
+<!-- 2. INSTALLATION FROM ZIP FILE -->
+<!-- ============================================================ -->
+<h2>2. Installation from ZIP File (Local Development with VS Code)</h2>
+<p>Follow these steps to set up the AI Solutions project on your local machine starting from a ZIP file. Each step includes a description of what it does and why it is necessary.</p>
+
+<!-- Step 1 -->
+<div class="box">
+    <div class="step-head"><span class="num">1</span><h3>Extract the ZIP File Using File Manager</h3></div>
+    <p><strong>Description:</strong> The project is distributed as a ZIP archive containing all source files, configurations, and documentation. Use your operating system's built-in file manager to extract the contents to a location on your computer. This creates the project root directory that will serve as your workspace.</p>
+    <pre>
+<span class="c"># Windows File Explorer:</span>
+<span class="c"># 1. Navigate to the downloaded ZIP file</span>
+<span class="c"># 2. Right-click the ZIP file</span>
+<span class="c"># 3. Select "Extract All..."</span>
+<span class="c"># 4. Choose a destination folder (e.g., C:\Users\YourName\Projects\)</span>
+<span class="c"># 5. Click "Extract"</span>
+
+<span class="c"># After extraction, the folder structure should look like:</span>
+C:\Users\YourName\Projects\aisolutions\
+    manage.py
+    requirements.txt
+    .gitignore
+    config\
+    core\
+    chatbot\
+    admin\
+    css\
+    js\
+    photos\
+    media\
+    *.html (index.html, about.html, contact.html, etc.)
+    </pre>
+    <div class="note"><strong>Tip:</strong> Choose a short path with no spaces (e.g., <code>C:\Projects\aisolutions</code>) to avoid command-line issues.</div>
+</div>
+
+<!-- Step 2 -->
+<div class="box">
+    <div class="step-head"><span class="num">2</span><h3>Open the Project in VS Code</h3></div>
+    <p><strong>Description:</strong> Visual Studio Code provides an integrated environment for editing code, running terminal commands, and managing Git operations. Opening the project folder in VS Code gives you access to the file explorer, built-in terminal, and source control tools.</p>
+    <pre>
+<span class="c"># Method 1: From File Manager</span>
+<span class="c"># 1. Navigate to the extracted aisolutions folder</span>
+<span class="c"># 2. Right-click anywhere in the folder</span>
+<span class="c"># 3. Select "Open with Code"</span>
+
+<span class="c"># Method 2: From VS Code</span>
+<span class="c"># 1. Open VS Code</span>
+<span class="c"># 2. File &rarr; Open Folder (Ctrl+K Ctrl+O)</span>
+<span class="c"># 3. Select the aisolutions folder</span>
+<span class="c"># 4. Click "Select Folder"</span>
+
+<span class="c"># Open the integrated terminal:</span>
+<span class="c"># View &rarr; Terminal (Ctrl+`)</span>
+<span class="c"># The terminal should open at the project root:</span>
+PS C:\Users\YourName\Projects\aisolutions&gt;
+    </pre>
+</div>
+
+<!-- Step 3 -->
+<div class="box">
+    <div class="step-head"><span class="num">3</span><h3>Verify Python Installation</h3></div>
+    <p><strong>Description:</strong> Django 5.1.3 requires Python 3.10 or higher. Verify that Python 3.13 is installed on your system. If you have multiple Python versions, use the <code>py</code> launcher on Windows to specify the exact version.</p>
+    <pre>
+<span class="c"># In VS Code terminal (PowerShell), check Python version:</span>
+py --version
+<span class="c"># Expected output: Python 3.13.x</span>
+
+<span class="c"># If you see Python 3.12 or lower, specify the version explicitly:</span>
+py -3.13 --version
+<span class="c"># Expected output: Python 3.13.x</span>
+
+<span class="c"># If Python is not installed, download from:</span>
+<span class="c"># https://www.python.org/downloads/</span>
+<span class="c"># During installation, check "Add Python to PATH"</span>
+
+<span class="c"># Verify pip is available:</span>
+py -m pip --version
+    </pre>
+    <div class="warn"><strong>Important:</strong> If Python 3.13 is not installed, the <code>pip install -r requirements.txt</code> command may fail or install incompatible package versions. Always use the Python version specified in the requirements.</div>
+</div>
+
+<!-- Step 4 -->
+<div class="box">
+    <div class="step-head"><span class="num">4</span><h3>Create a Virtual Environment</h3></div>
+    <p><strong>Description:</strong> A virtual environment is an isolated Python environment that keeps the project's dependencies separate from your system Python. This prevents version conflicts between different projects. The <code>venv</code> module (included with Python) creates a new virtual environment in a <code>venv/</code> folder inside the project directory. This folder is listed in <code>.gitignore</code> and will never be committed to Git.</p>
+    <pre>
+<span class="c"># In VS Code terminal (PowerShell), at the project root:</span>
+py -3.13 -m venv venv
+
+<span class="c"># This creates the venv/ folder with:</span>
+<span class="c">#   venv\Scripts\python.exe     (Python interpreter)</span>
+<span class="c">#   venv\Scripts\pip.exe        (Package manager)</span>
+<span class="c">#   venv\Scripts\activate.ps1   (Activation script for PowerShell)</span>
+<span class="c">#   venv\Scripts\activate.bat   (Activation script for CMD)</span>
+
+<span class="c"># Activate the virtual environment (PowerShell):</span>
+venv\Scripts\activate
+
+<span class="c"># Your prompt should change to show (venv):</span>
+(venv) PS C:\Users\YourName\Projects\aisolutions&gt;
+
+<span class="c"># Verify the Python path points to the venv:</span>
+where python
+<span class="c"># Output should show the venv path first.</span>
+    </pre>
+    <div class="warn"><strong>Critical:</strong> Always activate the virtual environment before running any Python or Django commands. If you see packages installed but Python cannot find them, you likely forgot to activate the venv. The terminal prompt should show <code>(venv)</code> at the beginning.</div>
+</div>
+
+<!-- Step 5 -->
+<div class="box">
+    <div class="step-head"><span class="num">5</span><h3>Install Project Dependencies</h3></div>
+    <p><strong>Description:</strong> The <code>requirements.txt</code> file lists every Python package the project needs to run. The <code>pip install</code> command reads this file and downloads each package and its dependencies from the Python Package Index (PyPI). All packages are installed into the active virtual environment, keeping your system Python clean.</p>
+    <pre>
+<span class="c"># Make sure the virtual environment is activated (prompt shows (venv))</span>
+
+<span class="c"># Upgrade pip to the latest version:</span>
+python -m pip install --upgrade pip
+
+<span class="c"># Install all project dependencies:</span>
+pip install -r requirements.txt
+
+<span class="c"># Verify installed packages:</span>
+pip list
+<span class="c"># You should see:</span>
+<span class="c">#   Django            5.1.3</span>
+<span class="c">#   djangorestframework  3.15.x</span>
+<span class="c">#   django-cors-headers  4.3.x</span>
+<span class="c">#   requests          2.31.x</span>
+<span class="c">#   gunicorn          22.0.x</span>
+<span class="c">#   (plus sub-dependencies like sqlparse, asgiref, etc.)</span>
+    </pre>
+    <div class="note"><strong>Troubleshooting:</strong> If you get a "pip is not recognized" error, ensure the virtual environment is activated. If a package fails to install, try installing it individually: <code>pip install django==5.1.3</code>.</div>
+</div>
+
+<!-- Step 6 -->
+<div class="box">
+    <div class="step-head"><span class="num">6</span><h3>Configure Environment Variables</h3></div>
+    <p><strong>Description:</strong> The application reads configuration settings (secret key, database credentials, API keys) from environment variables. For local development, create a <code>.env</code> file in the project root directory. This file is listed in <code>.gitignore</code> and will NEVER be committed to Git, keeping your secrets safe. The <code>.env</code> file is read by the shell when you run the Django server.</p>
+    <pre>
+<span class="c"># In VS Code, create a new file named .env in the project root</span>
+<span class="c"># File &rarr; New File (Ctrl+N)</span>
+<span class="c"># Save as .env (Ctrl+S)</span>
+
+<span class="c"># Paste the following template and fill in your values:</span>
+SECRET_KEY=django-insecure-&#x3C;generate-a-unique-key-here&#x3E;
+DEBUG=True
+ALLOWED_HOSTS=*
+OPENROUTER_API_KEY=sk-or-v1-&#x3C;your-openrouter-key&#x3E;
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=&#x3C;your-admin-password&#x3E;
+    </pre>
+    <table>
+        <tr><th>Variable</th><th>Development Value</th><th>Description</th></tr>
+        <tr><td><code>SECRET_KEY</code></td><td>Generate a random string</td><td>Used by Django for cryptographic signing (sessions, CSRF tokens, password reset tokens). Keep this secret. Generate a strong key using Python: <code>python -c "import secrets; print(secrets.token_urlsafe(50))"</code></td></tr>
+        <tr><td><code>DEBUG</code></td><td><code>True</code></td><td>When <code>True</code>, Django shows detailed error pages with stack traces, making debugging easier. Set to <code>False</code> in production to avoid exposing sensitive information.</td></tr>
+        <tr><td><code>ALLOWED_HOSTS</code></td><td><code>*</code></td><td>List of domain names allowed to serve the site. <code>*</code> allows all hosts in development. In production, set to your actual domain (e.g., <code>bishwasshrestha01.pythonanywhere.com</code>).</td></tr>
+        <tr><td><code>OPENROUTER_API_KEY</code></td><td>Your API key</td><td>API key for the OpenRouter AI service. Required for the AI chatbot to work. Obtain a free key at <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai/keys</a>. Without it, the chatbot uses basic keyword responses.</td></tr>
+        <tr><td><code>ADMIN_USERNAME</code></td><td><code>admin</code></td><td>Username for the custom admin panel login at <code>/admin/</code>. This is NOT Django's built-in admin — it uses session-based authentication against these environment variables.</td></tr>
+        <tr><td><code>ADMIN_PASSWORD</code></td><td>Your password</td><td>Password for the custom admin panel login. Must be at least 4 characters. Change this before deploying to production.</td></tr>
+    </table>
+    <div class="warn"><strong>Security:</strong> Never share your <code>.env</code> file, commit it to Git, or paste its contents in public. The <code>.gitignore</code> file already includes <code>.env</code> to prevent accidental commits.</div>
+</div>
+
+<!-- Step 7 -->
+<div class="box">
+    <div class="step-head"><span class="num">7</span><h3>Apply Database Migrations</h3></div>
+    <p><strong>Description:</strong> Django models define the database structure (tables, columns, relationships). Migrations are Python files that translate these models into actual database tables. Running <code>python manage.py migrate</code> applies all pending migrations to the SQLite database, creating the <code>db.sqlite</code> file with tables for Events, Users, Inquiries, Demo Requests, Feedback, and Page Visits.</p>
+    <pre>
+<span class="c"># Ensure virtual environment is activated</span>
+<span class="c"># Run migrations to create database tables:</span>
+python manage.py migrate
+
+<span class="c"># Expected output (similar to):</span>
+<span class="c">#   Operations to perform:</span>
+<span class="c">#     Apply all migrations: admin, auth, contenttypes, core, sessions</span>
+<span class="c">#   Running migrations:</span>
+<span class="c">#     Applying core.0001_initial... OK</span>
+<span class="c">#     ...</span>
+
+<span class="c"># This creates db.sqlite in the project root:</span>
+<span class="c"># - Events table: stores event details (title, date, capacity, etc.)</span>
+<span class="c"># - Users table: stores user information (name, email)</span>
+<span class="c"># - Inquiries table: stores contact form submissions</span>
+<span class="c"># - DemoRequests table: stores demo scheduling requests</span>
+<span class="c"># - Feedback table: stores user feedback and ratings</span>
+<span class="c"># - PageVisits table: stores daily visit counts</span>
+<span class="c"># - EventRegistrations table: stores event registration records</span>
+    </pre>
+    <div class="note"><strong>Note:</strong> Run <code>python manage.py migrate</code> every time you pull code changes that include new or modified models. If you see "No migrations to apply," the database is already up-to-date.</div>
+</div>
+
+<!-- Step 8 -->
+<div class="box">
+    <div class="step-head"><span class="num">8</span><h3>Collect Static Files</h3></div>
+    <p><strong>Description:</strong> Static files (CSS stylesheets, JavaScript files, images) are stored in separate directories (<code>css/</code>, <code>js/</code>, <code>photos/</code>). The <code>collectstatic</code> command copies all these files into a single <code>staticfiles/</code> directory. This is necessary because in production, the web server needs to serve all static assets from one location. Running this in development ensures the configuration is correct before deployment.</p>
+    <pre>
+<span class="c"># Collect all static files into staticfiles/:</span>
+python manage.py collectstatic --noinput
+
+<span class="c"># Expected output:</span>
+<span class="c">#   Copying 'C:\...\css\style.css'</span>
+<span class="c">#   Copying 'C:\...\js\script.js'</span>
+<span class="c">#   Copying 'C:\...\photos\...'</span>
+<span class="c">#   128 files copied to 'staticfiles\'.</span>
+
+<span class="c"># This creates/fills the staticfiles/ directory:</span>
+<span class="c">#   staticfiles/css/</span>
+<span class="c">#   staticfiles/js/</span>
+<span class="c">#   staticfiles/photos/</span>
+    </pre>
+</div>
+
+<!-- Step 9 -->
+<div class="box">
+    <div class="step-head"><span class="num">9</span><h3>Verify the Database</h3></div>
+    <p><strong>Description:</strong> Confirm that the SQLite database was created successfully and contains the expected tables. Django provides a built-in command to inspect the database schema.</p>
+    <pre>
+<span class="c"># Check that db.sqlite was created:</span>
+dir db.sqlite
+<span class="c"># Output should show the file with a size > 0 bytes</span>
+
+<span class="c"># Inspect database tables (optional):</span>
+python manage.py dbshell
+.tables
+<span class="c"># Expected tables:</span>
+<span class="c">#   core_demorequest</span>
+<span class="c">#   core_event</span>
+<span class="c">#   core_eventregistration</span>
+<span class="c">#   core_feedback</span>
+<span class="c">#   core_inquiry</span>
+<span class="c">#   core_pagevisit</span>
+<span class="c">#   core_user</span>
+<span class="c">#   django_session</span>
+.quit
+    </pre>
+</div>
+
+<!-- Step 10 -->
+<div class="box">
+    <div class="step-head"><span class="num">10</span><h3>Run the Development Server</h3></div>
+    <p><strong>Description:</strong> Django's built-in development server starts a lightweight HTTP server that serves your application at <code>http://127.0.0.1:8000</code>. It automatically reloads when you modify Python files, making it ideal for development. Open the URL in your browser to see the AI Solutions website live on your local machine.</p>
+    <pre>
+<span class="c"># Start the Django development server:</span>
+python manage.py runserver
+
+<span class="c"># Expected output:</span>
+<span class="c">#   Watching for file changes with StatReloader</span>
+<span class="c">#   Performing system checks...</span>
+<span class="c">#   System check identified no issues (0 silenced).</span>
+<span class="c">#   July 01, 2026 - 15:30:00</span>
+<span class="c">#   Django version 5.1.3, using settings 'config.settings'</span>
+<span class="c">#   Starting development server at http://127.0.0.1:8000/</span>
+<span class="c">#   Quit the server with CTRL-BREAK.</span>
+
+<span class="c"># Open in your browser and test these URLs:</span>
+<span class="c">#   http://127.0.0.1:8000/           — Home page (index.html)</span>
+<span class="c">#   http://127.0.0.1:8000/about.html — About page</span>
+<span class="c">#   http://127.0.0.1:8000/contact.html — Contact form</span>
+<span class="c">#   http://127.0.0.1:8000/events.html — Events listing</span>
+<span class="c">#   http://127.0.0.1:8000/admin/     — Admin panel login</span>
+<span class="c">#   http://127.0.0.1:8000/api/health/ — API health check</span>
+<span class="c">#   http://127.0.0.1:8000/test.html  — Test cases (all Pass)</span>
+
+<span class="c"># Press Ctrl+C in the terminal to stop the server</span>
+    </pre>
+    <div class="warn"><strong>Important:</strong> The development server is for local testing only. It is not secure or performant enough for production. Always use Gunicorn (Linux VPS) or PythonAnywhere's WSGI runner for production.</div>
+</div>
+
+<!-- Step 11 -->
+<div class="box">
+    <div class="step-head"><span class="num">11</span><h3>Initialize Git Repository &amp; Push to GitHub</h3></div>
+    <p><strong>Description:</strong> Git is used for version control. Initialize a Git repository in the project folder, stage all files, create the first commit, and push to GitHub. This serves two purposes: it backs up your code remotely, and it provides the source for PythonAnywhere to clone during deployment.</p>
+    <pre>
+<span class="c"># In VS Code terminal, at the project root:</span>
+
+<span class="c"># Initialize a new Git repository:</span>
+git init
+
+<span class="c"># Stage all files (except those listed in .gitignore):</span>
+git add .
+
+<span class="c"># Create the first commit:</span>
+git commit -m "Initial commit - AI Solutions project"
+
+<span class="c"># Create a repository on GitHub:</span>
+<span class="c"># 1. Go to https://github.com/yourusername</span>
+<span class="c"># 2. Click the "+" icon &rarr; "New repository"</span>
+<span class="c"># 3. Name it "aisolutions"</span>
+<span class="c"># 4. Do NOT initialize with README (we already have files)</span>
+<span class="c"># 5. Click "Create repository"</span>
+
+<span class="c"># Link your local repo to GitHub:</span>
+git remote add origin https://github.com/yourusername/aisolutions.git
+
+<span class="c"># Push to GitHub (first time with -u flag to set upstream):</span>
+git push -u origin master
+
+<span class="c"># Future pushes (after making changes):</span>
+git add .
+git commit -m "description of changes"
+git push
+    </pre>
+    <div class="note"><strong>Note:</strong> The <code>.gitignore</code> file automatically excludes <code>venv/</code>, <code>.env</code>, <code>db.sqlite</code>, <code>__pycache__/</code>, log files, and SQLite database browser files. These contain secrets, are machine-specific, or are generated at runtime.</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 3. PRODUCTION DEPLOYMENT -->
+<!-- ============================================================ -->
+<h2>3. Production Deployment (PythonAnywhere + VS Code)</h2>
+<p>This section covers deploying the application to PythonAnywhere's production hosting platform. All PythonAnywhere commands are executed in the Bash console (available in the Consoles tab on the PythonAnywhere website).</p>
+
+<!-- Step PA1 -->
+<div class="box">
+    <div class="step-head"><span class="num">1</span><span class="badge badge-pa">PythonAnywhere</span></div>
+    <h3>Create a PythonAnywhere Account &amp; Web App</h3>
+    <p><strong>Description:</strong> Sign up for a free PythonAnywhere account and create a new web application. The free tier provides one web app, 512 MB of storage, and a subdomain at <code>https://yourusername.pythonanywhere.com</code>. Choose Manual Configuration (not a template) to have full control over the WSGI file and settings.</p>
+    <pre>
+<span class="c"># 1. Go to https://www.pythonanywhere.com and sign up</span>
+<span class="c"># 2. Click "Dashboard" &rarr; "Web" tab</span>
+<span class="c"># 3. Click "Add a new web app"</span>
+<span class="c"># 4. Click "Next" &rarr; Choose "Manual configuration"</span>
+<span class="c"># 5. Select Python version: 3.13</span>
+<span class="c"># 6. Click "Next" to create the web app</span>
+
+<span class="c"># After creation, note your site URL:</span>
+<span class="c"># https://yourusername.pythonanywhere.com</span>
+
+<span class="c"># Set these fields in the Web tab:</span>
+<span class="c">#   Source code:  /home/yourusername/aisolutions</span>
+<span class="c">#   Working dir:  /home/yourusername/aisolutions</span>
+<span class="c">#   Python:       3.13</span>
+    </pre>
+</div>
+
+<!-- Step PA2 -->
+<div class="box">
+    <div class="step-head"><span class="num">2</span><span class="badge badge-pa">PythonAnywhere</span></div>
+    <h3>Clone the Repository from GitHub</h3>
+    <p><strong>Description:</strong> Open a Bash console on PythonAnywhere and clone your GitHub repository. This downloads all your source code to the server. The <code>~</code> symbol represents your home directory on PythonAnywhere (<code>/home/yourusername</code>).</p>
+    <pre>
+<span class="c"># In PythonAnywhere Bash console (Consoles tab &rarr; Bash):</span>
+
+<span class="c"># Clone the repository:</span>
+cd ~
+git clone https://github.com/yourusername/aisolutions.git
+
+<span class="c"># Enter the project directory:</span>
+cd aisolutions
+
+<span class="c"># Verify the files are present:</span>
+ls
+<span class="c"># You should see: manage.py  requirements.txt  config/  core/  chatbot/  ...</span>
+    </pre>
+    <div class="warn"><strong>Troubleshooting:</strong> If you get an authentication error, use a personal access token instead of your password. Generate one at GitHub &rarr; Settings &rarr; Developer settings &rarr; Personal access tokens. Use it as the password when cloning.</div>
+</div>
+
+<!-- Step PA3 -->
+<div class="box">
+    <div class="step-head"><span class="num">3</span><span class="badge badge-pa">PythonAnywhere</span></div>
+    <h3>Create &amp; Activate Virtual Environment</h3>
+    <p><strong>Description:</strong> Just like on your local machine, create a Python virtual environment on PythonAnywhere to isolate the project's dependencies. Use <code>python3.13</code> to ensure the correct Python version. After activation, the prompt changes to show <code>(venv)</code>.</p>
+    <pre>
+<span class="c"># Make sure you are in ~/aisolutions</span>
+
+<span class="c"># Create virtual environment with Python 3.13:</span>
+python3.13 -m venv venv
+
+<span class="c"># Activate it:</span>
+source venv/bin/activate
+
+<span class="c"># Your prompt should change to:</span>
+(venv) 16:30 ~/aisolutions (master)$
+
+<span class="c"># Verify the Python version:</span>
+python --version
+<span class="c"># Output: Python 3.13.x</span>
+    </pre>
+</div>
+
+<!-- Step PA4 -->
+<div class="box">
+    <div class="step-head"><span class="num">4</span><span class="badge badge-pa">PythonAnywhere</span></div>
+    <h3>Install Dependencies &amp; Set Up the Database</h3>
+    <p><strong>Description:</strong> Install all Python packages from <code>requirements.txt</code>, run database migrations to create tables, and collect static files into the <code>staticfiles/</code> directory. These are the same commands you ran locally during development.</p>
+    <pre>
+<span class="c"># With the virtual environment activated:</span>
+
+<span class="c"># Upgrade pip:</span>
+pip install --upgrade pip
+
+<span class="c"># Install all dependencies:</span>
+pip install -r requirements.txt
+
+<span class="c"># Run migrations to create database tables:</span>
+python manage.py migrate
+
+<span class="c"># Collect static files (CSS, JS, photos):</span>
+python manage.py collectstatic --noinput
+    </pre>
+</div>
+
+<!-- Step PA5 -->
+<div class="box">
+    <div class="step-head"><span class="num">5</span><span class="badge badge-pa">PythonAnywhere</span><span class="badge badge-vs">VS Code</span></div>
+    <h3>Set Up the WSGI File (with VS Code)</h3>
+    <p><strong>Description:</strong> The WSGI file is the entry point for PythonAnywhere's web server. It sets environment variables, activates the virtual environment, and starts Django. You can use the PythonAnywhere Files tab editor OR you can do this efficiently from VS Code:</p>
+    
+    <p><strong>Option A &mdash; Using VS Code (Recommended):</strong></p>
+    <pre>
+<span class="c"># In VS Code terminal (LOCAL machine), create wsgi.py:</span>
+New-Item -ItemType File -Path "pythonanywhere_wsgi.py" -Force
+
+<span class="c"># Copy the content below into this file</span>
+<span class="c"># Then open a Bash console on PythonAnywhere and run:</span>
+<span class="c"># cat ~/aisolutions/pythonanywhere_wsgi.py &gt; /var/www/yourusername_pythonanywhere_com_wsgi.py</span>
+<span class="c"># (This copies the file from your repo to the PA WSGI path)</span>
+    </pre>
+
+    <p><strong>Option B &mdash; Using PythonAnywhere Files Tab:</strong></p>
+    <pre>
+<span class="c"># 1. Go to PythonAnywhere "Files" tab</span>
+<span class="c"># 2. Navigate to: /var/www/</span>
+<span class="c"># 3. Open: yourusername_pythonanywhere_com_wsgi.py</span>
+<span class="c"># 4. Replace ALL content with the code below</span>
+<span class="c"># 5. Click Save</span>
+    </pre>
+
+    <p><strong>WSGI File Content (paste exactly):</strong></p>
+    <pre>
+import os
+import sys
+
+<span class="c"># Project path</span>
+project_home = '/home/yourusername/aisolutions'
+if project_home not in sys.path:
+    sys.path.insert(0, project_home)
+
+<span class="c"># Activate virtual environment automatically</span>
+activate_this = project_home + '/venv/bin/activate_this.py'
+if os.path.exists(activate_this):
+    with open(activate_this) as f:
+        exec(f.read(), {'__file__': activate_this})
+
+<span class="c"># Environment variables (REPLACE with your actual values)</span>
+os.environ['DJANGO_SETTINGS_MODULE'] = 'config.settings'
+os.environ['DEBUG'] = 'False'
+os.environ['SECRET_KEY'] = 'your-production-secret-key'
+os.environ['ALLOWED_HOSTS'] = 'yourusername.pythonanywhere.com'
+os.environ['OPENROUTER_API_KEY'] = 'your-openrouter-api-key'
+os.environ['ADMIN_USERNAME'] = 'admin'
+os.environ['ADMIN_PASSWORD'] = 'your-admin-password'
+
+<span class="c"># Start Django</span>
+from django.core.wsgi import get_wsgi_application
+application = get_wsgi_application()
+    </pre>
+    <div class="warn"><strong>Critical:</strong> Replace <code>yourusername</code> with your actual PythonAnywhere username in the <code>project_home</code> path and <code>ALLOWED_HOSTS</code>. Replace all secret values with strong, unique passwords and keys.</div>
+</div>
+
+<!-- Step PA6 -->
+<div class="box">
+    <div class="step-head"><span class="num">6</span><span class="badge badge-pa">PythonAnywhere</span></div>
+    <h3>Configure the Web Tab</h3>
+    <p><strong>Description:</strong> The Web tab on PythonAnywhere controls how your application is served. You need to set the virtual environment path, configure static and media file mappings, enable HTTPS, and add CSRF trust origins.</p>
+    <pre>
+<span class="c"># In the PythonAnywhere "Web" tab, configure these sections:</span>
+
+<span class="c"># --- Virtualenv ---</span>
+<span class="c"># Path: /home/yourusername/aisolutions/venv</span>
+<span class="c"># Click the refresh icon (circular arrow) next to the field</span>
+<span class="c"># It should verify and show the Python path</span>
+
+<span class="c"># --- Static files (URL and path pairs) ---</span>
+<span class="c"># URL: /static/</span>
+<span class="c"># Path: /home/yourusername/aisolutions/staticfiles/</span>
+<span class="c"># Click "Add static file"</span>
+
+<span class="c"># URL: /media/</span>
+<span class="c"># Path: /home/yourusername/aisolutions/media/</span>
+<span class="c"># Click "Add static file"</span>
+
+<span class="c"># --- Security ---</span>
+<span class="c"># Force HTTPS: ON (toggle at the top of the page)</span>
+<span class="c"># CSRF trust origins: Add https://yourusername.pythonanywhere.com</span>
+    </pre>
+</div>
+
+<!-- Step PA7 -->
+<div class="box">
+    <div class="step-head"><span class="num">7</span><span class="badge badge-pa">PythonAnywhere</span></div>
+    <h3>Reload the Web Application</h3>
+    <p><strong>Description:</strong> Reloading restarts your web application, applying all changes made to the WSGI file, environment variables, static file mappings, and Python packages. You must reload every time you make changes that affect the server-side behavior.</p>
+    <pre>
+<span class="c"># In the PythonAnywhere "Web" tab:</span>
+<span class="c"># 1. Scroll to the top of the page</span>
+<span class="c"># 2. Click the green "Reload" button</span>
+
+<span class="c"># Wait a few seconds for the reload to complete</span>
+<span class="c"># The page should show:</span>
+<span class="c">#   "Reloading your web app..."</span>
+<span class="c">#   followed by "Your web app is now running"</span>
+
+<span class="c"># Visit your live site:</span>
+<span class="c"># https://yourusername.pythonanywhere.com</span>
+    </pre>
+    <div class="note"><strong>Note:</strong> After reloading, check the error log if the site doesn't load: <code>cat /var/log/yourusername.pythonanywhere.com.error.log</code>. This will show any Python errors during startup.</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 4. UPDATING THE LIVE SITE -->
+<!-- ============================================================ -->
+<h2>4. Updating the Live Site</h2>
+<p>When you make changes locally and need to deploy them to production, follow these steps in order.</p>
+
+<div class="box">
+    <div class="step-head"><span class="num">1</span><span class="badge badge-vs">VS Code</span></div>
+    <h3>Commit and Push Changes to GitHub</h3>
+    <p><strong>Description:</strong> Stage all modified files, commit with a descriptive message, and push to GitHub. This updates the remote repository that PythonAnywhere will pull from.</p>
+    <pre>
+<span class="c"># In VS Code terminal (local machine):</span>
+cd C:\Users\YourName\Projects\aisolutions
+git add .
+git commit -m "description of changes made"
+git push
+    </pre>
+</div>
+
+<div class="box">
+    <div class="step-head"><span class="num">2</span><span class="badge badge-pa">PythonAnywhere</span></div>
+    <h3>Pull Changes and Apply Updates</h3>
+    <p><strong>Description:</strong> In the PythonAnywhere Bash console, navigate to the project, activate the virtual environment, pull the latest code from GitHub, and apply any necessary updates (migrations, static files, dependencies).</p>
+    <pre>
+<span class="c"># In PythonAnywhere Bash console:</span>
+cd ~/aisolutions
+source venv/bin/activate
+git pull
+pip install -r requirements.txt   <span class="c"># Only if dependencies changed</span>
+python manage.py migrate           <span class="c"># Only if models changed</span>
+python manage.py collectstatic --noinput  <span class="c"># Only if static files changed</span>
+    </pre>
+</div>
+
+<div class="box">
+    <div class="step-head"><span class="num">3</span><span class="badge badge-pa">PythonAnywhere</span></div>
+    <h3>Reload the Web App</h3>
+    <p><strong>Description:</strong> Reload to apply the changes. This is required every time you update the code.</p>
+    <pre>
+<span class="c"># Go to the PythonAnywhere Web tab and click "Reload"</span>
+<span class="c"># Or use the API:</span>
+<span class="c"># (PA doesn't provide a CLI reload command on free tier)</span>
+    </pre>
+</div>
+
+<!-- ============================================================ -->
+<!-- 5. TROUBLESHOOTING -->
+<!-- ============================================================ -->
+<h2>5. Common Issues and Solutions</h2>
+<table>
+    <tr><th>Problem</th><th>Likely Cause</th><th>Solution</th></tr>
+    <tr><td>"No module named 'decouple'"</td><td>Outdated code still referencing <code>python-decouple</code></td><td>The project now uses <code>os.environ.get()</code>. Pull the latest code and remove <code>python-decouple</code> from <code>requirements.txt</code>. Delete and recreate the venv.</td></tr>
+    <tr><td>"No virtualenv detected at this path"</td><td>Virtual environment does not exist at the specified path</td><td>Recreate the venv: <code>cd ~/aisolutions && rm -rf venv && python3.13 -m venv venv && source venv/bin/activate && pip install -r requirements.txt</code></td></tr>
+    <tr><td>"DisallowedHost" error</td><td>ALLOWED_HOSTS does not include the domain</td><td>Set <code>ALLOWED_HOSTS</code> to your PythonAnywhere domain in the WSGI file (e.g., <code>bishwasshrestha01.pythonanywhere.com</code>).</td></tr>
+    <tr><td>"CSRF verification failed"</td><td>CSRF trust origin not configured</td><td>In the Web tab, under Security, add <code>https://yourusername.pythonanywhere.com</code> to CSRF trust origins.</td></tr>
+    <tr><td>404 errors for CSS/JS/images</td><td>Static files not collected or mapped</td><td>Run <code>python manage.py collectstatic --noinput</code> and verify the static file mappings in the Web tab (<code>/static/</code> &rarr; <code>staticfiles/</code>).</td></tr>
+    <tr><td>500 Internal Server Error</td><td>Missing environment variable, database error, or Python exception</td><td>Check the error log: <code>cat /var/log/yourusername.pythonanywhere.com.error.log</code>. Fix the issue described in the traceback.</td></tr>
+    <tr><td>Django welcome page instead of the site</td><td>WSGI file not properly configured or wrong <code>DJANGO_SETTINGS_MODULE</code></td><td>Ensure the WSGI file has <code>os.environ['DJANGO_SETTINGS_MODULE'] = 'config.settings'</code> and the <code>project_home</code> path is correct.</td></tr>
+    <tr><td>Chatbot says "I am the AI Solutions assistant" (fallback)</td><td>OpenRouter API key missing, invalid, or expired</td><td>Set <code>OPENROUTER_API_KEY</code> in the WSGI file. Get a free key from <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai/keys</a>.</td></tr>
+    <tr><td>"pip is not recognized" or "python not found"</td><td>Virtual environment not activated</td><td>Activate the venv: <code>source venv/bin/activate</code> (Linux/Mac) or <code>venv\Scripts\activate</code> (Windows). Look for <code>(venv)</code> in the prompt.</td></tr>
+    <tr><td>Database errors / "no such table"</td><td>Migrations not run</td><td>Run <code>python manage.py migrate</code> to create all database tables.</td></tr>
+    <tr><td>Permission denied when cloning</td><td>GitHub authentication issue</td><td>Use a personal access token as the password. On PythonAnywhere, use the HTTPS clone URL and enter your token when prompted.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<!-- 6. APPLICATION ARCHITECTURE -->
+<!-- ============================================================ -->
+<h2>6. Application Architecture Overview</h2>
+<p>Understanding how the application is structured helps with debugging and making changes.</p>
+
+<h3>6.1 Architecture Flow</h3>
+<pre>
+<span class="c"># Request Flow:</span>
+Browser (user)  &rarr;  PythonAnywhere Web Server  &rarr;  WSGI File  &rarr;  Django
+  &rarr;  URL Router (config/urls.py)  &rarr;  Django View / API View
+  &rarr;  Database (SQLite) or HTML File  &rarr;  Response back to browser
+
+<span class="c"># Frontend (HTML + JavaScript):</span>
+- Static HTML pages (index.html, about.html, contact.html, etc.)
+- JavaScript uses Fetch API to call Django REST endpoints
+- Bootstrap 5 for responsive design
+- Chatbot widget embedded in pages
+
+<span class="c"># Backend (Django + DRF):</span>
+- REST API at /api/* for all data operations
+- Custom session-based admin authentication at /admin/
+- AI Chatbot via OpenRouter API at /api/chat/
+- Visit tracking via middleware
+    </pre>
+
+<h3>6.2 Key Files Reference</h3>
+<table>
+    <tr><th>File</th><th>Purpose</th></tr>
+    <tr><td><code>config/settings.py</code></td><td>All Django settings: databases, apps, middleware, CORS, REST framework, session config, admin credentials, and OpenRouter API configuration.</td></tr>
+    <tr><td><code>config/urls.py</code></td><td>Root URL configuration: routes API requests to <code>core/urls.py</code>, serves static HTML pages, and handles the admin panel routing.</td></tr>
+    <tr><td><code>config/wsgi.py</code></td><td>WSGI entry point for production servers. Used as the base for PythonAnywhere's WSGI file.</td></tr>
+    <tr><td><code>core/views.py</code></td><td>All API view functions: event CRUD, registration, inquiries, demo requests, feedback, AI chat, admin auth, visit tracking, health check, and API info.</td></tr>
+    <tr><td><code>core/models.py</code></td><td>Database models: Event, EventRegistration, Inquiry, User, PageVisit, DemoRequest, Feedback.</td></tr>
+    <tr><td><code>core/urls.py</code></td><td>API endpoint routing: maps URLs to view functions for all 20+ endpoints.</td></tr>
+    <tr><td><code>core/middleware.py</code></td><td>VisitTrackingMiddleware: counts daily page visits by tracking every request.</td></tr>
+    <tr><td><code>chatbot/knowledge.py</code></td><td>AI chatbot logic: system prompts, pricing responses, keyword-based fallback responses, response sanitization.</td></tr>
+    <tr><td><code>admin/*.html</code></td><td>Admin panel frontend: 9 HTML pages for dashboard, analytics, events, registrations, inquiries, feedback, demos, and settings.</td></tr>
+</table>
+
+<hr>
+<p style="text-align: center; color: #666;"><em>AI Solutions &mdash; Deployment Guide v2.0 &mdash; Updated July 2026</em></p>
+
+</body>
+</html>
