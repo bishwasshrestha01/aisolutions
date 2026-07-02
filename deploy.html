@@ -617,47 +617,32 @@ python manage.py collectstatic --noinput
 
 <!-- Step PA7 -->
 <div class="box">
-    <div class="step-head"><span class="num">7</span><span class="badge badge-pa">PythonAnywhere</span><span class="badge badge-vs">VS Code</span></div>
-    <h3>Set Up the WSGI File (with VS Code)</h3>
-    <p><strong>Description:</strong> The WSGI file is the entry point for PythonAnywhere's web server. It sets environment variables, activates the virtual environment, and starts Django. You can use the PythonAnywhere Files tab editor OR you can do this efficiently from VS Code:</p>
-    
-    <p><strong>Option A &mdash; Using VS Code (Recommended):</strong></p>
+    <div class="step-head"><span class="num">7</span><span class="badge badge-pa">PythonAnywhere</span></div>
+    <h3>Configure the Web Tab (Source Code, WSGI &amp; Static Files)</h3>
+    <p><strong>Description:</strong> After creating the web app (step 3), the <strong>Web</strong> tab shows all configuration fields for your site. You need to set the source code path, working directory, edit the auto-generated WSGI file with your environment variables, and add static file mappings.</p>
     <pre>
-<span class="c"># In VS Code terminal (LOCAL machine), create wsgi.py:</span>
-New-Item -ItemType File -Path "pythonanywhere_wsgi.py" -Force
+<span class="c"># In the PythonAnywhere "Web" tab, configure these sections:</span>
 
-<span class="c"># Copy the content below into this file</span>
-<span class="c"># Then open a Bash console on PythonAnywhere and run:</span>
-<span class="c"># cat ~/aisolutions/pythonanywhere_wsgi.py &gt; /var/www/yourusername_pythonanywhere_com_wsgi.py</span>
-<span class="c"># (This copies the file from your repo to the PA WSGI path)</span>
+<span class="c"># --- Code (top of the page) ---</span>
+<span class="c"># Source code:</span>
+/home/yourusername/aisolutions
+
+<span class="c"># Working directory:</span>
+/home/yourusername/aisolutions
+
+<span class="c"># --- WSGI configuration file (click the link to edit) ---</span>
+<span class="c"># The file is at: /var/www/yourusername_pythonanywhere_com_wsgi.py</span>
+<span class="c"># PA created this automatically. Replace its content with:</span>
     </pre>
-
-    <p><strong>Option B &mdash; Using PythonAnywhere Files Tab:</strong></p>
     <pre>
-<span class="c"># 1. Go to PythonAnywhere "Files" tab</span>
-<span class="c"># 2. Navigate to: /var/www/</span>
-<span class="c"># 3. Open: yourusername_pythonanywhere_com_wsgi.py</span>
-<span class="c"># 4. Replace ALL content with the code below</span>
-<span class="c"># 5. Click Save</span>
-    </pre>
-
-    <p><strong>WSGI File Content (paste exactly):</strong></p>
-    <pre>
-import os
-import sys
-
-<span class="c"># Project path</span>
+import os, sys
 project_home = '/home/yourusername/aisolutions'
 if project_home not in sys.path:
     sys.path.insert(0, project_home)
-
-<span class="c"># Activate virtual environment automatically</span>
 activate_this = project_home + '/venv/bin/activate_this.py'
 if os.path.exists(activate_this):
     with open(activate_this) as f:
         exec(f.read(), {'__file__': activate_this})
-
-<span class="c"># Environment variables (REPLACE with your actual values)</span>
 os.environ['DJANGO_SETTINGS_MODULE'] = 'config.settings'
 os.environ['DEBUG'] = 'False'
 os.environ['SECRET_KEY'] = 'your-production-secret-key'
@@ -665,26 +650,13 @@ os.environ['ALLOWED_HOSTS'] = 'yourusername.pythonanywhere.com'
 os.environ['OPENROUTER_API_KEY'] = 'your-openrouter-api-key'
 os.environ['ADMIN_USERNAME'] = 'admin'
 os.environ['ADMIN_PASSWORD'] = 'your-admin-password'
-
-<span class="c"># Start Django</span>
 from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()
     </pre>
-    <div class="warn"><strong>Critical:</strong> Replace <code>yourusername</code> with your actual PythonAnywhere username in the <code>project_home</code> path and <code>ALLOWED_HOSTS</code>. Replace all secret values with strong, unique passwords and keys.</div>
-</div>
-
-<!-- Step PA8 -->
-<div class="box">
-    <div class="step-head"><span class="num">8</span><span class="badge badge-pa">PythonAnywhere</span></div>
-    <h3>Configure the Web Tab</h3>
-    <p><strong>Description:</strong> The Web tab on PythonAnywhere controls how your application is served. You need to set the virtual environment path, configure static and media file mappings, enable HTTPS, and add CSRF trust origins.</p>
     <pre>
-<span class="c"># In the PythonAnywhere "Web" tab, configure these sections:</span>
-
 <span class="c"># --- Virtualenv ---</span>
-<span class="c"># Path: /home/yourusername/aisolutions/venv</span>
+/home/yourusername/aisolutions/venv
 <span class="c"># Click the refresh icon (circular arrow) next to the field</span>
-<span class="c"># It should verify and show the Python path</span>
 
 <span class="c"># --- Static files (URL and path pairs) ---</span>
 <span class="c"># URL: /static/</span>
@@ -699,11 +671,12 @@ application = get_wsgi_application()
 <span class="c"># Force HTTPS: ON (toggle at the top of the page)</span>
 <span class="c"># CSRF trust origins: Add https://yourusername.pythonanywhere.com</span>
     </pre>
+    <div class="warn"><strong>Critical:</strong> Replace <code>yourusername</code> with your actual PythonAnywhere username. Replace all secret values with strong, unique passwords and keys. The WSGI file content must match exactly.</div>
 </div>
 
-<!-- Step PA9 -->
+<!-- Step PA8 -->
 <div class="box">
-    <div class="step-head"><span class="num">9</span><span class="badge badge-pa">PythonAnywhere</span></div>
+    <div class="step-head"><span class="num">8</span><span class="badge badge-pa">PythonAnywhere</span></div>
     <h3>Reload the Web Application</h3>
     <p><strong>Description:</strong> Reloading restarts your web application, applying all changes made to the WSGI file, environment variables, static file mappings, and Python packages. You must reload every time you make changes that affect the server-side behavior.</p>
     <pre>
