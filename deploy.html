@@ -152,25 +152,47 @@ C:\Users\YourName\Projects\aisolutions\
 
 <!-- Step 2 -->
 <div class="box">
-    <div class="step-head"><span class="num">2</span><h3>Open the Project in VS Code</h3></div>
-    <p><strong>Description:</strong> Visual Studio Code provides an integrated environment for editing code, running terminal commands, and managing Git operations. Opening the project folder in VS Code gives you access to the file explorer, built-in terminal, and source control tools.</p>
+    <div class="step-head"><span class="num">2</span><h3>Move the Project Folder to Downloads</h3></div>
+    <p><strong>Description:</strong> When you extract a ZIP file on Windows, it often creates a nested folder structure &mdash; for example, an outer "AI Solutions" folder containing another "AI Solutions" folder inside it, or the project folder gets placed inside <code>C:\Users\DOS\Downloads\AI Solutions\AI Solutions\</code>. To avoid path issues, use File Manager to cut the inner project folder and paste it directly into Downloads (or a simpler location like <code>C:\Projects\</code>).</p>
     <pre>
-<span class="c"># Method 1: From File Manager</span>
-<span class="c"># 1. Navigate to the extracted aisolutions folder</span>
-<span class="c"># 2. Right-click anywhere in the folder</span>
-<span class="c"># 3. Select "Open with Code"</span>
+<span class="c"># In Windows File Manager (File Explorer):</span>
 
-<span class="c"># Method 2: From VS Code</span>
-<span class="c"># 1. Open VS Code</span>
-<span class="c"># 2. File &rarr; Open Folder (Ctrl+K Ctrl+O)</span>
-<span class="c"># 3. Select the aisolutions folder</span>
-<span class="c"># 4. Click "Select Folder"</span>
+<span class="c"># 1. Navigate to: This PC &rarr; Downloads</span>
+<span class="c"># 2. You will see: AI Solutions (folder)  [the outer wrapper]</span>
+<span class="c"># 3. Double-click to open it</span>
+<span class="c"># 4. Inside, you will see another "AI Solutions" folder</span>
+<span class="c">#    (this is the actual project folder with manage.py, etc.)</span>
 
-<span class="c"># Open the integrated terminal:</span>
-<span class="c"># View &rarr; Terminal (Ctrl+`)</span>
-<span class="c"># The terminal should open at the project root:</span>
-PS C:\Users\YourName\Projects\aisolutions&gt;
+<span class="c"># 5. RIGHT-CLICK the inner "AI Solutions" folder</span>
+<span class="c"># 6. Select "Cut" (or press Ctrl+X)</span>
+
+<span class="c"># 7. Navigate back to: This PC &rarr; Downloads</span>
+<span class="c"># 8. RIGHT-CLICK an empty space</span>
+<span class="c"># 9. Select "Paste" (or press Ctrl+V)</span>
+
+<span class="c"># 10. You should now have:</span>
+<span class="c">#     C:\Users\DOS\Downloads\AI Solutions\   [the real project folder]</span>
+<span class="c">#         manage.py</span>
+<span class="c">#         requirements.txt</span>
+<span class="c">#         config\</span>
+<span class="c">#         core\</span>
+<span class="c">#         ...</span>
+
+<span class="c"># 11. Delete the empty outer folder</span>
+
+<span class="c"># Now rename "AI Solutions" to "aisolutions" (no spaces):</span>
+<span class="c"># 1. RIGHT-CLICK the "AI Solutions" folder</span>
+<span class="c"># 2. Select "Rename" (or press F2)</span>
+<span class="c"># 3. Type: aisolutions</span>
+<span class="c"># 4. Press Enter</span>
+
+<span class="c"># Final path:</span>
+C:\Users\DOS\Downloads\aisolutions\
+    manage.py
+    requirements.txt
+    ...
     </pre>
+    <div class="warn"><strong>Important:</strong> Folder names with spaces cause issues in command-line tools. Always rename folders to use hyphens or underscores instead of spaces (e.g., <code>aisolutions</code> not <code>AI Solutions</code>).</div>
 </div>
 
 <!-- Step 3 -->
