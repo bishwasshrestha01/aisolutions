@@ -88,7 +88,9 @@
       if (item) {
         e.preventDefault();
         var code = item.getAttribute('data-code');
+        var countryName = item.textContent.replace(/\s*\(.*\)/, '').trim();
         document.getElementById('regPhoneCode').value = code;
+        document.getElementById('regPhoneCountry').value = countryName;
         document.getElementById('regPhoneDropdownText').textContent = code;
         document.getElementById('regPhoneError').classList.add('d-none');
       }
@@ -161,6 +163,17 @@
         return;
       }
       phoneError.classList.add('d-none');
+
+      // Validate country code matches country
+      var phoneCountry = document.getElementById('regPhoneCountry').value;
+      var countryError = document.getElementById('regCountryError');
+      if (phoneCountry.toLowerCase() !== country.toLowerCase()) {
+        countryError.textContent = 'Country code and country did not match';
+        countryError.classList.remove('d-none');
+        return;
+      }
+      countryError.textContent = 'Please fill in all required fields';
+      countryError.classList.add('d-none');
       
       // Validate agree to be contacted
       var agreeChecked = document.getElementById('regAgreeContact').checked;
