@@ -153,12 +153,19 @@ def register_for_event(request, event_id):
 
         attendee_name = data.get('attendee_name') or data.get('full_name')
         attendee_email = data.get('attendee_email') or data.get('user_email')
+        attendee_phone = data.get('attendee_phone') or data.get('phone', '')
         resolved_event_id = data.get('event_id') or event_id
 
         if not resolved_event_id or not attendee_name or not attendee_email:
             return Response(
                 {'success': False, 'error': 'event_id, attendee_name, and attendee_email are required'},
                 status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if attendee_phone and EventRegistration.objects.filter(event_id=resolved_event_id, attendee_phone=attendee_phone).exists():
+            return Response(
+                {'success': False, 'error': 'This phone number is already registered for this event'},
+                status=status.HTTP_409_CONFLICT
             )
 
         reg_id = f"reg-{uuid.uuid4().hex[:12]}"
@@ -177,7 +184,7 @@ def register_for_event(request, event_id):
             event_title=event_title,
             attendee_name=attendee_name,
             attendee_email=attendee_email,
-            attendee_phone=data.get('attendee_phone') or data.get('phone', '')
+            attendee_phone=attendee_phone
         )
 
         user = save_or_update_user(attendee_name, attendee_email)
@@ -591,11 +598,17 @@ def registrations_compat(request):
     data = request.data
     attendee_name = data.get('full_name') or data.get('attendee_name')
     attendee_email = data.get('user_email') or data.get('attendee_email')
+    attendee_phone = data.get('phone', '')
     event_id = data.get('event_id')
     if not event_id or not attendee_name or not attendee_email:
         return Response(
             {'success': False, 'error': 'event_id, full_name, and user_email are required'},
             status=status.HTTP_400_BAD_REQUEST
+        )
+    if attendee_phone and EventRegistration.objects.filter(event_id=event_id, attendee_phone=attendee_phone).exists():
+        return Response(
+            {'success': False, 'error': 'This phone number is already registered for this event'},
+            status=status.HTTP_409_CONFLICT
         )
     reg_id = f"reg-{uuid.uuid4().hex[:12]}"
     event_title = ''
@@ -677,11 +690,17 @@ def registration_create(request):
     data = request.data
     attendee_name = data.get('full_name') or data.get('attendee_name')
     attendee_email = data.get('user_email') or data.get('attendee_email')
+    attendee_phone = data.get('phone', '')
     event_id = data.get('event_id')
     if not event_id or not attendee_name or not attendee_email:
         return Response(
             {'success': False, 'error': 'event_id, full_name, and user_email are required'},
             status=status.HTTP_400_BAD_REQUEST
+        )
+    if attendee_phone and EventRegistration.objects.filter(event_id=event_id, attendee_phone=attendee_phone).exists():
+        return Response(
+            {'success': False, 'error': 'This phone number is already registered for this event'},
+            status=status.HTTP_409_CONFLICT
         )
     reg_id = f"reg-{uuid.uuid4().hex[:12]}"
     event_title = ''
