@@ -326,6 +326,7 @@ FALLBACK_RESPONSES = {
 }
 
 
+@csrf_exempt
 @api_view(['POST'])
 def chat(request):
     """AI Chat endpoint using OpenRouter API"""
