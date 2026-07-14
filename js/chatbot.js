@@ -38,8 +38,19 @@
         conversation_id: CONVERSATION_ID
       })
     });
-    const data = await response.json();
+    if (!response.ok) {
+      console.warn('Backend returned status', response.status, 'from', url);
+    }
+    let data;
+    try {
+      data = await response.json();
+    } catch (e) {
+      const text = await response.text().catch(() => '');
+      console.warn('Backend non-JSON response from', url, ':', text.slice(0, 200));
+      return null;
+    }
     if (data.success && data.response) return data.response;
+    console.warn('Backend unexpected response from', url, ':', JSON.stringify(data).slice(0, 200));
     return null;
   }
 
@@ -59,6 +70,7 @@
         console.warn('Backend unreachable:', url, e.message);
       }
     }
+    console.error('All AI backends failed — see warnings above for details');
     return 'Sorry, the AI service is temporarily unavailable. Please try again later.';
   }
 

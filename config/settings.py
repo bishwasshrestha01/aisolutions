@@ -84,6 +84,10 @@ CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:5500',
     'http://localhost:5501',
     'http://127.0.0.1:5501',
+    'https://bishwasshrestha01.pythonanywhere.com',
+]
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r'^https://.*\.pythonanywhere\.com$',
 ]
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
@@ -101,6 +105,14 @@ REST_FRAMEWORK = {
 OPENROUTER_API_KEY = os.environ.get('OPENROUTER_API_KEY', '')
 OPENROUTER_BASE_URL = os.environ.get('OPENROUTER_BASE_URL', 'https://openrouter.ai/api/v1')
 OPENROUTER_MODEL = os.environ.get('OPENROUTER_MODEL', 'openrouter/auto')
+
+# Production settings for PythonAnywhere
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+CSRF_TRUSTED_ORIGINS = [
+    'https://bishwasshrestha01.pythonanywhere.com',
+]
+CSRF_COOKIE_SECURE = not DEBUG
+SESSION_COOKIE_SECURE = not DEBUG
 
 # Session settings
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
